@@ -8,8 +8,8 @@ import { definePluginI18n } from "@utils/i18n/types";
 
 export default definePluginI18n({
     "description": {
-        "ar": "يضيف زراً بجانب زر البريد الوارد في رأس القناة يحتوي على إجراءات Equicord السريعة",
-        "en": "Adds a button next to the inbox in the channel header with quick Equicord actions."
+        "ar": "يضيف زراً بجانب زر البريد الوارد في رأس القناة يحتوي على إجراءات FluxCord السريعة",
+        "en": "Adds a button next to the inbox in the channel header with quick FluxCord actions."
     },
     "options": {
         "showPluginMenu": {

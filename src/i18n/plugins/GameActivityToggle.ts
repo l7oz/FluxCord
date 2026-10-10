@@ -21,7 +21,7 @@ export default definePluginI18n({
             "en": "Where to show the game activity toggle button.",
             "choices": {
                 "PANEL": { "ar": "بجانب الكتم/الإصمام", "en": "Next to Mute/Deafen" },
-                "TOOLBOX": { "ar": "Equicord Toolbox", "en": "Equicord Toolbox" }
+                "TOOLBOX": { "ar": "FluxCord Toolbox", "en": "FluxCord Toolbox" }
             }
         }
     }

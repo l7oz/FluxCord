@@ -13,8 +13,8 @@ export default definePluginI18n({
     },
     "options": {
         "showToolboxButton": {
-            "ar": "يعرض زر 'حفظ GIF المفضلة' في صندوق أدوات Equicord (يتطلب إعادة تحميل)",
-            "en": "Show the 'Save Favourite GIFs' button in the Equicord toolbox (requires a reload)."
+            "ar": "يعرض زر 'حفظ GIF المفضلة' في صندوق أدوات FluxCord (يتطلب إعادة تحميل)",
+            "en": "Show the 'Save Favourite GIFs' button in the FluxCord toolbox (requires a reload)."
         }
     }
 });

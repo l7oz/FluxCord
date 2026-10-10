@@ -8,7 +8,7 @@ import { definePluginI18n } from "@utils/i18n/types";
 
 export default definePluginI18n({
     "description": {
-        "ar": "أداة تُنبّهك عند إضافة إضافات جديدة إلى Equicord",
-        "en": "Alerts you when new plugins are added to Equicord."
+        "ar": "أداة تُنبّهك عند إضافة إضافات جديدة إلى FluxCord",
+        "en": "Alerts you when new plugins are added to FluxCord."
     }
 });

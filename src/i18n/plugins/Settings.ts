@@ -21,8 +21,8 @@ export default definePluginI18n({
             "en": "Arabic Font (Tajawal) — Unify the font of all Arabic text (Discord UI, the Esharq panel, and plugins). On by default; disable to keep Discord's default font. Only Arabic glyphs are affected; Latin text and code blocks stay untouched."
         },
         "settingsLocation": {
-            "ar": "مكان عرض قسم إعدادات Equicord في الإعدادات",
-            "en": "Where to display the Equicord settings section."
+            "ar": "مكان عرض قسم إعدادات FluxCord في الإعدادات",
+            "en": "Where to display the FluxCord settings section."
         },
         "includeVencordInfoWhenCopying": {
             "ar": "نسخ معلومات Vencord (Vencord، Electron، Chromium) أيضاً عند النقر على معلومات الإصدار في صفحة الإعدادات",
