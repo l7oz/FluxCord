@@ -5,7 +5,7 @@
  */
 
 import { IpcEvents } from "@shared/IpcEvents";
-import { gitHashShort } from "@shared/vencordUserAgent";
+import { gitHashShort, gitRemote } from "@shared/vencordUserAgent";
 import { BrowserWindow, ipcMain, Menu, MenuItemConstructorOptions, shell } from "electron";
 import aboutHtml from "file://about.html?minify";
 
@@ -83,7 +83,8 @@ function openAboutWindow() {
 
     const aboutParams = aboutHtml
         .replaceAll("{{VERSION}}", VERSION)
-        .replaceAll("{{GIT_HASH}}", gitHashShort);
+        .replaceAll("{{GIT_HASH}}", gitHashShort)
+        .replaceAll("{{REPO}}", gitRemote || "Equicord/Equicord");
     const base64Html = Buffer.from(aboutParams).toString("base64");
     aboutWindow.loadURL(`data:text/html;base64,${base64Html}`);
     aboutWindow.on("closed", () => {

@@ -22,6 +22,8 @@ import { constants as fsConstants } from "fs";
 import { access, mkdir, rm, writeFile } from "fs/promises";
 import { join } from "path";
 
+import { gitRemote } from "@shared/vencordUserAgent";
+
 import { DATA_DIR } from "./constants";
 import { crxToZip } from "./crxToZip";
 import { fetchBuffer } from "./http";
@@ -71,7 +73,7 @@ export async function installExt(id: string) {
 
         const buf = await fetchBuffer(url, {
             headers: {
-                "User-Agent": `Electron ${process.versions.electron} ~ FluxCord (https://github.com/Equicord/Equicord)`
+                "User-Agent": `Electron ${process.versions.electron} ~ FluxCord (https://github.com/${gitRemote || "Equicord/Equicord"})`
             }
         });
 

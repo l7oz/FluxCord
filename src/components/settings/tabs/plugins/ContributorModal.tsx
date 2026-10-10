@@ -15,6 +15,7 @@ import { classNameFactory } from "@utils/css";
 import { fetchUserProfile } from "@utils/discord";
 import { pluralise } from "@utils/misc";
 import { RenderModalProps, User } from "@vencord/discord-types";
+import { gitRemote } from "@shared/vencordUserAgent";
 import { Modal, openModal, showToast, useEffect, useMemo, UserProfileStore, useStateFromStores } from "@webpack/common";
 
 import Plugins, { PluginMeta } from "~plugins";
@@ -55,7 +56,7 @@ function ContributorModal({ user, modalProps }: { user: User; modalProps: Render
             .sort((a, b) => Number(a.required ?? false) - Number(b.required ?? false));
     }, [user.id, user.username]);
 
-    const ContributedHyperLink = <Link href="https://github.com/Equicord/Equicord">contributed</Link>;
+    const ContributedHyperLink = <Link href={`https://github.com/${gitRemote || "Equicord/Equicord"}`}>contributed</Link>;
 
     const hasLinks = website || githubName;
 
