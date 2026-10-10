@@ -239,7 +239,13 @@ export const gitRemotePlugin = {
                     .replace(/.git$/, "");
             }
 
-            return { contents: `export default "${remote}"` };
+            // A clone made from a local path (`git clone ../Other`) has a filesystem
+            // path as its origin. Emitting that would leak the builder's filesystem
+            // path into the shipped bundle and produce dead `https://github.com/<path>`
+            // links, so fall back to "no remote" instead.
+            if (!/^[\w.-]+\/[\w.-]+$/.test(remote)) remote = "";
+
+            return { contents: `export default ${JSON.stringify(remote)}` };
         });
     }
 };
