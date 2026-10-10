@@ -1,0 +1,11 @@
+.vc-vct-status {
+    display: inline;
+}
+
+.vc-vct-separator {
+    opacity: 0.45;
+}
+
+.vc-vct-timer {
+    font-variant-numeric: tabular-nums;
+}
