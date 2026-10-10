@@ -89,9 +89,32 @@ export interface ToastOptions {
     duration?: number;
 }
 
-export const Toasts: t.Toasts = mapMangledModuleLazy(".currentToastMap.has(", {
-    show: filters.byCode(".currentToastMap.has("),
-    pop: filters.byCode(".delete(")
+const ToastType = {
+    MESSAGE: "message",
+    SUCCESS: "success",
+    FAILURE: "failure",
+    CUSTOM: "custom",
+    CLIP: "clip",
+    LINK: "link",
+    FORWARD: "forward",
+    BOOKMARK: "bookmark",
+    CLOCK: "clock"
+} as const;
+
+const ToastPosition = {
+    TOP: 0,
+    BOTTOM: 1
+};
+
+interface ToastsExports {
+    /** Discord's current toast renderer. Takes { text, variant, position, duration }. */
+    showToast: (data: any) => void;
+    popToast: (context?: string) => void;
+}
+
+const ToastsExports = mapMangledModuleLazy(".currentToastMap.has(", {
+    showToast: filters.byCode(".currentToastMap.has("),
+    popToast: filters.byCode(".delete(")
 });
 
 export const createToast: t.createToast = findByCodeLazy('variant:"default",icon:', ".duration");
@@ -102,12 +125,44 @@ export const createToast: t.createToast = findByCodeLazy('variant:"default",icon
 export function showToast(message: string, type: t.ToastType = "message", options?: ToastOptions) {
     // FIXME once Discord makes up their mind and stops changing this API every update
     try {
-        Toasts.show(createToast(message, type, options));
+        ToastsExports.showToast(createToast(message, type, options));
     } catch {
         // @ts-ignore
-        Toasts.show({ text: message, variant: type });
+        ToastsExports.showToast({ text: message, variant: type });
     }
 }
+
+/**
+ * Equicord-compatible Toasts facade.
+ *
+ * A large number of plugins call `Toasts.show({ message, id, type, options })`,
+ * which is the *old* Discord toast shape. Discord now renders toasts from
+ * `{ text, variant, position, duration }` instead, so the legacy payload is
+ * translated on the way through. Payloads that are already in the new shape
+ * (i.e. anything produced by `Toasts.create`) are passed straight through.
+ */
+export const Toasts = {
+    Type: ToastType,
+    Position: ToastPosition,
+    genId: () => (Math.random() || Math.random()).toString(36).slice(2),
+
+    create: createToast,
+
+    show(data: ToastData | t.ToastData) {
+        // Already the modern shape (has `text`) -> hand it over untouched.
+        if (data != null && typeof data === "object" && "text" in data) {
+            ToastsExports.showToast(data);
+            return;
+        }
+
+        // Legacy Equicord shape -> rebuild it through Discord's own converter,
+        // so type/position mapping stays correct across Discord updates.
+        const { message, type, options } = (data ?? {}) as ToastData;
+        showToast(message, type as t.ToastType ?? ToastType.MESSAGE, options);
+    },
+
+    pop: (context?: string) => ToastsExports.popToast(context)
+};
 
 export const UserUtils = {
     getUser: findByCodeLazy(".USER(")
