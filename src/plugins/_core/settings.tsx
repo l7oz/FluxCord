@@ -98,19 +98,19 @@ interface SettingsLayoutBuilder {
 const settings = definePluginSettings({
     settingsLocation: {
         type: OptionType.SELECT,
-        description: "Where to put the Orbitcord settings section",
+        description: "Where to put the Equicord settings section",
         options: [
             { label: "At the very top", value: "top" },
-            { label: "Above the Nitro section", value: "aboveNitro", default: true },
-            { label: "Below the Nitro section", value: "belowNitro" },
-            { label: "Above Activity Settings", value: "aboveActivity" },
-            { label: "Below Activity Settings", value: "belowActivity" },
+            { label: "Above Billing section", value: "aboveNitro", default: true },
+            { label: "Below Billing section", value: "belowNitro" },
+            { label: "Above Games & Apps Settings", value: "aboveActivity" },
+            { label: "Below Games & Apps Settings", value: "belowActivity" },
             { label: "At the very bottom", value: "bottom" },
         ] as { label: string; value: SettingsLocation; default?: boolean; }[]
     },
     includeVencordInfoWhenCopying: {
         type: OptionType.BOOLEAN,
-        description: "Also copy Vencord info (Vencord, Electron, Chromium) when clicking the version info in the bottom left area of the Settings page",
+        description: "Also copy Equicord info (Equicord, Electron, Chromium) when clicking the version info in the bottom left area of the Settings page",
         default: true
     }
 });
@@ -119,6 +119,7 @@ export default definePlugin({
     name: "Settings",
     description: "Adds Settings UI and debug info",
     authors: [Devs.Ven, Devs.Megu],
+    tags: ["Utility"],
     required: true,
 
     settings,
@@ -132,10 +133,9 @@ export default definePlugin({
                     replace: "$&.replace(/^./, c => c.toUpperCase())"
                 },
                 {
-                    match: /"text-xxs\/normal".{0,300}?(?=null!=(\i)&&(.{0,20}\i\.\i.{0,200}?,children:).{0,15}?("span"),({className:\i\.\i,children:\["Build Override: ",\1\.id\]\})\)\}\))/,
-                    replace: (m, _buildOverride, makeRow, component, props) => {
-                        props = props.replace(/children:\[.+\]/, "");
-                        return `${m},$self.makeInfoElements(${component},${props}).map(e=>${makeRow}e})),`;
+                    match: /"text-xxs\/normal".{0,300}?(?=null!=(\i)&&(.{0,20}\i\.\i.{0,200}?,children:).{0,15}?("span"),{className:(\i\.\i),children:\["Build Override: ",\1\.id,\i\]\}\)\}\))/,
+                    replace: (m, _buildOverride, makeRow, component, className) => {
+                        return `${m},$self.makeInfoElements(${component},${className}).map(e=>${makeRow}e})),`;
                     }
                 },
                 {
@@ -192,8 +192,8 @@ export default definePlugin({
         const equicordEntries: SettingsLayoutNode[] = [
             buildEntry({
                 key: "equicord_main",
-                title: "Orbitcord",
-                panelTitle: "Orbitcord Settings",
+                title: "Equicord",
+                panelTitle: "Equicord Settings",
                 Component: VencordTab,
                 Icon: MainSettingsIcon
             }),
@@ -247,7 +247,7 @@ export default definePlugin({
         const equicordSection: SettingsLayoutNode = {
             key: "equicord_section",
             type: LayoutTypes.SECTION,
-            useTitle: () => "Orbitcord Settings",
+            useTitle: () => "Equicord Settings",
             buildLayout: () => equicordEntries
         };
 
@@ -257,8 +257,8 @@ export default definePlugin({
             top: "user_section",
             aboveNitro: "billing_section",
             belowNitro: "billing_section",
-            aboveActivity: "activity_section",
-            belowActivity: "activity_section",
+            aboveActivity: "games_and_apps_section",
+            belowActivity: "games_and_apps_section",
             bottom: "utility_section"
         };
 
@@ -313,7 +313,7 @@ export default definePlugin({
     getInfoRows() {
         const { electronVersion, chromiumVersion, getVersionInfo } = this;
 
-        const rows = [`Orbitcord ${gitHashShort}${getVersionInfo()}`];
+        const rows = [`Equicord ${gitHashShort}${getVersionInfo()}`];
 
         if (electronVersion) rows.push(`Electron ${electronVersion}`);
         if (chromiumVersion) rows.push(`Chromium ${chromiumVersion}`);
@@ -326,14 +326,9 @@ export default definePlugin({
         return "\n" + this.getInfoRows().join("\n");
     },
 
-    makeInfoElements(
-        Component: ComponentType<React.PropsWithChildren>,
-        props: PropsWithChildren,
-    ) {
-        return this.getInfoRows().map((text, i) => (
-            <Component key={i} {...props}>
-                {text}
-            </Component>
-        ));
-    },
+    makeInfoElements(Component: ComponentType<PropsWithChildren<{ className?: string; }>>, className: string) {
+        return this.getInfoRows().map((text, i) =>
+            <Component key={i} className={className}>{text}</Component>
+        );
+    }
 });

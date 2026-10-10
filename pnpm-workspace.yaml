@@ -7,6 +7,8 @@ allowBuilds:
 overrides:
     "@eslint/plugin-kit@<0.3.4": ">=0.3.4"
 
+allowUnusedPatches: true
+
 patchedDependencies:
     "@types/less@3.0.8": patches/@types__less@3.0.8.patch
 
@@ -21,3 +23,4 @@ allowedDeprecatedVersions:
     source-map-url: "*"
     urix: "*"
     q: "*"
+
