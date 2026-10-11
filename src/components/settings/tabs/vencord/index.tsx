@@ -20,7 +20,6 @@ import { openContributorModal, openPluginModal, SettingsTab, wrapTab } from "@co
 import { QuickAction, QuickActionCard } from "@components/settings/QuickAction";
 import { SpecialCard } from "@components/settings/SpecialCard";
 import BadgeAPI from "@plugins/_api/badges";
-import { gitRemote } from "@shared/vencordUserAgent";
 import { DONOR_ROLE_ID, GUILD_ID, IS_WINDOWS, VC_DONOR_ROLE_ID, VC_GUILD_ID } from "@utils/constants";
 import { classNameFactory } from "@utils/css";
 import { Margins } from "@utils/margins";
@@ -227,15 +226,6 @@ function EquicordSettings() {
                         action={() => VencordNative.settings.openFolder()}
                     />
                 )}
-                <QuickAction
-                    Icon={GithubIcon}
-                    text="View Source Code"
-                    action={() =>
-                        VencordNative.native.openExternal(
-                            "https://github.com/" + gitRemote,
-                        )
-                    }
-                />
             </QuickActionCard>
 
             <Divider className={Margins.top20} />
