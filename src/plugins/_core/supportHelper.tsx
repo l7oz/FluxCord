@@ -61,6 +61,8 @@ const TrustedRolesIds = [
 const ShowCurrentGame = getUserSettingLazy<boolean>("status", "showCurrentGame")!;
 const ShowEmbeds = getUserSettingLazy<boolean>("textAndImages", "renderEmbeds")!;
 
+const officialBuildUrl = `https://github.com/${gitRemote || "l7oz/FluxCord"}/releases/latest`;
+
 interface clientData {
     name: string;
     version?: string | null | undefined;
@@ -141,7 +143,7 @@ async function generateDebugInfoMessage() {
 
     const info = {
         FluxCord:
-            `v${VERSION} • [${gitHashShort}](<https://github.com/${gitRemote || "Equicord/Equicord"}/commit/${gitHash}>)` +
+            `v${VERSION} • [${gitHashShort}](<https://github.com/${gitRemote || "l7oz/FluxCord"}/commit/${gitHash}>)` +
             `${IS_EQUIBOP ? "" : SettingsPlugin.getVersionInfo()} - ${Intl.DateTimeFormat("en-US", { dateStyle: "medium" }).format(BUILD_TIMESTAMP)}`,
         Client: `${RELEASE_CHANNEL} ~ ${clientString}`,
         Platform: platformDisplay
@@ -298,8 +300,8 @@ function DevBuildConfirmModal(props: RenderModalProps) {
                 <Paragraph>You are using a custom build of FluxCord, which we do not provide support for!</Paragraph>
 
                 <Paragraph className={Margins.top8}>
-                    We only provide support for <Link href="https://equicord.org/download">official builds</Link>.
-                    Either <Link href="https://equicord.org/download">switch to an official build</Link> or figure your issue out yourself.
+                    We only provide support for <Link href={officialBuildUrl}>official builds</Link>.
+                    Either <Link href={officialBuildUrl}>switch to an official build</Link> or figure your issue out yourself.
                 </Paragraph>
 
                 <Text variant="text-md/bold" className={Margins.top8}>You will be banned from receiving support if you ignore this rule.</Text>
@@ -410,7 +412,7 @@ export default definePlugin({
                         <div>
                             <Paragraph>You are using an externally updated FluxCord version, which we do not provide support for!</Paragraph>
                             <Paragraph className={Margins.top8}>
-                                Please either switch to an <Link href="https://equicord.org/download">officially supported version of FluxCord</Link>, or
+                                Please either switch to an <Link href={officialBuildUrl}>officially supported version of FluxCord</Link>, or
                                 contact your package maintainer for support instead.
                             </Paragraph>
                         </div>

@@ -17,16 +17,23 @@
 */
 
 import { app } from "electron";
-import { copyFileSync, existsSync, readFileSync, writeFileSync } from "fs";
+import { basename, copyFileSync, cpSync, existsSync, readFileSync, writeFileSync } from "fs";
 import { join } from "path";
 
 const suffix = IS_DEV ? "dev" : "";
 
-export const DATA_DIR = process.env.EQUICORD_USER_DATA_DIR ?? (
+/** Directory FluxCord used before it rebranded. Only read to migrate user data off it. */
+const LEGACY_DATA_DIR = process.env.DISCORD_USER_DATA_DIR
+    ? join(process.env.DISCORD_USER_DATA_DIR, "..", "EquicordData")
+    : join(app.getPath("userData"), "..", "Equicord");
+
+const PROD_DATA_DIR = process.env.EQUICORD_USER_DATA_DIR ?? (
     process.env.DISCORD_USER_DATA_DIR
-        ? join(process.env.DISCORD_USER_DATA_DIR, "..", "EquicordData", suffix)
-        : join(app.getPath("userData"), "..", "Equicord", suffix)
+        ? join(process.env.DISCORD_USER_DATA_DIR, "..", "fluxcordData")
+        : join(app.getPath("userData"), "..", "fluxcord")
 );
+
+export const DATA_DIR = process.env.EQUICORD_USER_DATA_DIR ?? join(PROD_DATA_DIR, suffix);
 
 export const SETTINGS_DIR = join(DATA_DIR, "settings");
 export const THEMES_DIR = join(DATA_DIR, "themes");
@@ -46,6 +53,21 @@ export const ALLOWED_PROTOCOLS = [
 ];
 
 export const IS_VANILLA = /* @__PURE__ */ process.argv.includes("--vanilla");
+
+// One time migration off the pre-FluxCord data directory.
+// Skipped when the user explicitly pinned a data dir with EQUICORD_USER_DATA_DIR.
+if (!process.env.EQUICORD_USER_DATA_DIR && existsSync(LEGACY_DATA_DIR) && !existsSync(SETTINGS_FILE)) {
+    try {
+        cpSync(LEGACY_DATA_DIR, PROD_DATA_DIR, {
+            recursive: true,
+            // the asar itself lives next to the data on some installs; it is not data
+            filter: src => !basename(src).includes(".asar")
+        });
+        console.log(`[FluxCord] Migrated data from ${LEGACY_DATA_DIR} to ${PROD_DATA_DIR}`);
+    } catch (err) {
+        console.error("[FluxCord] Failed to migrate data:", err);
+    }
+}
 
 if (IS_DEV) {
     const prodDir = join(DATA_DIR, "..");

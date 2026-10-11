@@ -84,7 +84,7 @@ function openAboutWindow() {
     const aboutParams = aboutHtml
         .replaceAll("{{VERSION}}", VERSION)
         .replaceAll("{{GIT_HASH}}", gitHashShort)
-        .replaceAll("{{REPO}}", gitRemote || "Equicord/Equicord");
+        .replaceAll("{{REPO}}", gitRemote || "l7oz/FluxCord");
     const base64Html = Buffer.from(aboutParams).toString("base64");
     aboutWindow.loadURL(`data:text/html;base64,${base64Html}`);
     aboutWindow.on("closed", () => {

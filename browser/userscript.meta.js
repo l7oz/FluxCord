@@ -1,11 +1,11 @@
 // ==UserScript==
-// @name            Equicord
+// @name            FluxCord
 // @description     A Discord client mod - Web version
 // @version         %version%
-// @author          Equicord (https://github.com/Equicord)
-// @namespace       https://github.com/Equicord/Equicord
-// @supportURL      https://github.com/Equicord/Equicord
-// @icon            https://raw.githubusercontent.com/Equicord/Equicord/refs/heads/main/browser/icon.png
+// @author          FluxCord (https://github.com/l7oz)
+// @namespace       https://github.com/l7oz/FluxCord
+// @supportURL      https://github.com/l7oz/FluxCord/issues
+// @icon            https://raw.githubusercontent.com/l7oz/FluxCord/refs/heads/main/browser/icon.png
 // @license         GPL-3.0
 // @match           *://*.discord.com/*
 // @grant           GM_xmlhttpRequest
@@ -23,4 +23,4 @@
 // to overwrite stuff on the window on sites that use CSP. Use Tampermonkey or use a chromium based browser
 // https://github.com/violentmonkey/violentmonkey/issues/997
 
-// this is a compiled and minified version of Equicord. For the source code, visit the GitHub repo
+// this is a compiled and minified version of FluxCord. For the source code, visit the GitHub repo

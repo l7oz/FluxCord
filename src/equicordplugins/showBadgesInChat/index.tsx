@@ -7,6 +7,7 @@
 import "./styles.css";
 
 import badges from "@plugins/_api/badges";
+import { FLUXCORD_MARK } from "@utils/branding";
 import { Devs, EquicordDevs } from "@utils/constants";
 import { isEquicordPluginDev, isPluginDev } from "@utils/misc";
 import definePlugin from "@utils/types";
@@ -58,7 +59,7 @@ function CheckBadge({ badge, author }: { badge: string; author: User; }): JSX.El
                         className={roleIcon}
                         name="FluxCord Contributor"
                         size={20}
-                        src={"https://equicord.org/assets/favicon.png"}
+                        src={FLUXCORD_MARK}
                     />
                 </span>
             ) : null;

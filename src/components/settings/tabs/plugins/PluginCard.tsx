@@ -9,6 +9,7 @@ import { hasAnyVisibleSettings, isPluginEnabled, pluginRequiresRestart, startDep
 import { Settings } from "@api/Settings";
 import { CogWheel, InfoIcon } from "@components/Icons";
 import { AddonCard } from "@components/settings/AddonCard";
+import { FLUXCORD_MARK } from "@utils/branding";
 import { classNameFactory } from "@utils/css";
 import { Logger } from "@utils/Logger";
 import { Plugin } from "@utils/types";
@@ -98,7 +99,7 @@ export function PluginCard({ plugin, disabled, onRestartNeeded, onMouseEnter, on
         },
         {
             condition: isEquicordPlugin,
-            src: "https://equicord.org/assets/favicon.png",
+            src: FLUXCORD_MARK,
             alt: "FluxCord",
             title: "FluxCord Plugin"
         },
