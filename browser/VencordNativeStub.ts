@@ -24,7 +24,7 @@
 import monacoHtmlLocal from "file://monacoWin.html?minify";
 import * as DataStore from "@api/DataStore";
 import type { Settings } from "@api/Settings";
-import { getThemeInfo } from "@main/themes";
+import { getThemeInfo } from "@utils/themes/bd";
 import { debounce } from "@shared/debounce";
 import { localStorage } from "@utils/localStorage";
 import { getStylusWebStoreUrl } from "@utils/web";

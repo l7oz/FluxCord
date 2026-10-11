@@ -26,6 +26,20 @@ import { coreStyleRootNode, managedStyleRootNode, userStyleRootNode, vencordRoot
 let style: HTMLStyleElement;
 let themesStyle: HTMLStyleElement;
 
+const themeChangeListeners = new Set<() => void>();
+
+/**
+ * Subscribe to theme (re)applications. Used by the web PWA plugin to refresh
+ * its manifest whenever the enabled themes change.
+ */
+export function addThemeChangeListener(cb: () => void) {
+    themeChangeListeners.add(cb);
+}
+
+export function removeThemeChangeListener(cb: () => void) {
+    themeChangeListeners.delete(cb);
+}
+
 function getThemeActivationMode(themeId: string) {
     return Settings.themeActivationModes?.[themeId] ?? "always";
 }
@@ -98,6 +112,8 @@ async function initThemes() {
 
     themesStyle.textContent = Array.from(links).map(link => `@import url("${link.trim()}");`).join("\n");
     updatePopoutWindows();
+
+    for (const cb of themeChangeListeners) cb();
 }
 
 function applyToPopout(popoutWindow: Window | undefined, key: string) {
