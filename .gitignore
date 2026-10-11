@@ -5,6 +5,10 @@ node_modules
 .secrets
 .input
 
+# Built FluxCord installers + the vendored installer source they are built from.
+# Binaries are uploaded to the GitHub release, never committed.
+Flxuilotl/
+
 *.exe
 vencord_installer
 equicord_installer

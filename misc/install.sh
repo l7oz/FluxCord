@@ -1,8 +1,8 @@
 #!/bin/bash
 
 # Configuration
-INSTALLER_PATH="$HOME/.equilotl"
-GITHUB_URL="https://github.com/l7oz/FluxCord/releases/latest/download/EquilotlCli-Linux"
+INSTALLER_PATH="$HOME/.flxuilotl"
+GITHUB_URL="https://github.com/l7oz/FluxCord/releases/latest/download/FlxuilotlCli-linux"
 PRIVILEGE_CMDS=("sudo" "doas")
 DEBUG=false
 LOG_FILE="$(dirname "$(realpath "$0")")/fluxcordinstalldebug.log"
