@@ -147,14 +147,14 @@ export const globPlugins = kind => ({
         });
 
         build.onLoad({ filter, namespace: "import-plugins" }, async () => {
-            const pluginDirs = ["plugins/_api", "plugins/_core", "plugins", "equicordplugins/_api", "equicordplugins/_core", "equicordplugins", "userplugins"];
+            const pluginDirs = ["plugins/_api", "plugins/_core", "plugins", "equicordplugins/_api", "equicordplugins/_core", "equicordplugins", "fluxplugin"];
             let code = "";
             let pluginsCode = "\n";
             let metaCode = "\n";
             let excludedCode = "\n";
             let i = 0;
             for (const dir of pluginDirs) {
-                const userPlugin = dir === "userplugins";
+                const userPlugin = dir === "fluxplugin";
 
                 const fullDir = `./src/${dir}`;
                 if (!await exists(fullDir)) continue;

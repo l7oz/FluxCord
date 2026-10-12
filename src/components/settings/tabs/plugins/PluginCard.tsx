@@ -99,9 +99,9 @@ export function PluginCard({ plugin, disabled, onRestartNeeded, onMouseEnter, on
         },
         {
             condition: isEquicordPlugin,
-            src: FLUXCORD_MARK,
-            alt: "FluxCord",
-            title: "FluxCord Plugin"
+            src: "https://equicord.org/assets/favicon.png",
+            alt: "Equicord",
+            title: "Equicord Plugin"
         },
         {
             condition: isVencordPlugin,
@@ -111,9 +111,9 @@ export function PluginCard({ plugin, disabled, onRestartNeeded, onMouseEnter, on
         },
         {
             condition: isUserPlugin,
-            src: "https://equicord.org/assets/icons/misc/userplugin.png",
-            alt: "User",
-            title: "User Plugin"
+            src: FLUXCORD_MARK,
+            alt: "FluxPlugin",
+            title: "FluxPlugin"
         }
     ];
 

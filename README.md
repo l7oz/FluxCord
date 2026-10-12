@@ -8,7 +8,7 @@ FluxCord is a fork of [Vencord](https://github.com/Vendicated/Vencord), with 300
 ### Included Plugins
 
 Plugins live in [`src/plugins`](./src/plugins) (Vencord plugins), [`src/equicordplugins`](./src/equicordplugins)
-(fork plugins), and [`src/userplugins`](./src/userplugins) (community plugins).
+(Equicord plugins), and [`src/fluxplugin`](./src/fluxplugin) (FluxPlugin).
 
 ## Installing / Uninstalling
 
