@@ -6,7 +6,6 @@
 
 import { definePluginSettings } from "@api/Settings";
 import { openPluginModal } from "@components/settings";
-import { Devs } from "@utils/constants";
 import definePlugin, { OptionType } from "@utils/types";
 import { ContextMenuApi, FluxDispatcher, Menu } from "@webpack/common";
 import type { MouseEvent } from "react";
@@ -255,7 +254,7 @@ export default definePlugin({
     name: "FakeDeafen",
     description: "You're deafened but you're not.",
     dependencies: [], // تمت إزالة الاعتمادية المسببة للخطأ هنا
-    authors: [Devs.desu, Devs.viciouscal],
+    authors: [{ name: "desu", id: 0n }, { name: "viciouscal", id: 0n }],
 
     patches: [
         {

@@ -11,7 +11,6 @@ import { HeaderBarButton } from "@api/HeaderBar";
 import { showNotification } from "@api/Notifications";
 import { popNotice, showNotice } from "@api/Notices";
 import { getUserSettingLazy } from "@api/UserSettings";
-import { EquicordDevs } from "@utils/constants";
 import { t } from "@utils/esharqI18n";
 import { Logger } from "@utils/Logger";
 import { useForceUpdater } from "@utils/react";
@@ -335,7 +334,7 @@ function PerfHeaderButton() {
 export default definePlugin({
     name: "PerformanceBoost",
     description: "Game/performance mode: reduces animations, compacts messages, stops GIFs, lowers process priority, cleans cache, and applies runtime speedups (spring skip, passive listeners, lazy images, memory-freeing) — all revertible. (Hardware acceleration requires one-time manual toggle + restart.)",
-    authors: [EquicordDevs.LOSTSTR],
+    authors: [{ name: "LOSTSTR", id: 681465758127226900n }],
     tags: ["Utility"],
     dependencies: ["HeaderBarAPI"],
     settings,

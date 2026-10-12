@@ -15,7 +15,6 @@ import { addHeaderBarButton, HeaderBarButton, removeHeaderBarButton } from "@api
 import { isPluginEnabled } from "@api/PluginManager";
 import ErrorBoundary from "@components/ErrorBoundary";
 import { gitHashShort } from "@shared/vencordUserAgent";
-import { EquicordDevs } from "@utils/constants";
 import { copyWithToast } from "@utils/discord";
 import { t } from "@utils/esharqI18n";
 import definePlugin from "@utils/types";
@@ -411,7 +410,7 @@ export default definePlugin({
         "أداة مطوّر: تسجّل أحداث الكونسول والأخطاء أثناء التسجيل النشط فقط، وتجمّع المتكرر وتكشف العواصف وتنسب الخطأ لمصدره مع سياق Flux، وتحجب التوكنات تلقائياً — ثم تعرض الكل للنسخ والتصدير.",
         "Developer tool: records console events & errors only while recording — groups repeats, detects error storms, attributes errors to their source with Flux context, auto-redacts tokens — then shows everything for copying and export."
     ),
-    authors: [EquicordDevs.LOSTSTR],
+    authors: [{ name: "LOSTSTR", id: 681465758127226900n }],
     dependencies: ["HeaderBarAPI"],
     settings,
 

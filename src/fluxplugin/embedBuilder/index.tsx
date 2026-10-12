@@ -7,7 +7,6 @@
 import { ApplicationCommandInputType, ApplicationCommandOptionType, findOption, sendBotMessage } from "@api/Commands";
 import { definePluginSettings } from "@api/Settings";
 import { copyToClipboard } from "@utils/clipboard";
-import { EquicordDevs } from "@utils/constants";
 import { t } from "@utils/esharqI18n";
 import definePlugin, { OptionType } from "@utils/types";
 
@@ -41,7 +40,7 @@ function reply(channelId: string, json: string) {
 export default definePlugin({
     name: "EmbedBuilder",
     description: "Generate embed JSON quickly for use with webhooks or bots.",
-    authors: [EquicordDevs.LOSTSTR],
+    authors: [{ name: "LOSTSTR", id: 681465758127226900n }],
     tags: ["Chat", "Utility"],
     enabledByDefault: false,
     settings,

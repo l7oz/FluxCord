@@ -13,7 +13,6 @@
 
 import "./styles.css";
 
-import { EquicordDevs } from "@utils/constants";
 import { t } from "@utils/esharqI18n";
 import definePlugin from "@utils/types";
 import { i18n, React } from "@webpack/common";
@@ -636,7 +635,7 @@ export default definePlugin({
         "تعريب شامل لواجهة ديسكورد إلى العربية — من تطوير اشراق.",
         "Comprehensive Arabic localization of Discord's UI — by Esharq."
     ),
-    authors: [EquicordDevs.LOSTSTR],
+    authors: [{ name: "LOSTSTR", id: 681465758127226900n }],
     settings,
     // الترقيع يلفّ دوال i18n.intl؛ يجب أن يكون حاضراً من بداية الجلسة قبل أن تلتقط وحدات
     // ديسكورد مراجع تلك الدوال أو ترسم نصوصها — وإلا بقيت بعض النصوص إنجليزية. لذا نطلب

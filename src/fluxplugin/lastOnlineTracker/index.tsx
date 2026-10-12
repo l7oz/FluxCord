@@ -8,7 +8,6 @@ import { addContextMenuPatch, findGroupChildrenByChildId, removeContextMenuPatch
 import { DataStore } from "@api/index";
 import { addMemberListDecorator, removeMemberListDecorator } from "@api/MemberListDecorators";
 import { definePluginSettings } from "@api/Settings";
-import { EquicordDevs } from "@utils/constants";
 import { t } from "@utils/esharqI18n";
 import definePlugin, { OptionType } from "@utils/types";
 import { findByPropsLazy } from "@webpack";
@@ -133,7 +132,7 @@ const ctxPatch = (children: any[], props: any) => {
 export default definePlugin({
     name: "LastOnlineTracker",
     description: "Shows 'Active X ago' under usernames in the DM list.",
-    authors: [EquicordDevs.LOSTSTR],
+    authors: [{ name: "LOSTSTR", id: 681465758127226900n }],
     tags: ["Friends", "Utility"],
     enabledByDefault: false,
     dependencies: ["MemberListDecoratorsAPI", "ContextMenuAPI"],

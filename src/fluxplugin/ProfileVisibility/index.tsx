@@ -12,7 +12,6 @@
 import { HeaderBarButton } from "@api/HeaderBar";
 import { useSettings } from "@api/Settings";
 import { getUserSetting } from "@api/UserSettings";
-import { EquicordDevs } from "@utils/constants";
 import { t } from "@utils/esharqI18n";
 import { Logger } from "@utils/Logger";
 import definePlugin from "@utils/types";
@@ -141,7 +140,7 @@ function ProfileVisibilityButton() {
 export default definePlugin({
     name: "ProfileVisibility",
     description: "Toggle your Discord profile visibility (private — Friends Only — vs visible to all servers) with a button in the top bar.",
-    authors: [EquicordDevs.LOSTSTR],
+    authors: [{ name: "LOSTSTR", id: 681465758127226900n }],
     tags: ["Privacy", "Shortcuts"],
     dependencies: ["UserSettingsAPI", "HeaderBarAPI"],
 

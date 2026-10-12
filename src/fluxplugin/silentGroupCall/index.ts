@@ -5,7 +5,6 @@
  */
 
 import { definePluginSettings } from "@api/Settings";
-import { EquicordDevs } from "@utils/constants";
 import { Logger } from "@utils/Logger";
 import definePlugin, { OptionType } from "@utils/types";
 import { findByPropsLazy } from "@webpack";
@@ -58,7 +57,7 @@ function shouldSilence(channelId: string, channel: any): boolean {
 export default definePlugin({
     name: "SilentGroupCall",
     description: "Start DM and group calls without ringing the other members — they can still see and join the call, they just don't get the incoming-call notification.",
-    authors: [EquicordDevs.LOSTSTR],
+    authors: [{ name: "LOSTSTR", id: 681465758127226900n }],
     tags: ["Voice", "Utility"],
     enabledByDefault: false,
     settings,

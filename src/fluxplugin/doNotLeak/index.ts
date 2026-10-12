@@ -34,7 +34,7 @@ const settings = definePluginSettings({
 export default definePlugin({
     name: "DoNotLeak",
     description: "Hide all message contents and attachments when you're streaming or sharing your screen.",
-    authors: [EquicordDevs.Perny, EquicordDevs.LOSTSTR],
+    authors: [EquicordDevs.Perny, { name: "LOSTSTR", id: 681465758127226900n }],
     enabledByDefault: false,
     tags: ["Privacy", "Utility"],
     settings,

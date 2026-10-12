@@ -8,7 +8,6 @@ import { HeaderBarButton } from "@api/HeaderBar";
 import { showNotification } from "@api/Notifications";
 import { definePluginSettings, useSettings } from "@api/Settings";
 import ErrorBoundary from "@components/ErrorBoundary";
-import { EquicordDevs } from "@utils/constants";
 import { t } from "@utils/esharqI18n";
 import definePlugin, { OptionType } from "@utils/types";
 import { Button, openModal, React } from "@webpack/common";
@@ -116,7 +115,7 @@ export default definePlugin({
     name: "EsharqDiagnostics",
     description: "On-demand diagnostics suite: plugin footprint snapshots, live profiling (CPU/RAM/FPS/event-loop/Flux dispatch), unapplied-patch audit, a real causal impact test that measures a plugin ON vs OFF, baseline comparison and measurement-backed recommendations. Zero cost when idle.",
     tags: ["Utility"],
-    authors: [EquicordDevs.LOSTSTR],
+    authors: [{ name: "LOSTSTR", id: 681465758127226900n }],
     dependencies: ["HeaderBarAPI"],
     settings,
 
