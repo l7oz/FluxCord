@@ -12,7 +12,7 @@ import { definePluginSettings } from "@api/Settings";
 import { BanRiskWarning } from "@utils/esharqBanWarning";
 import { t } from "@utils/esharqI18n";
 import definePlugin, { OptionType } from "@utils/types";
-import { ChannelStore, Constants, Menu, MessageStore, RestAPI, UserStore } from "@webpack/common";
+import { ChannelStore, Constants, Menu, MessageActions, MessageStore, RestAPI, UserStore } from "@webpack/common";
 
 const settings = definePluginSettings({
     warning: {
@@ -21,16 +21,6 @@ const settings = definePluginSettings({
             ar="تحذير: الحذف الصامت وتجاوز مسجّلات الرسائل قد يخالف شروط خدمة Discord ويعرّض حسابك للحظر. أمر /silentpurge قد يصطدم بحدود المعدّل. استخدمها بمسؤولية."
             en="Warning: silently deleting and bypassing message loggers may violate Discord's Terms of Service and could get your account banned. /silentpurge may hit rate limits. Use responsibly."
         />,
-    },
-    replacementText: {
-        type: OptionType.STRING,
-        description: t("النص الذي يحلّ محلّ الرسالة قبل حذفها.", "Text to replace the message with before deletion."),
-        default: "** **"
-    },
-    deleteDelay: {
-        type: OptionType.NUMBER,
-        description: t("التأخير بالمللي ثانية بين استبدال محتوى الرسالة بالعنصر النائب وحذفها (يمنح المسجّلات وقت لتسجيل العنصر النائب).", "Delay in milliseconds between overwriting the message with the placeholder and deleting it (gives loggers time to record the placeholder)."),
-        default: 200
     },
     deleteOriginal: {
         type: OptionType.BOOLEAN,
@@ -62,40 +52,18 @@ const sleep = (ms: number) => new Promise<void>(r => setTimeout(r, ms));
 
 async function silentDeleteMessage(channelId: string, messageId: string, deleteOriginal = true): Promise<boolean> {
     try {
-        const { replacementText = "** **", deleteDelay = 200, deleteOriginal: shouldDelete = true } = settings.store;
+        const { deleteOriginal: shouldDelete = true } = settings.store;
 
         // A message the local logger is holding onto no longer exists server-side, so
-        // there is nothing to PATCH or DELETE. Scrub our own copy instead.
+        // there is nothing to DELETE. Scrub our own copy instead.
         const cached = MessageStore.getMessage(channelId, messageId) as any;
-        if (cached?.deleted) {
-            updateMessage(channelId, messageId, { content: replacementText, editHistory: [] });
+        if (cached?.deleted || !deleteOriginal || !shouldDelete) {
+            updateMessage(channelId, messageId, { content: "** **", editHistory: [] });
             return true;
         }
 
-        // Overwrite the original's content with the placeholder BEFORE deleting it, so the
-        // MESSAGE_DELETE event carries the placeholder instead of the real text.
-        //
-        // The old approach posted the placeholder as a *second* message and then deleted
-        // both it and the original. That produced two separate delete events (placeholder
-        // + original) in every logger, and the original's event still carried the real
-        // text - so it leaked the content it was meant to hide.
-        await RestAPI.patch({
-            url: Constants.Endpoints.MESSAGE(channelId, messageId),
-            body: { content: replacementText }
-        });
-
-        // Let the edit land first. Loggers that refresh their cached content on
-        // MESSAGE_UPDATE will then record the placeholder as the deleted content.
-        await sleep(deleteDelay);
-
-        if (deleteOriginal && shouldDelete) {
-            await RestAPI.del({ url: Constants.Endpoints.MESSAGE(channelId, messageId) });
-        }
-
-        // The patch above is itself an edit, which MessageLogger stores in editHistory
-        // along with the original text. Scrub it so the local logger cannot reconstruct
-        // what was deleted.
-        updateMessage(channelId, messageId, { editHistory: [] });
+        // Direct delete without the placeholder PATCH step.
+        await MessageActions.deleteMessage(channelId, messageId);
 
         return true;
     } catch (error) {
