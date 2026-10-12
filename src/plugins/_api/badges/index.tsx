@@ -86,6 +86,9 @@ const UserPluginContributorBadge: ProfileBadge = {
 
 let DonorBadges = {} as Record<string, Array<Record<"tooltip" | "badge", string>>>;
 let EquicordDonorBadges = {} as Record<string, Array<Record<"tooltip" | "badge", string>>>;
+let FluxTeamBadges = {} as Record<string, Array<{ badge: string; tooltip: string; }>>;
+
+const FLUX_BORED = "https://raw.githubusercontent.com/l7oz/Flux-bored/main";
 
 async function loadBadges(url: string, noCache = false) {
     const init = {} as RequestInit;
@@ -94,12 +97,46 @@ async function loadBadges(url: string, noCache = false) {
     return await fetch(url, init).then(r => r.json());
 }
 
-async function loadAllBadges(noCache = false) {
-    const vencordBadges = await loadBadges("https://badges.vencord.dev/badges.json", noCache);
-    const equicordBadges = await loadBadges("https://badge.equicord.org/badges.json", noCache);
+interface FluxTeamJson {
+    owner: string[];
+    admin: string[];
+    tester: string[];
+    supporter: string[];
+    highlight: Record<string, { ar: string; en: string; }>;
+}
 
-    DonorBadges = vencordBadges;
-    EquicordDonorBadges = equicordBadges;
+const FLUX_ROLE_TOOLTIPS = {
+    owner: "FluxCord Owner",
+    admin: "FluxCord Admin",
+    supporter: "FluxCord Supporter",
+    tester: "FluxCord Tester",
+} as const;
+
+function buildFluxTeamBadges(team: FluxTeamJson) {
+    const out = {} as typeof FluxTeamBadges;
+    (Object.keys(FLUX_ROLE_TOOLTIPS) as Array<keyof typeof FLUX_ROLE_TOOLTIPS>).forEach(role => {
+        for (const id of team[role] ?? []) {
+            (out[id] ??= []).push({
+                badge: `${FLUX_BORED}/badges/${role}/${role}.png`,
+                tooltip: team.highlight?.[id]?.en ?? FLUX_ROLE_TOOLTIPS[role],
+            });
+        }
+    });
+    return out;
+}
+
+async function loadAllBadges(noCache = false) {
+    // Each source is independent: one dead host must not take the others down
+    // (badge.equicord.org currently does not resolve, so it is skipped silently).
+    try {
+        DonorBadges = await loadBadges("https://badges.vencord.dev/badges.json", noCache);
+    } catch { /* keep previous data */ }
+    try {
+        EquicordDonorBadges = await loadBadges("https://badge.equicord.org/badges.json", noCache);
+    } catch { /* keep previous data */ }
+    try {
+        FluxTeamBadges = buildFluxTeamBadges(await loadBadges(`${FLUX_BORED}/team.json`, noCache));
+    } catch { /* keep previous data */ }
 }
 
 let intervalId: any;
@@ -129,6 +166,24 @@ export function BadgeContextMenu({ badge }: { badge: Omit<ProfileBadge, "id"> & 
             )}
         </Menu.Menu>
     );
+}
+
+function makeDonorBadge(badge: { badge: string; tooltip: string; }, id: string) {
+    return {
+        id,
+        iconSrc: badge.badge,
+        description: badge.tooltip,
+        position: BadgePosition.START,
+        props: {
+            style: {
+                borderRadius: "50%",
+                transform: "scale(0.9)" // The image is a bit too big compared to default badges
+            }
+        },
+        onContextMenu(event, badge) {
+            ContextMenuApi.openContextMenu(event, () => <BadgeContextMenu badge={badge} />);
+        },
+    };
 }
 
 export default definePlugin({
@@ -177,6 +232,10 @@ export default definePlugin({
 
     get EquicordDonorBadges() {
         return EquicordDonorBadges;
+    },
+
+    get FluxTeamBadges() {
+        return FluxTeamBadges;
     },
 
     toolboxActions: {
@@ -249,23 +308,15 @@ export default definePlugin({
     },
 
     getEquicordDonorBadges(userId: string) {
-        return EquicordDonorBadges[userId]?.map((badge, idx) => ({
-            id: `equicord_donor_badge_${idx}`,
-            iconSrc: badge.badge,
-            description: badge.tooltip,
-            position: BadgePosition.START,
-            props: {
-                style: {
-                    borderRadius: "50%",
-                    transform: "scale(0.9)" // The image is a bit too big compared to default badges
-                }
-            },
-            onContextMenu(event, badge) {
-                ContextMenuApi.openContextMenu(event, () => <BadgeContextMenu badge={badge} />);
-            },
+        const equicord = (EquicordDonorBadges[userId] ?? []).map((badge, idx) => ({
+            ...makeDonorBadge(badge, `equicord_donor_badge_${idx}`),
             onClick() {
                 return badge.tooltip === "FluxCord Translator" ? EquicordTranslatorModal() : EquicordDonorModal();
             },
         } satisfies ProfileBadge));
+        const flux = (FluxTeamBadges[userId] ?? []).map((badge, idx) => ({
+            ...makeDonorBadge(badge, `flux_team_badge_${idx}`),
+        } satisfies ProfileBadge));
+        return [...equicord, ...flux];
     }
 });
