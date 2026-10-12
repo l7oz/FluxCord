@@ -7,11 +7,12 @@
 import { ApplicationCommandInputType, ApplicationCommandOptionType, sendBotMessage } from "@api/Commands";
 import { findGroupChildrenByChildId, NavContextMenuPatchCallback } from "@api/ContextMenu";
 import { addMessagePopoverButton as addButton, removeMessagePopoverButton as removeButton } from "@api/MessagePopover";
+import { updateMessage } from "@api/MessageUpdater";
 import { definePluginSettings } from "@api/Settings";
 import { BanRiskWarning } from "@utils/esharqBanWarning";
 import { t } from "@utils/esharqI18n";
 import definePlugin, { OptionType } from "@utils/types";
-import { ChannelStore, Constants, Menu, RestAPI, UserStore } from "@webpack/common";
+import { ChannelStore, Constants, Menu, MessageStore, RestAPI, UserStore } from "@webpack/common";
 
 const settings = definePluginSettings({
     warning: {
@@ -28,13 +29,8 @@ const settings = definePluginSettings({
     },
     deleteDelay: {
         type: OptionType.NUMBER,
-        description: t("التأخير بالمللي ثانية قبل حذف رسالة الاستبدال (يُنصح بـ 100-500).", "Delay in milliseconds before deleting the replacement message (recommended: 100-500)."),
+        description: t("التأخير بالمللي ثانية بين استبدال محتوى الرسالة بالعنصر النائب وحذفها (يمنح المسجّلات وقت لتسجيل العنصر النائب).", "Delay in milliseconds between overwriting the message with the placeholder and deleting it (gives loggers time to record the placeholder)."),
         default: 200
-    },
-    suppressNotifications: {
-        type: OptionType.BOOLEAN,
-        description: t("كتم الإشعارات عند استبدال الرسالة (يمنع تنبيه المستخدمين المذكورين).", "Suppress notifications when replacing the message (prevents pinging mentioned users)."),
-        default: true
     },
     deleteOriginal: {
         type: OptionType.BOOLEAN,
@@ -66,26 +62,40 @@ const sleep = (ms: number) => new Promise<void>(r => setTimeout(r, ms));
 
 async function silentDeleteMessage(channelId: string, messageId: string, deleteOriginal = true): Promise<boolean> {
     try {
-        const { replacementText = "** **", deleteDelay = 200, suppressNotifications = true, deleteOriginal: shouldDelete = true } = settings.store;
+        const { replacementText = "** **", deleteDelay = 200, deleteOriginal: shouldDelete = true } = settings.store;
 
-        const response = await RestAPI.post({
-            url: Constants.Endpoints.MESSAGES(channelId),
-            body: {
-                content: replacementText,
-                flags: suppressNotifications ? 4096 : 0,
-                mobile_network_type: "unknown",
-                nonce: messageId,
-                tts: false
-            }
+        // A message the local logger is holding onto no longer exists server-side, so
+        // there is nothing to PATCH or DELETE. Scrub our own copy instead.
+        const cached = MessageStore.getMessage(channelId, messageId) as any;
+        if (cached?.deleted) {
+            updateMessage(channelId, messageId, { content: replacementText, editHistory: [] });
+            return true;
+        }
+
+        // Overwrite the original's content with the placeholder BEFORE deleting it, so the
+        // MESSAGE_DELETE event carries the placeholder instead of the real text.
+        //
+        // The old approach posted the placeholder as a *second* message and then deleted
+        // both it and the original. That produced two separate delete events (placeholder
+        // + original) in every logger, and the original's event still carried the real
+        // text - so it leaked the content it was meant to hide.
+        await RestAPI.patch({
+            url: Constants.Endpoints.MESSAGE(channelId, messageId),
+            body: { content: replacementText }
         });
 
+        // Let the edit land first. Loggers that refresh their cached content on
+        // MESSAGE_UPDATE will then record the placeholder as the deleted content.
         await sleep(deleteDelay);
-        await RestAPI.del({ url: Constants.Endpoints.MESSAGE(channelId, response.body.id) });
 
         if (deleteOriginal && shouldDelete) {
-            await sleep(100);
             await RestAPI.del({ url: Constants.Endpoints.MESSAGE(channelId, messageId) });
         }
+
+        // The patch above is itself an edit, which MessageLogger stores in editHistory
+        // along with the original text. Scrub it so the local logger cannot reconstruct
+        // what was deleted.
+        updateMessage(channelId, messageId, { editHistory: [] });
 
         return true;
     } catch (error) {
@@ -115,7 +125,7 @@ export default definePlugin({
         { name: "Aurick", id: 1348025017233047634n },
         { name: "appleflyer", id: 1209096766075703368n }
     ],
-    dependencies: ["MessagePopoverAPI", "CommandsAPI"],
+    dependencies: ["MessagePopoverAPI", "CommandsAPI", "MessageUpdaterAPI"],
     settings,
     contextMenus: {
         "message": messageContextMenuPatch

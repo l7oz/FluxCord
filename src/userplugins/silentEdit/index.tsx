@@ -5,6 +5,7 @@
  */
 
 import { addMessagePopoverButton as addButton, removeMessagePopoverButton as removeButton } from "@api/MessagePopover";
+import { updateMessage } from "@api/MessageUpdater";
 import { definePluginSettings } from "@api/Settings";
 import { BanRiskWarning } from "@utils/esharqBanWarning";
 import { t } from "@utils/esharqI18n";
@@ -29,8 +30,13 @@ const settings = definePluginSettings({
     },
     deleteDelay: {
         type: OptionType.NUMBER,
-        description: t("التأخير (بالمللي ثانية) قبل حذف الرسالة الأصلية إذا فُعّل.", "Delay (in milliseconds) before deleting the original message if enabled."),
+        description: t("التأخير (بالمللي ثانية) بين استبدال محتوى الرسالة الأصلية بالعنصر النائب وحذفها.", "Delay (in milliseconds) between overwriting the original message with the placeholder and deleting it."),
         default: 500
+    },
+    replacementText: {
+        type: OptionType.STRING,
+        description: t("النص الذي يحلّ محلّ الرسالة الأصلية قبل حذفها، حتى لا تُسجَّل نصًا صريحًا في المسجّلات.", "Text that replaces the original message before deletion, so loggers never record the real content."),
+        default: "** **"
     },
     suppressNotifications: {
         type: OptionType.BOOLEAN,
@@ -85,7 +91,7 @@ export default definePlugin({
     name: "SilentEdit",
     description: "\"Silently\" edit a message without showing the edit tag and bypass Vencord's message logger.",
     authors: [{ name: "Aurick", id: 1348025017233047634n }],
-    dependencies: ["MessagePopoverAPI"],
+    dependencies: ["MessagePopoverAPI", "MessageUpdaterAPI"],
     settings,
     start() {
         addButton("SilentEdit", msg => {
@@ -104,7 +110,7 @@ export default definePlugin({
                     }
 
                     try {
-                        await sendMessage(
+                        const res = await sendMessage(
                             content.content,
                             msg.id,
                             channelId,
@@ -112,11 +118,30 @@ export default definePlugin({
                             msg.messageReference
                         );
 
+                        // Discord may replace the original in place (same id), in which case the
+                        // edit is already applied. Patching or deleting here would destroy the
+                        // message we just sent.
+                        if (res?.body?.id === messageId) return;
+
+                        if (!settings.store.deleteOriginalMessage) return;
+
+                        // Overwrite the original with a placeholder before deleting it.
+                        // Deleting it as-is hands the real text to every message logger on
+                        // MESSAGE_DELETE, which is exactly what a silent edit must hide.
+                        await RestAPI.patch({
+                            url: Constants.Endpoints.MESSAGE(channelId, messageId),
+                            body: { content: settings.store.replacementText || "** **" }
+                        });
+
+                        // Delay before the actual delete so loggers have time to pick up the
+                        // placeholder as the message's current content.
                         await sleep(settings.store.deleteDelay);
 
-                        if (settings.store.deleteOriginalMessage) {
-                            await deleteMessage(channelId, messageId);
-                        }
+                        await deleteMessage(channelId, messageId);
+
+                        // The patch is itself an edit, so MessageLogger keeps the original text
+                        // in editHistory - scrub it so the local logger can't rebuild it.
+                        updateMessage(channelId, messageId, { editHistory: [] });
                     } catch (error) {
                         console.error("[SilentEdit] Error:", error);
                     }
