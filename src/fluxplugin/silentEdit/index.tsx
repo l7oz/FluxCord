@@ -10,7 +10,7 @@ import { BanRiskWarning } from "@utils/esharqBanWarning";
 import { t } from "@utils/esharqI18n";
 import definePlugin, { OptionType } from "@utils/types";
 import { findByPropsLazy } from "@webpack";
-import { ChannelStore, Constants, RestAPI, UserStore } from "@webpack/common";
+import { ChannelStore, UserStore } from "@webpack/common";
 
 const MessageActions = findByPropsLazy("deleteMessage", "startEditMessage");
 
@@ -21,16 +21,6 @@ const settings = definePluginSettings({
             ar="تحذير: التعديل الصامت وتجاوز سجلّ الرسائل قد يخالف شروط خدمة Discord ويعرّض حسابك للحظر. استخدمها بمسؤولية."
             en="Warning: silently editing and bypassing the message logger may violate Discord's Terms of Service and could get your account banned. Use responsibly."
         />,
-    },
-    deleteOriginalMessage: {
-        type: OptionType.BOOLEAN,
-        description: t("حذف الرسالة الأصلية من الخادم بعد التعديل الصامت. إذا عُطّل، ستعود الرسالة الأصلية بعد إعادة تحميل العميل.", "Delete the original server-side message after silent edit. If disabled, the original message will reappear after client reload."),
-        default: true
-    },
-    suppressNotifications: {
-        type: OptionType.BOOLEAN,
-        description: t("يُنصح به في الرسائل الخاصة لتجنّب تنبيه المستخدمين.", "Recommended for use in DMs to prevent pinging users."),
-        default: false
     },
     accentColor: {
         type: OptionType.STRING,
@@ -45,38 +35,9 @@ const SilentEditIcon = () => (
     </svg>
 );
 
-function sendMessage(content: string, nonce: string, channelId: string, suppressNotifications: boolean, messageReference?: any) {
-    const body: any = {
-        content,
-        flags: suppressNotifications ? 4096 : 0,
-        mobile_network_type: "unknown",
-        nonce,
-        tts: false,
-    };
-
-    if (messageReference) {
-        body.message_reference = {
-            channel_id: messageReference.channel_id,
-            message_id: messageReference.message_id,
-            guild_id: messageReference.guild_id
-        };
-    }
-
-    return RestAPI.post({
-        url: Constants.Endpoints.MESSAGES(channelId),
-        body
-    });
-}
-
-function deleteMessage(channelId: string, messageId: string) {
-    return RestAPI.del({
-        url: Constants.Endpoints.MESSAGE(channelId, messageId)
-    });
-}
-
 export default definePlugin({
     name: "SilentEdit",
-    description: "\"Silently\" edit a message without showing the edit tag and bypass Vencord's message logger.",
+    description: "Edit a message with a single direct edit — no re-send, no delete tricks. Pair with NoEditedTimestamp to hide the edit tag.",
     authors: [{ name: "Aurick", id: 1348025017233047634n }],
     dependencies: ["MessagePopoverAPI"],
     settings,
@@ -84,40 +45,10 @@ export default definePlugin({
         addButton("SilentEdit", msg => {
             if (msg.author.id !== UserStore.getCurrentUser().id) return null;
 
-            const handleClick = async () => {
+            // Open Discord's own editor and let the normal edit go through
+            // untouched: one operation, no new message, no delete.
+            const handleClick = () => {
                 MessageActions.startEditMessage(msg.channel_id, msg.id, msg.content);
-
-                const originalEditMessage = MessageActions.editMessage;
-
-                MessageActions.editMessage = async function (channelId: string, messageId: string, content: any) {
-                    MessageActions.editMessage = originalEditMessage;
-
-                    if (messageId !== msg.id) {
-                        return originalEditMessage.apply(this, arguments);
-                    }
-
-                    try {
-                        const res = await sendMessage(
-                            content.content,
-                            msg.id,
-                            channelId,
-                            settings.store.suppressNotifications,
-                            msg.messageReference
-                        );
-
-                        // Discord may replace the original in place (same id), in which case the
-                        // edit is already applied. Patching or deleting here would destroy the
-                        // message we just sent.
-                        if (res?.body?.id === messageId) return;
-
-                        if (!settings.store.deleteOriginalMessage) return;
-
-                        // Direct delete without the placeholder PATCH step.
-                        await deleteMessage(channelId, messageId);
-                    } catch (error) {
-                        console.error("[SilentEdit] Error:", error);
-                    }
-                };
             };
 
             return {

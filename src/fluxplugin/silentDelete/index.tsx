@@ -50,6 +50,10 @@ const SilentDeleteIcon = () => (
 
 const sleep = (ms: number) => new Promise<void>(r => setTimeout(r, ms));
 
+async function handleDelete(channelId: string, messageId: string) {
+    await MessageActions.deleteMessage(channelId, messageId);
+}
+
 async function silentDeleteMessage(channelId: string, messageId: string, deleteOriginal = true): Promise<boolean> {
     try {
         const { deleteOriginal: shouldDelete = true } = settings.store;
@@ -63,7 +67,7 @@ async function silentDeleteMessage(channelId: string, messageId: string, deleteO
         }
 
         // Direct delete without the placeholder PATCH step.
-        await MessageActions.deleteMessage(channelId, messageId);
+        await handleDelete(channelId, messageId);
 
         return true;
     } catch (error) {
