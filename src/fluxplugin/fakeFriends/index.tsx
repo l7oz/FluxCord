@@ -5,7 +5,8 @@
  */
 
 import { addContextMenuPatch, NavContextMenuPatchCallback, removeContextMenuPatch } from "@api/ContextMenu";
-import { Modals, openModal } from "@utils/modal";
+import { openModal } from "@utils/modal";
+import { ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalRoot } from "@utils/esharqModals";
 import definePlugin from "@utils/types";
 import { RelationshipType } from "@vencord/discord-types/enums";
 import { filters, find } from "@webpack";
@@ -451,14 +452,14 @@ function askCount(title: string, max: number): Promise<number | null> {
             }
 
             return (
-                <Modals.ModalRoot {...modalProps} size="small">
-                    <Modals.ModalHeader>
-                        <Modals.ModalCloseButton onClick={cancel} />
+                <ModalRoot {...modalProps} size="small">
+                    <ModalHeader>
+                        <ModalCloseButton onClick={cancel} />
                         <h2 style={{ flex: 1, fontSize: 16, fontWeight: 700, color: "var(--white-500)" }}>
                             {title}
                         </h2>
-                    </Modals.ModalHeader>
-                    <Modals.ModalContent style={{ padding: "16px 20px" }}>
+                    </ModalHeader>
+                    <ModalContent style={{ padding: "16px 20px" }}>
                         <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
                             <label style={{ fontSize: 12, fontWeight: 600, color: "#fff", textTransform: "uppercase", letterSpacing: ".04em" }}>
                                 Nombre (max {max})
@@ -483,8 +484,8 @@ function askCount(title: string, max: number): Promise<number | null> {
                                 }}
                             />
                         </div>
-                    </Modals.ModalContent>
-                    <Modals.ModalFooter>
+                    </ModalContent>
+                    <ModalFooter>
                         <button
                             onClick={confirm}
                             disabled={!valid}
@@ -510,8 +511,8 @@ function askCount(title: string, max: number): Promise<number | null> {
                         >
                             Cancel
                         </button>
-                    </Modals.ModalFooter>
-                </Modals.ModalRoot>
+                    </ModalFooter>
+                </ModalRoot>
             );
         }
 

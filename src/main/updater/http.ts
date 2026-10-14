@@ -19,6 +19,7 @@
 import { fetchBuffer, fetchJson } from "@main/utils/http";
 import { IpcEvents } from "@shared/IpcEvents";
 import { VENCORD_USER_AGENT } from "@shared/vencordUserAgent";
+import { createHash } from "crypto";
 import { ipcMain } from "electron";
 import { writeFileSync } from "original-fs";
 
@@ -28,7 +29,7 @@ import gitRemote from "~git-remote";
 import { ASAR_FILE, serializeErrors } from "./common";
 
 const API_BASE = `https://api.github.com/repos/${gitRemote}`;
-let PendingUpdate: string | null = null;
+let PendingUpdate: { url: string; digest: string | null; } | null = null;
 
 async function githubGet<T = any>(endpoint: string) {
     return fetchJson<T>(API_BASE + endpoint, {
@@ -62,7 +63,8 @@ async function fetchUpdates() {
         return false;
 
     const asset = data.assets.find(a => a.name === ASAR_FILE);
-    PendingUpdate = asset.browser_download_url;
+    if (!asset) throw new Error(`Release has no ${ASAR_FILE} asset`);
+    PendingUpdate = { url: asset.browser_download_url, digest: asset.digest ?? null };
 
     return true;
 }
@@ -70,7 +72,15 @@ async function fetchUpdates() {
 async function applyUpdates() {
     if (!PendingUpdate) return true;
 
-    const data = await fetchBuffer(PendingUpdate);
+    const data = await fetchBuffer(PendingUpdate.url);
+
+    if (PendingUpdate.digest) {
+        const [algo, hex] = PendingUpdate.digest.split(":");
+        const actual = createHash(algo ?? "sha256").update(data).digest("hex");
+        if (actual !== hex)
+            throw new Error(`Update integrity check failed: expected ${PendingUpdate.digest}, got ${algo}:${actual}. Aborting before writing anything.`);
+    }
+
     writeFileSync(__dirname, data, { flush: true });
 
     PendingUpdate = null;

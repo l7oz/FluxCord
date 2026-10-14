@@ -20,7 +20,7 @@ import { Dirent, readdirSync, readFileSync, writeFileSync } from "fs";
 import { access, readFile } from "fs/promises";
 import { join, sep } from "path";
 import { normalize as posixNormalize, sep as posixSep } from "path/posix";
-import { BigIntLiteral, createSourceFile, Identifier, isArrayLiteralExpression, isCallExpression, isExportAssignment, isIdentifier, isObjectLiteralExpression, isPropertyAccessExpression, isPropertyAssignment, isSatisfiesExpression, isStringLiteral, isVariableStatement, NamedDeclaration, NodeArray, ObjectLiteralExpression, PropertyAssignment, ScriptTarget, StringLiteral, SyntaxKind } from "typescript";
+import { BigIntLiteral, createSourceFile, Identifier, isArrayLiteralExpression, isBigIntLiteral, isCallExpression, isExportAssignment, isIdentifier, isNumericLiteral, isObjectLiteralExpression, isPropertyAccessExpression, isPropertyAssignment, isSatisfiesExpression, isStringLiteral, isVariableStatement, NamedDeclaration, NodeArray, ObjectLiteralExpression, PropertyAssignment, ScriptTarget, StringLiteral, SyntaxKind } from "typescript";
 
 import { getPluginTarget } from "./utils.mjs";
 import { PluginTarget, PluginTargets } from "@utils/pluginTargets";
@@ -204,6 +204,19 @@ export async function parseFile(fileName: string) {
                 case "authors":
                     if (!isArrayLiteralExpression(value)) throw fail("authors is not an array literal");
                     data.authors = value.elements.map(e => {
+                        if (isObjectLiteralExpression(e)) {
+                            const nameProp = getObjectProp(e, "name");
+                            const idProp = getObjectProp(e, "id");
+                            const name = nameProp && isStringLiteral(nameProp) ? nameProp.text : null;
+                            let id: string | null = null;
+                            if (idProp) {
+                                if (isBigIntLiteral(idProp)) id = idProp.text.slice(0, -1);
+                                else if (isNumericLiteral(idProp)) id = idProp.text;
+                                else if (isStringLiteral(idProp)) id = idProp.text;
+                            }
+                            if (name == null || id == null) throw fail("inline author needs a string name and a numeric id");
+                            return { name, id };
+                        }
                         if (!isPropertyAccessExpression(e)) throw fail("authors array contains non-property access expressions");
                         const d = devs[getName(e)!] || equicordDevs[getName(e)!];
                         if (!d) throw fail(`couldn't look up author ${getName(e)}`);
