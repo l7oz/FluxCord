@@ -24,11 +24,17 @@ export default definePlugin({
     description: "Frosted-glass blur on the sidebar and member list.",
     authors: [{ name: "Sharp", id: 0n }],
     start() {
-        setStyleClassNames(style, {
-            sidebar: classes.sidebar,
-            membersWrap: classes.membersWrap,
-            members: classes.members,
-        });
+        // Resolve each class independently: if Discord renamed one, the other
+        // surfaces still blur instead of the whole plugin failing to start.
+        const names = {} as Record<string, string>;
+        for (const key of ["sidebar", "membersWrap", "members"] as const) {
+            try {
+                names[key] = (classes as any)[key];
+            } catch {
+                // left unresolved; compileStyle leaves the placeholder unmatched
+            }
+        }
+        setStyleClassNames(style, names);
         enableStyle(style);
     },
     stop: () => disableStyle(style),
