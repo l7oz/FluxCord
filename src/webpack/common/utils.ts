@@ -127,8 +127,14 @@ export function showToast(message: string, type: t.ToastType = "message", option
     try {
         ToastsExports.showToast(createToast(message, type, options));
     } catch {
-        // @ts-ignore
-        ToastsExports.showToast({ text: message, variant: type });
+        try {
+            // @ts-ignore
+            ToastsExports.showToast({ text: message, variant: type });
+        } catch {
+            // Toast store module missing in this Discord build; a notification
+            // must never crash its caller.
+            console.debug("[Toasts] showToast unavailable:", message);
+        }
     }
 }
 

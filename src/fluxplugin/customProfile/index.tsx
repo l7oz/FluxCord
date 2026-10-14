@@ -560,10 +560,30 @@ function uploadProfileToServer(userId: string, data: CustomProfileData, enabled:
     }, 400);
 }
 
+// Discord Desktop has no DOM localStorage; DataStore is the real persistence
+// layer there. This shim keeps the fast local cache working on web while
+// staying a silent no-op on desktop.
+const safeStorage: Pick<Storage, "getItem" | "setItem" | "removeItem"> =
+    typeof localStorage !== "undefined" ? localStorage : {
+        getItem: () => null,
+        setItem: () => { },
+        removeItem: () => { },
+    };
+
+// Toast infra is broken in some Discord builds (store module lookup fails),
+// and a notification must never crash its caller. Falls back to console.
+function showNote(note: { id?: string; message: string; type?: string; }) {
+    try {
+        Toasts.show(note as any);
+    } catch (e) {
+        console.info("[CustomProfile] toast unavailable:", note.message);
+    }
+}
+
 function saveDataSync(userId: string, data: CustomProfileData, enabled: boolean) {
     try {
-        localStorage.setItem(LS_KEY_DATA, JSON.stringify(data));
-        localStorage.setItem(LS_KEY_ENABLED, enabled ? "1" : "0");
+        safeStorage.setItem(LS_KEY_DATA, JSON.stringify(data));
+        safeStorage.setItem(LS_KEY_ENABLED, enabled ? "1" : "0");
     } catch (e) {
         console.warn("[CustomProfile] localStorage saveDataSync failed:", e);
     }
@@ -571,8 +591,8 @@ function saveDataSync(userId: string, data: CustomProfileData, enabled: boolean)
 
 function saveAllDataSync() {
     try {
-        localStorage.setItem(LS_ALL_DATA, JSON.stringify(allAccountsData));
-        localStorage.setItem(LS_ALL_ENABLED, JSON.stringify(allAccountsEnabled));
+        safeStorage.setItem(LS_ALL_DATA, JSON.stringify(allAccountsData));
+        safeStorage.setItem(LS_ALL_ENABLED, JSON.stringify(allAccountsEnabled));
     } catch (e) {
         console.warn("[CustomProfile] localStorage saveAllDataSync failed:", e);
     }
@@ -580,13 +600,13 @@ function saveAllDataSync() {
 
 function savePresetsSync() {
     try {
-        localStorage.setItem(LS_PRESETS, JSON.stringify(allPresetsData));
+        safeStorage.setItem(LS_PRESETS, JSON.stringify(allPresetsData));
     } catch { }
 }
 
 function loadPresetsSync() {
     try {
-        const raw = localStorage.getItem(LS_PRESETS);
+        const raw = safeStorage.getItem(LS_PRESETS);
         if (raw) {
             try { allPresetsData = JSON.parse(raw); } catch { allPresetsData = {}; }
         }
@@ -604,15 +624,15 @@ function syncCurrentUserData() {
 
 function loadDataSync() {
     try {
-        const rawAll = localStorage.getItem(LS_ALL_DATA);
+        const rawAll = safeStorage.getItem(LS_ALL_DATA);
         if (rawAll) {
             try { allAccountsData = JSON.parse(rawAll); } catch { allAccountsData = {}; }
-            const rawEnabled = localStorage.getItem(LS_ALL_ENABLED);
+            const rawEnabled = safeStorage.getItem(LS_ALL_ENABLED);
             try { allAccountsEnabled = rawEnabled ? JSON.parse(rawEnabled) : {}; } catch { allAccountsEnabled = {}; }
             syncCurrentUserData();
             if (!storedData || Object.keys(storedData).length === 0) {
-                const rawOld = localStorage.getItem(LS_KEY_DATA);
-                const enOld = localStorage.getItem(LS_KEY_ENABLED);
+                const rawOld = safeStorage.getItem(LS_KEY_DATA);
+                const enOld = safeStorage.getItem(LS_KEY_ENABLED);
                 if (rawOld) {
                     try { storedData = JSON.parse(rawOld); } catch { storedData = {}; }
                     isEnabled = enOld === "1";
@@ -621,8 +641,8 @@ function loadDataSync() {
             purgeCopiedProfiles();
             return;
         }
-        const raw = localStorage.getItem(LS_KEY_DATA);
-        const en = localStorage.getItem(LS_KEY_ENABLED);
+        const raw = safeStorage.getItem(LS_KEY_DATA);
+        const en = safeStorage.getItem(LS_KEY_ENABLED);
         if (raw) {
             try { storedData = JSON.parse(raw); } catch { storedData = {}; }
         } else { storedData = {}; }
@@ -1307,14 +1327,14 @@ function CustomProfileModal({ rootProps }: { rootProps: any; }) {
             updateCachedRealData();
             forceAccountPanelRerender();
 
-            Toasts.show({
+            showNote({
                 id: "cp-sync-success",
                 message: uploaded ? "Profile Saved." : "Saved locally. To share it, ask an admin to list it in Flux-bored.",
                 type: uploaded ? Toasts.Type.SUCCESS : Toasts.Type.FAILURE
             });
         } catch (err: any) {
             console.error("[CustomProfile] save error:", err);
-            Toasts.show({
+            showNote({
                 id: "cp-save-debug-err",
                 message: `Save error: ${err.message || err}`,
                 type: Toasts.Type.FAILURE
@@ -1369,14 +1389,14 @@ function CustomProfileModal({ rootProps }: { rootProps: any; }) {
             updateCachedRealData();
             forceAccountPanelRerender();
 
-            Toasts.show({
+            showNote({
                 id: "cp-reset-success",
                 message: "Profile reset.",
                 type: Toasts.Type.SUCCESS
             });
         } catch (err: any) {
             console.error("[CustomProfile] reset error:", err);
-            Toasts.show({
+            showNote({
                 id: "cp-reset-error",
                 message: `Reset error: ${err.message || err}`,
                 type: Toasts.Type.FAILURE
