@@ -5,7 +5,7 @@
  */
 
 import { addContextMenuPatch, NavContextMenuPatchCallback, removeContextMenuPatch } from "@api/ContextMenu";
-import { ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalRoot, openModal } from "@utils/esharqModals";
+import { ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalRoot, openModal } from "@utils/fluxModals";
 import definePlugin, { OptionType } from "@utils/types";
 import { Button, FluxDispatcher, GuildChannelStore, GuildMemberStore, GuildRoleStore, GuildStore, Menu, React, Select, SelectedGuildStore, showToast, TextArea, UserStore, VoiceStateStore } from "@webpack/common";
 

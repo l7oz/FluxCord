@@ -8,7 +8,7 @@ import "./styles.css";
 
 import { ChannelToolbarButton } from "@api/HeaderBar";
 import { definePluginSettings } from "@api/Settings";
-import { openModal } from "@utils/esharqModals";
+import { openModal } from "@utils/fluxModals";
 import definePlugin, { OptionType } from "@utils/types";
 import { useState } from "@webpack/common";
 

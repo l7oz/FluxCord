@@ -5,7 +5,7 @@
  */
 
 import { ApplicationCommandOptionType, findOption, sendBotMessage } from "@api/Commands";
-import { t } from "@utils/esharqI18n";
+import { t } from "@utils/fluxI18n";
 import definePlugin from "@utils/types";
 import { IconUtils, UserStore } from "@webpack/common";
 

@@ -8,7 +8,7 @@ import { sendBotMessage } from "@api/Commands";
 import * as DataStore from "@api/DataStore";
 import { addMessagePreSendListener, removeMessagePreSendListener } from "@api/MessageEvents";
 import { definePluginSettings } from "@api/Settings";
-import { t } from "@utils/esharqI18n";
+import { t } from "@utils/fluxI18n";
 import definePlugin, { OptionType } from "@utils/types";
 import { React, useEffect, useState } from "@webpack/common";
 

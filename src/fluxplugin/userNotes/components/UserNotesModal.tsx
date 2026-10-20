@@ -7,7 +7,7 @@
 import { classNameFactory } from "@api/Styles";
 import {
     closeModal, ModalCloseButton, ModalFooter, ModalHeader, ModalProps, ModalRoot, openModal
-} from "@utils/esharqModals";
+} from "@utils/fluxModals";
 import { User } from "@vencord/discord-types";
 import { Button, Text, TextArea, useState } from "@webpack/common";
 

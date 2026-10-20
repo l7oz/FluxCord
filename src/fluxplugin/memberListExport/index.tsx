@@ -16,7 +16,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { t } from "@utils/esharqI18n";
+import { t } from "@utils/fluxI18n";
 import "./style.css";
 
 import ErrorBoundary from "@components/ErrorBoundary";

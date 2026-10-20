@@ -5,7 +5,7 @@
  */
 
 import { ApplicationCommandOptionType, findOption, sendBotMessage } from "@api/Commands";
-import { t } from "@utils/esharqI18n";
+import { t } from "@utils/fluxI18n";
 import definePlugin from "@utils/types";
 
 const NUMBERS = ["1️⃣", "2️⃣", "3️⃣", "4️⃣", "5️⃣", "6️⃣", "7️⃣", "8️⃣", "9️⃣", "🔟"];

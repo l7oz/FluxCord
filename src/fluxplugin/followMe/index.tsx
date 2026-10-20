@@ -8,14 +8,14 @@ import { addContextMenuPatch, NavContextMenuPatchCallback, removeContextMenuPatc
 import { HeaderBarButton } from "@api/HeaderBar";
 import * as DataStore from "@api/DataStore";
 import { definePluginSettings } from "@api/Settings";
-import { BanRiskWarning } from "@utils/esharqBanWarning";
-import { t } from "@utils/esharqI18n";
+import { BanRiskWarning } from "@utils/fluxBanWarning";
+import { t } from "@utils/fluxI18n";
 import definePlugin, { OptionType } from "@utils/types";
 import { findStoreLazy } from "@webpack";
 import { ChannelStore, Constants, Menu, PermissionsBits, PermissionStore, React, RestAPI, Toasts, useEffect, UserStore, useState } from "@webpack/common";
 
 const VoiceStateStore = findStoreLazy("VoiceStateStore") as any;
-const DS_KEY = "esharq-followMe-target";
+const DS_KEY = "flux-followMe-target";
 
 let targetId: string | null = null;
 let targetName = "";
@@ -141,7 +141,7 @@ const ctxPatch: NavContextMenuPatchCallback = (children, props) => {
     const isFollowed = targetId === userId;
     children.push(
         <Menu.MenuCheckboxItem
-            id="esharq-follow-me"
+            id="flux-follow-me"
             label={isFollowed ? t("إيقاف المتابعة", "Stop Follow Me") : t("اجعله يتبعني", "Follow Me")}
             checked={isFollowed}
             action={() => isFollowed ? unfollow() : follow(userId)}

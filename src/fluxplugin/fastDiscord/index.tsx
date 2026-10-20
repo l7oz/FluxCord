@@ -6,7 +6,7 @@
 
 import { isPluginEnabled } from "@api/PluginManager";
 import { definePluginSettings } from "@api/Settings";
-import { t } from "@utils/esharqI18n";
+import { t } from "@utils/fluxI18n";
 import { Logger } from "@utils/Logger";
 import { isObject } from "@utils/misc";
 import definePlugin, { OptionType } from "@utils/types";

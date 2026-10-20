@@ -5,7 +5,7 @@
  */
 
 import definePlugin from "@utils/types";
-import { t } from "@utils/esharqI18n";
+import { t } from "@utils/fluxI18n";
 import { Logger } from "@utils/Logger";
 
 const logger = new Logger("DoubleEmoji");

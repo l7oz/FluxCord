@@ -8,7 +8,7 @@ import "./styles.css";
 
 import { definePluginSettings } from "@api/Settings";
 import { insertTextIntoChatInputBox } from "@utils/discord";
-import { t } from "@utils/esharqI18n";
+import { t } from "@utils/fluxI18n";
 import definePlugin, { OptionType } from "@utils/types";
 
 const SNOWFLAKE_RE = /^\d{15,21}$/;

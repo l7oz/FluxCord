@@ -5,7 +5,7 @@
  */
 
 import { addMessagePreSendListener, removeMessagePreSendListener } from "@api/MessageEvents";
-import { t } from "@utils/esharqI18n";
+import { t } from "@utils/fluxI18n";
 import definePlugin from "@utils/types";
 
 function toFullwidth(text: string) {

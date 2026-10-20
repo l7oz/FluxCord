@@ -9,7 +9,7 @@ import "./styles.css";
 import { ChatBarButton, ChatBarButtonFactory } from "@api/ChatButtons";
 import { definePluginSettings } from "@api/Settings";
 import { EquicordDevs } from "@utils/constants";
-import { t } from "@utils/esharqI18n";
+import { t } from "@utils/fluxI18n";
 import definePlugin, { IconProps, OptionType } from "@utils/types";
 import { findByPropsLazy } from "@webpack";
 import { React, UserStore,useState, useStateFromStores } from "@webpack/common";

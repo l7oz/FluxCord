@@ -7,7 +7,7 @@
 import { NavContextMenuPatchCallback } from "@api/ContextMenu";
 import { definePluginSettings } from "@api/Settings";
 import { Devs } from "@utils/constants";
-import { t } from "@utils/esharqI18n";
+import { t } from "@utils/fluxI18n";
 import definePlugin, { OptionType } from "@utils/types";
 import { ChannelStore, Menu, React, SelectedChannelStore, showToast, Toasts } from "@webpack/common";
 

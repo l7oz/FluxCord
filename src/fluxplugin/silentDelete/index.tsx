@@ -9,8 +9,8 @@ import { findGroupChildrenByChildId, NavContextMenuPatchCallback } from "@api/Co
 import { addMessagePopoverButton as addButton, removeMessagePopoverButton as removeButton } from "@api/MessagePopover";
 import { updateMessage } from "@api/MessageUpdater";
 import { definePluginSettings } from "@api/Settings";
-import { BanRiskWarning } from "@utils/esharqBanWarning";
-import { t } from "@utils/esharqI18n";
+import { BanRiskWarning } from "@utils/fluxBanWarning";
+import { t } from "@utils/fluxI18n";
 import definePlugin, { OptionType } from "@utils/types";
 import { ChannelStore, Constants, Menu, MessageActions, MessageStore, RestAPI, UserStore } from "@webpack/common";
 

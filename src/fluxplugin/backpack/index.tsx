@@ -10,7 +10,7 @@ import { backpackListeners, BackpackedButtons, ChatBarButton, ChatBarButtonFacto
 import { DataStore } from "@api/index";
 import ErrorBoundary from "@components/ErrorBoundary";
 import { EquicordDevs } from "@utils/constants";
-import { t } from "@utils/esharqI18n";
+import { t } from "@utils/fluxI18n";
 import definePlugin from "@utils/types";
 import { ContextMenuApi, Menu, Popout, React, Tooltip, useEffect, useRef, useState } from "@webpack/common";
 import { Logger } from "@utils/Logger";

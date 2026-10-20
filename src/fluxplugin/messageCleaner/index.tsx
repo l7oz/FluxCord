@@ -6,8 +6,8 @@
 
 import { findGroupChildrenByChildId, NavContextMenuPatchCallback } from "@api/ContextMenu";
 import { definePluginSettings } from "@api/Settings";
-import { BanRiskWarning } from "@utils/esharqBanWarning";
-import { t } from "@utils/esharqI18n";
+import { BanRiskWarning } from "@utils/fluxBanWarning";
+import { t } from "@utils/fluxI18n";
 import definePlugin, { OptionType } from "@utils/types";
 import { Channel, Message } from "@vencord/discord-types";
 import { ChannelStore, Menu, RestAPI, UserStore } from "@webpack/common";

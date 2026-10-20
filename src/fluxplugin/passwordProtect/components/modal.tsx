@@ -5,7 +5,7 @@
  */
 
 import { classNameFactory } from "@api/Styles";
-import { ModalContent, ModalFooter, ModalHeader, ModalProps, ModalRoot } from "@utils/esharqModals";
+import { ModalContent, ModalFooter, ModalHeader, ModalProps, ModalRoot } from "@utils/fluxModals";
 import { Button, Forms, Text, TextInput, useEffect, useState } from "@webpack/common";
 import { Divider } from "@components/Divider";
 

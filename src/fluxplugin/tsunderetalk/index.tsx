@@ -7,8 +7,8 @@
 import { HeaderBarButton } from "@api/HeaderBar";
 import { definePluginSettings } from "@api/Settings";
 import ErrorBoundary from "@components/ErrorBoundary";
-import { esharqChat, GROQ_MODEL_OPTIONS } from "@utils/esharqAI";
-import { t } from "@utils/esharqI18n";
+import { fluxChat, GROQ_MODEL_OPTIONS } from "@utils/fluxAI";
+import { t } from "@utils/fluxI18n";
 import { Logger } from "@utils/Logger";
 import definePlugin, { IconProps, OptionType } from "@utils/types";
 
@@ -64,7 +64,7 @@ function cleanResponse(text: string) {
 }
 
 async function rewriteMessage(systemPrompt: string, text: string) {
-    return esharqChat({
+    return fluxChat({
         apiKey: settings.store.apiKey,
         model: settings.store.model,
         messages: [

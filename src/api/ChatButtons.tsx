@@ -95,7 +95,7 @@ export type ChatBarButtonData = {
 export const ChatBarButtonMap = new Map<string, ChatBarButtonData>();
 const logger = new Logger("ChatButtons");
 
-// ── Backpack plugin support (Esharq) ──────────────────────────────────────────
+// ── Backpack plugin support ──────────────────────────────────────────
 // Button IDs in this set are hidden from the main chat bar and shown inside the Backpack
 // popout instead. `backpackListeners` lets the bar re-render when the set changes.
 export const BackpackedButtons = new Set<string>();

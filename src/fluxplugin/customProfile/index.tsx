@@ -18,7 +18,7 @@ import {
     ModalHeader as ModalHeader_,
     ModalRoot as ModalRoot_,
     openModal
-} from "@utils/esharqModals";
+} from "@utils/fluxModals";
 import definePlugin from "@utils/types";
 import { AuthenticationStore, Button, FluxDispatcher, IconUtils, Menu, React, RestAPI, Select, SnowflakeUtils, UserProfileStore, UserStore, Toasts } from "@webpack/common";
 import virtualMerge from "virtual-merge";

@@ -6,7 +6,7 @@
 
 import { BaseText } from "@components/BaseText";
 import ErrorBoundary from "@components/ErrorBoundary";
-import { t } from "@utils/esharqI18n";
+import { t } from "@utils/fluxI18n";
 import definePlugin from "@utils/types";
 import { findComponentByCodeLazy } from "@webpack";
 import { React, useState } from "@webpack/common";

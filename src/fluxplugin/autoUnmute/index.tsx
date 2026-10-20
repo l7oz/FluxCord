@@ -5,7 +5,7 @@
  */
 
 import { definePluginSettings } from "@api/Settings";
-import { BanRiskWarning } from "@utils/esharqBanWarning";
+import { BanRiskWarning } from "@utils/fluxBanWarning";
 import definePlugin, { OptionType } from "@utils/types";
 import { findByPropsLazy, findStoreLazy } from "@webpack";
 import { ChannelStore, Constants, PermissionsBits, PermissionStore, RestAPI, UserStore } from "@webpack/common";

@@ -6,7 +6,7 @@
 
 import { addContextMenuPatch, NavContextMenuPatchCallback, removeContextMenuPatch } from "@api/ContextMenu";
 import { openModal } from "@utils/modal";
-import { ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalRoot } from "@utils/esharqModals";
+import { ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalRoot } from "@utils/fluxModals";
 import definePlugin from "@utils/types";
 import { RelationshipType } from "@vencord/discord-types/enums";
 import { filters, find } from "@webpack";

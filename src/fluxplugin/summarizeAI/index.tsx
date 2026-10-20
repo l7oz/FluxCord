@@ -6,8 +6,8 @@
 
 import { ApplicationCommandInputType, ApplicationCommandOptionType, findOption, sendBotMessage } from "@api/Commands";
 import { definePluginSettings } from "@api/Settings";
-import { AIChatMessage, esharqChat, GROQ_MODEL_OPTIONS } from "@utils/esharqAI";
-import { t } from "@utils/esharqI18n";
+import { AIChatMessage, fluxChat, GROQ_MODEL_OPTIONS } from "@utils/fluxAI";
+import { t } from "@utils/fluxI18n";
 import { sleep } from "@utils/misc";
 import definePlugin, { OptionType } from "@utils/types";
 import type { Message } from "@vencord/discord-types";
@@ -168,7 +168,7 @@ export default definePlugin({
                     const formatted = formatMessages(messages);
                     const personName = person?.globalName || person?.username;
                     const prompt = buildSummaryPrompt(formatted, style, channelName, personName);
-                    const summary = await esharqChat({
+                    const summary = await fluxChat({
                         apiKey: settings.store.apiKey,
                         model: settings.store.model,
                         messages: prompt,

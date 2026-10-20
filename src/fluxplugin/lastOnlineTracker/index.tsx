@@ -8,7 +8,7 @@ import { addContextMenuPatch, findGroupChildrenByChildId, removeContextMenuPatch
 import { DataStore } from "@api/index";
 import { addMemberListDecorator, removeMemberListDecorator } from "@api/MemberListDecorators";
 import { definePluginSettings } from "@api/Settings";
-import { t } from "@utils/esharqI18n";
+import { t } from "@utils/fluxI18n";
 import definePlugin, { OptionType } from "@utils/types";
 import { findByPropsLazy } from "@webpack";
 import { Menu, React, ReactDOM } from "@webpack/common";

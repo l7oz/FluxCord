@@ -7,8 +7,8 @@
 import "./styles.css";
 
 import { addHeaderBarButton, HeaderBarButton, removeHeaderBarButton } from "@api/HeaderBar";
-import { t } from "@utils/esharqI18n";
-import { ModalCloseButton, ModalContent, ModalHeader, ModalRoot, openModal } from "@utils/esharqModals";
+import { t } from "@utils/fluxI18n";
+import { ModalCloseButton, ModalContent, ModalHeader, ModalRoot, openModal } from "@utils/fluxModals";
 import definePlugin from "@utils/types";
 import { findByPropsLazy } from "@webpack";
 import { ChannelStore, Forms, GuildChannelStore, GuildStore, IconUtils, PermissionStore, React, UserStore, useEffect, useMemo, useRef, useState, VoiceStateStore } from "@webpack/common";
@@ -297,10 +297,10 @@ export default definePlugin({
     dependencies: ["HeaderBarAPI"],
 
     start() {
-        addHeaderBarButton("esharq-voice-channel-search", () => <VCSHeaderButton />, 9);
+        addHeaderBarButton("flux-voice-channel-search", () => <VCSHeaderButton />, 9);
     },
     stop() {
-        removeHeaderBarButton("esharq-voice-channel-search");
+        removeHeaderBarButton("flux-voice-channel-search");
         scanCache = null;
     },
 });

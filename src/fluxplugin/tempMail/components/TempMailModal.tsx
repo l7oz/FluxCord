@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
-import { t } from "@utils/esharqI18n";
+import { t } from "@utils/fluxI18n";
 import "../styles.css";
 
 import { copyToClipboard } from "@utils/clipboard";

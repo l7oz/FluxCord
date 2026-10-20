@@ -5,7 +5,7 @@
  */
 
 import { definePluginSettings } from "@api/Settings";
-import { t } from "@utils/esharqI18n";
+import { t } from "@utils/fluxI18n";
 import definePlugin, { OptionType } from "@utils/types";
 import { findByPropsLazy } from "@webpack";
 import { Menu, RestAPI, SelectedChannelStore, Toasts, UserStore, VoiceStateStore } from "@webpack/common";
@@ -133,7 +133,7 @@ function pinChannelContextMenu(children: any, { channel }: { channel: { id: stri
 
 export default definePlugin({
     name: "VoiceGuard",
-    description: "Resist server voice moderation: auto-rejoin, auto-unmute/undeafen, and stay in a pinned channel if moved. ⚠️ May violate Discord ToS. Use at your own risk — Esharq disclaims all liability.",
+    description: "Resist server voice moderation: auto-rejoin, auto-unmute/undeafen, and stay in a pinned channel if moved. ⚠️ May violate Discord ToS. Use at your own risk — FluxCord disclaims all liability.",
     authors: [{ name: t("مؤلف غير معروف", "Unknown"), id: 0n }],
     settings,
 

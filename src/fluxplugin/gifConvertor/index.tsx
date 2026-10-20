@@ -7,7 +7,7 @@
 import "./styles.css";
 
 import { ChatBarButton, ChatBarButtonFactory } from "@api/ChatButtons";
-import { t } from "@utils/esharqI18n";
+import { t } from "@utils/fluxI18n";
 import definePlugin, { IconProps } from "@utils/types";
 import { CloudUploadPlatform } from "@vencord/discord-types/enums";
 import {

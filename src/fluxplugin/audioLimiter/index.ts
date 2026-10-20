@@ -5,7 +5,7 @@
  */
 
 import { definePluginSettings } from "@api/Settings";
-import { t } from "@utils/esharqI18n";
+import { t } from "@utils/fluxI18n";
 import definePlugin, { makeRange, OptionType } from "@utils/types";
 import { findByPropsLazy } from "@webpack";
 import { UserStore } from "@webpack/common";

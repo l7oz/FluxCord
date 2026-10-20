@@ -5,7 +5,7 @@
  */
 
 import { ApplicationCommandOptionType, findOption } from "@api/Commands";
-import { t } from "@utils/esharqI18n";
+import { t } from "@utils/fluxI18n";
 import definePlugin from "@utils/types";
 
 // stable per name-pair so the same couple always gets the same score

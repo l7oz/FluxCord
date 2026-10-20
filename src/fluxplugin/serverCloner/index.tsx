@@ -10,7 +10,7 @@ import { addContextMenuPatch, NavContextMenuPatchCallback, removeContextMenuPatc
 import { definePluginSettings } from "@api/Settings";
 import { t } from "@api/i18n";
 import { FormSwitch } from "@components/FormSwitch";
-import { ModalCloseButton, ModalContent, ModalHeader, ModalRoot, openModal } from "@utils/esharqModals";
+import { ModalCloseButton, ModalContent, ModalHeader, ModalRoot, openModal } from "@utils/fluxModals";
 import definePlugin, { OptionType } from "@utils/types";
 import { findStoreLazy } from "@webpack";
 import { Button, GuildStore, Menu, React, RestAPI, Select, Toasts, useMemo, useRef, UserStore, useState, IconUtils } from "@webpack/common";

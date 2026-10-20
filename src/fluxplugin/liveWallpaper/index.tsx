@@ -6,7 +6,7 @@
 
 import { DataStore } from "@api/index";
 import { definePluginSettings } from "@api/Settings";
-import { t } from "@utils/esharqI18n";
+import { t } from "@utils/fluxI18n";
 import definePlugin, { OptionType } from "@utils/types";
 import { Button, Forms, React, showToast, Toasts } from "@webpack/common";
 

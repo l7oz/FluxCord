@@ -8,7 +8,7 @@ import { classNameFactory } from "@api/Styles";
 import { copyWithToast, openPrivateChannel, openUserProfile } from "@utils/discord";
 import {
     closeModal, ModalCloseButton, ModalContent, ModalHeader, ModalProps, ModalRoot, openModal
-} from "@utils/esharqModals";
+} from "@utils/fluxModals";
 import { LazyComponent, useAwaiter } from "@utils/react";
 import { Alerts, Avatar, Button, ContextMenuApi, Menu, Popout, React, RelationshipStore, Select, Text, TextArea, TextInput, Tooltip, useCallback, useMemo, useReducer, useRef, UserStore, UserUtils, useState } from "@webpack/common";
 
