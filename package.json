@@ -1,7 +1,7 @@
 {
     "name": "fluxcord",
     "private": "true",
-    "version": "1.2",
+    "version": "1.2.1",
     "description": "The other cutest Discord client mod",
     "homepage": "https://github.com/l7oz/FluxCord#readme",
     "bugs": {
