@@ -140,7 +140,7 @@ export function Updatable(props: CommonProps) {
                 <>
                     <Span size="md" weight="medium" color="text-strong">Error checking for updates</Span>
                     <ErrorCard className={Margins.top8} style={{ padding: "1em" }}>
-                        <p>{updateError.stderr || updateError.stdout || "An unknown error occurred"}</p>
+                        <p>{updateError.stderr || updateError.stdout || updateError.message || (typeof updateError === "string" ? updateError : "An unknown error occurred")}</p>
                     </ErrorCard>
                 </>
             ) : isOutdated ? (

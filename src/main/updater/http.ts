@@ -32,21 +32,49 @@ const API_BASE = `https://api.github.com/repos/${gitRemote}`;
 let PendingUpdate: { url: string; digest: string | null; } | null = null;
 
 async function githubGet<T = any>(endpoint: string) {
-    return fetchJson<T>(API_BASE + endpoint, {
+    const url = API_BASE + endpoint;
+    const options = {
         headers: {
             Accept: "application/vnd.github+json",
             // "All API requests MUST include a valid User-Agent header.
             // Requests with no User-Agent header will be rejected."
             "User-Agent": VENCORD_USER_AGENT
         }
-    });
+    };
+
+    for (let attempt = 0; ; attempt++) {
+        try {
+            return await fetchJson<T>(url, options);
+        } catch (e: any) {
+            // Retry network-level failures once (checkedFetch prefixes those
+            // with "GET <url> failed:"). HTTP error responses (403 rate limit,
+            // 404, ...) are never retried as they'd just fail again.
+            if (attempt < 1 && String(e?.message).includes(" failed: ")) {
+                await new Promise(r => setTimeout(r, 1200));
+                continue;
+            }
+            throw e;
+        }
+    }
 }
 
 async function calculateGitChanges() {
     const isOutdated = await fetchUpdates();
     if (!isOutdated) return [];
 
-    const data = await githubGet(`/compare/${gitHash}...HEAD`);
+    let data;
+    try {
+        data = await githubGet(`/compare/${gitHash}...HEAD`);
+    } catch (e: any) {
+        // Local/dev builds can carry a commit GitHub has never seen (unpushed,
+        // squashed away, ...). There's nothing to compare against, so skip the
+        // changelog instead of failing the whole update check.
+        if (String(e?.message).includes(": 404")) {
+            console.warn(`[Updater] Commit ${gitHash} is unknown to GitHub, skipping changelog:`, e.message);
+            return [];
+        }
+        throw e;
+    }
 
     return data.commits.map((c: any) => ({
         hash: c.sha,
