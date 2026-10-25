@@ -100,6 +100,16 @@ async function fetchUpdates() {
 async function applyUpdates() {
     if (!PendingUpdate) return true;
 
+    // Release installs are loaded from inside an asar file, which can be
+    // overwritten in place. Directory installs (pnpm inject / dev setups)
+    // are loaded from a plain folder like <repo>/dist/desktop where there
+    // is no single file to replace - writing to it would fail with EISDIR.
+    if (!__dirname.endsWith(".asar"))
+        throw new Error(
+            `You're running a local directory install (loaded from ${__dirname}), not an asar. ` +
+            "The in-app updater can't replace it. Run `pnpm build` and restart Discord to update."
+        );
+
     const data = await fetchBuffer(PendingUpdate.url);
 
     if (PendingUpdate.digest) {
