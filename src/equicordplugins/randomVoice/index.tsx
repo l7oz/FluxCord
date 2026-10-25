@@ -724,14 +724,14 @@ function RandomVoiceMenu({ onClose }: { onClose(): void; }) {
                     <Menu.MenuSeparator />
                     <Menu.MenuCheckboxItem
                         id="random-voice-include-states"
-                        label="Include Filters"
+                        label={t("Include Filters")}
                         checked={store.includeStates}
                         disabled={store.avoidStates || !hasStateFilters(store)}
                         action={() => toggle("includeStates")}
                     />
                     <Menu.MenuCheckboxItem
                         id="random-voice-avoid-states"
-                        label="Avoid Filters"
+                        label={t("Avoid Filters")}
                         checked={store.avoidStates}
                         disabled={store.includeStates || !hasStateFilters(store)}
                         action={() => toggle("avoidStates")}

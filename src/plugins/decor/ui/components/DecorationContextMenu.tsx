@@ -9,6 +9,7 @@ import { Decoration } from "@plugins/decor/lib/api";
 import { useCurrentUserDecorationsStore } from "@plugins/decor/lib/stores/CurrentUserDecorationsStore";
 import { cl } from "@plugins/decor/ui";
 import { copyToClipboard } from "@utils/clipboard";
+import { t } from "@utils/i18n";
 import { ConfirmModal,ContextMenuApi, Menu, openModal, UserStore } from "@webpack/common";
 
 export default function DecorationContextMenu({ decoration }: { decoration: Decoration; }) {
@@ -21,7 +22,7 @@ export default function DecorationContextMenu({ decoration }: { decoration: Deco
     >
         <Menu.MenuItem
             id={cl("decoration-context-menu-copy-hash")}
-            label="Copy Decoration Hash"
+            label={t("Copy Decoration Hash")}
             icon={CopyIcon}
             leadingAccessory={{ type: "icon", icon: CopyIcon }}
             action={() => copyToClipboard(decoration.hash)}
@@ -29,17 +30,17 @@ export default function DecorationContextMenu({ decoration }: { decoration: Deco
         {decoration.authorId === UserStore.getCurrentUser().id &&
             <Menu.MenuItem
                 id={cl("decoration-context-menu-delete")}
-                label="Delete Decoration"
+                label={t("Delete Decoration")}
                 color="danger"
                 icon={DeleteIcon}
                 leadingAccessory={{ type: "icon", icon: DeleteIcon }}
                 action={() => openModal(props => (
                     <ConfirmModal
                         {...props}
-                        title="Delete Decoration"
+                        title={t("Delete Decoration")}
                         subtitle={`Are you sure you want to delete ${decoration.alt}?`}
-                        confirmText="Delete"
-                        cancelText="Cancel"
+                        confirmText={t("Delete")}
+                        cancelText={t("Cancel")}
                         onConfirm={() => {
                             deleteDecoration(decoration);
                         }}

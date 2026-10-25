@@ -9,10 +9,10 @@ import "./styles.css";
 import { addHeaderBarButton, HeaderBarButton, removeHeaderBarButton } from "@api/HeaderBar";
 import { t } from "@utils/fluxI18n";
 import { ModalCloseButton, ModalContent, ModalHeader, ModalRoot, openModal } from "@utils/fluxModals";
+import { Logger } from "@utils/Logger";
 import definePlugin from "@utils/types";
 import { findByPropsLazy } from "@webpack";
-import { ChannelStore, Forms, GuildChannelStore, GuildStore, IconUtils, PermissionStore, React, UserStore, useEffect, useMemo, useRef, useState, VoiceStateStore } from "@webpack/common";
-import { Logger } from "@utils/Logger";
+import { Forms, GuildChannelStore, GuildStore, IconUtils, React, useEffect, useMemo, useRef, UserStore, useState, VoiceStateStore } from "@webpack/common";
 
 const logger = new Logger("VoiceChannelSearch");
 

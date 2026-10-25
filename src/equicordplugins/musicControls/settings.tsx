@@ -10,6 +10,7 @@ import { ButtonCompat } from "@components/Button";
 import { HeadingSecondary } from "@components/Heading";
 import { Paragraph } from "@components/Paragraph";
 import { SettingsSection } from "@components/settings/tabs/plugins/components/Common";
+import { t } from "@utils/i18n";
 import { makeRange, OptionType } from "@utils/types";
 import { MaskedLink, Select, showToast, TextInput, Toasts } from "@webpack/common";
 
@@ -43,7 +44,7 @@ function LyricsProviderSettings() {
 
     return (
         <>
-            <SettingsSection name="Lyrics Provider" description="Where lyrics are fetched from.">
+            <SettingsSection name="Lyrics Provider" description={t("Where lyrics are fetched from.")}>
                 <Select
                     options={[
                         { value: Provider.Lrclib, label: "LRCLIB", default: true },

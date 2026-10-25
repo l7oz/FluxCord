@@ -13,6 +13,7 @@ import { HeadingSecondary } from "@components/Heading";
 import { Notice } from "@components/Notice";
 import decor from "@plugins/decor";
 import { classNameFactory } from "@utils/css";
+import { t } from "@utils/i18n";
 import { Devs, EquicordDevs } from "@utils/index";
 import definePlugin, { OptionType } from "@utils/types";
 import { Alerts } from "@webpack/common";
@@ -62,9 +63,8 @@ export const settings = definePluginSettings({
         type: OptionType.COMPONENT,
         component: () => (
             <Notice.Info className={cl("accessibility-notice")}>
-                Discord already has a built-in username style option in Accessibility settings.
-            </Notice.Info>
-        )
+                {t("Discord already has a built-in username style option in Accessibility settings.")}</Notice.Info>
+        ),
     },
     friendsListHeader: {
         type: OptionType.COMPONENT,

@@ -18,13 +18,14 @@
 
 import "./fixDiscordBadgePadding.css";
 
-import { _getBadges, BadgePosition, BadgeUserArgs, ProfileBadge } from "@api/Badges";
+import { _getBadges, BadgeListProcessors, BadgePosition, BadgeUserArgs, ProfileBadge } from "@api/Badges";
 import ErrorBoundary from "@components/ErrorBoundary";
 import { CopyIcon, LinkIcon } from "@components/Icons";
 import { openContributorModal } from "@components/settings/tabs";
 import { FLUXCORD_MARK } from "@utils/branding";
 import { Devs } from "@utils/constants";
 import { copyWithToast } from "@utils/discord";
+import { t } from "@utils/i18n";
 import { Logger } from "@utils/Logger";
 import { shouldShowContributorBadge, shouldShowEquicordContributorBadge } from "@utils/misc";
 import definePlugin from "@utils/types";
@@ -151,7 +152,7 @@ export function BadgeContextMenu({ badge }: { badge: Omit<ProfileBadge, "id"> & 
             {badge.description && (
                 <Menu.MenuItem
                     id="vc-badge-copy-name"
-                    label="Copy Badge Name"
+                    label={t("Copy Badge Name")}
                     action={() => copyWithToast(badge.description!)}
                     leadingAccessory={{ type: "icon", icon: CopyIcon }}
                 />
@@ -159,7 +160,7 @@ export function BadgeContextMenu({ badge }: { badge: Omit<ProfileBadge, "id"> & 
             {badge.iconSrc && (
                 <Menu.MenuItem
                     id="vc-badge-copy-link"
-                    label="Copy Badge Image Link"
+                    label={t("Copy Badge Image Link")}
                     action={() => copyWithToast(badge.iconSrc!)}
                     leadingAccessory={{ type: "icon", icon: LinkIcon }}
                 />
@@ -219,8 +220,9 @@ export default definePlugin({
         {
             find: "getLegacyUsername(){",
             replacement: {
-                match: /getBadges\(\)\{.{0,100}?return\[/,
-                replace: "$&...$self.getBadges(this),"
+                // Keep Discord's list under a new name, add our badges to it, and let plugins reorder or filter the result
+                match: /getBadges\(\)\{(.{0,100}?)return\[/,
+                replace: "getBadges(){return $self.processBadges(this,this.ecUnprocessedBadges())}ecUnprocessedBadges(){$1return[...$self.getBadges(this),"
             }
         }
     ],
@@ -257,6 +259,10 @@ export default definePlugin({
         clearInterval(intervalId);
     },
 
+    set DonorBadges(val: any) {
+        DonorBadges = val;
+    },
+
     getBadges(profile: { userId: string; guildId: string; }) {
         if (!profile) return [];
 
@@ -268,6 +274,19 @@ export default definePlugin({
         }
     },
 
+    processBadges(profile: { userId: string; guildId: string; }, badges: any[]) {
+        if (!profile || !BadgeListProcessors.size) return badges;
+
+        for (const process of BadgeListProcessors) {
+            try {
+                badges = process(profile, badges) ?? badges;
+            } catch (e) {
+                new Logger("BadgeAPI#processBadges").error(e);
+            }
+        }
+        return badges;
+    },
+
     renderBadgeComponent: ErrorBoundary.wrap((badge: ProfileBadge & BadgeUserArgs) => {
         const Component = badge.component!;
         return <Component {...badge} />;
@@ -276,7 +295,7 @@ export default definePlugin({
     getBadgeMouseEventHandlers(badge: ProfileBadge & BadgeUserArgs) {
         const handlers = {} as Record<string, (e: React.MouseEvent) => void>;
 
-        if (!badge) return handlers; // sanity check
+        if (!badge) return handlers;
 
         const { onClick, onContextMenu } = badge;
 
@@ -287,15 +306,20 @@ export default definePlugin({
     },
 
     getDonorBadges(userId: string) {
-        return DonorBadges[userId]?.map((badge, idx) => ({
-            id: `vencord_donor_badge_${idx}`,
-            iconSrc: badge.badge,
-            description: badge.tooltip,
+        const userBadges = DonorBadges[userId];
+        if (!userBadges) return [];
+
+        const list = Array.isArray(userBadges) ? userBadges : ((userBadges as any)?.badges || []);
+        return list.map((badge: any, idx: number) => ({
+            id: badge.id ?? `fluxcord_donor_badge_${idx}`,
+            iconSrc: badge.badge || badge.icon || badge.iconSrc,
+            description: badge.tooltip || badge.description || "Custom Badge",
             position: BadgePosition.START,
             props: {
                 style: {
-                    borderRadius: "50%",
-                    transform: "scale(0.9)" // The image is a bit too big compared to default badges
+                    background: "transparent",
+                    backgroundColor: "transparent",
+                    transform: "scale(1.05)"
                 }
             },
             onContextMenu(event, badge) {

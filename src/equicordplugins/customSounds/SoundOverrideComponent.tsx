@@ -9,6 +9,7 @@ import { Card } from "@components/Card";
 import { FormSwitch } from "@components/FormSwitch";
 import { Heading } from "@components/Heading";
 import { classNameFactory } from "@utils/css";
+import { t } from "@utils/i18n";
 import { Margins } from "@utils/margins";
 import { useForceUpdater } from "@utils/react";
 import { makeRange } from "@utils/types";
@@ -192,67 +193,70 @@ export function SoundOverrideComponent({ type, override, onChange }: {
                         </Button>
                     </div>
 
-                    <Heading>Volume</Heading>
-                    <Slider
-                        markers={makeRange(0, 100, 10)}
-                        initialValue={override.volume}
-                        onValueChange={val => {
-                            sound.current && (sound.current.volume = val);
-                            override.volume = val;
-                            saveAndNotify();
-                        }}
-                        className={Margins.bottom16}
-                        disabled={!override.enabled}
-                    />
+                    <div className={Margins.bottom16}>
+                        <Heading>{t("Volume")}</Heading>
+                        <Slider
+                            markers={makeRange(0, 100, 10)}
+                            initialValue={override.volume}
+                            onValueChange={val => {
+                                sound.current && (sound.current.volume = val);
+                                override.volume = val;
+                                saveAndNotify();
+                            }}
+                            disabled={!override.enabled}
+                        />
+                    </div>
 
-                    <Heading>Sound Source</Heading>
-                    <Select
-                        options={[
-                            { value: "default", label: "Default" },
-                            ...(type.seasonal?.map(id => ({ value: id, label: capitalizeWords(id) })) ?? []),
-                            { value: "custom", label: "Custom" }
-                        ]}
-                        isSelected={v => v === override.selectedSound}
-                        select={async v => {
-                            override.selectedSound = v;
+                    <div className={Margins.bottom16}>
+                        <Heading>{t("Sound Source")}</Heading>
+                        <Select
+                            options={[
+                                { value: "default", label: "Default" },
+                                ...(type.seasonal?.map(id => ({ value: id, label: capitalizeWords(id) })) ?? []),
+                                { value: "custom", label: "Custom" }
+                            ]}
+                            isSelected={v => v === override.selectedSound}
+                            select={async v => {
+                                override.selectedSound = v;
 
-                            if (v === "custom" && override.selectedFileId) {
-                                try {
-                                    await ensureDataURICached(override.selectedFileId);
-                                } catch (error) {
-                                    console.error(`[CustomSounds] Failed to cache data URI for ${type.id}:`, error);
-                                    showToast("Error loading custom sound file");
+                                if (v === "custom" && override.selectedFileId) {
+                                    try {
+                                        await ensureDataURICached(override.selectedFileId);
+                                    } catch (error) {
+                                        console.error(`[CustomSounds] Failed to cache data URI for ${type.id}:`, error);
+                                        showToast("Error loading custom sound file");
+                                    }
                                 }
-                            }
 
-                            await saveAndNotify();
-                        }}
-                        serialize={opt => opt.value}
-                        className={Margins.bottom16}
-                    />
+                                await saveAndNotify();
+                            }}
+                            serialize={opt => opt.value}
+                        />
+                    </div>
 
                     {override.selectedSound === "custom" && (
                         <>
-                            <Heading>Custom File</Heading>
-                            <Select
-                                options={[
-                                    { value: "", label: "Select a file..." },
-                                    ...customFileOptions
-                                ]}
-                                isSelected={v => v === (override.selectedFileId || "")}
-                                select={async id => {
-                                    if (!id) {
-                                        override.selectedFileId = undefined;
-                                    } else {
-                                        override.selectedFileId = id;
-                                        await ensureDataURICached(id);
-                                    }
+                            <div className={Margins.bottom8}>
+                                <Heading>{t("Custom File")}</Heading>
+                                <Select
+                                    options={[
+                                        { value: "", label: "Select a file..." },
+                                        ...customFileOptions
+                                    ]}
+                                    isSelected={v => v === (override.selectedFileId || "")}
+                                    select={async id => {
+                                        if (!id) {
+                                            override.selectedFileId = undefined;
+                                        } else {
+                                            override.selectedFileId = id;
+                                            await ensureDataURICached(id);
+                                        }
 
-                                    await saveAndNotify();
-                                }}
-                                serialize={opt => opt.value}
-                                className={Margins.bottom8}
-                            />
+                                        await saveAndNotify();
+                                    }}
+                                    serialize={opt => opt.value}
+                                />
+                            </div>
                             <input
                                 ref={fileInputRef}
                                 type="file"

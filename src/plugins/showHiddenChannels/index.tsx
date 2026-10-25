@@ -22,6 +22,7 @@ import { definePluginSettings } from "@api/Settings";
 import ErrorBoundary from "@components/ErrorBoundary";
 import { Devs, EquicordDevs } from "@utils/constants";
 import { classNameFactory } from "@utils/css";
+import { t } from "@utils/i18n";
 import { classes } from "@utils/misc";
 import definePlugin, { OptionType } from "@utils/types";
 import type { Channel, Role } from "@vencord/discord-types";
@@ -398,7 +399,7 @@ export default definePlugin({
             ]
         },
         {
-            find: '"HasBeenInStageChannel"',
+            find: "audience-header-",
             replacement: [
                 {
                     // Render our HiddenChannelLockScreen component instead of the main stage channel component
@@ -419,12 +420,7 @@ export default definePlugin({
                     // Disable strange styles applied to the header for the HiddenChannelLockScreen of stage channels
                     match: /"124px".+?style:(?<=let \i,{channel:(\i).+?)/,
                     replace: (m, channel) => `${m}$self.isHiddenChannel(${channel})?void 0:`
-                }
-            ]
-        },
-        {
-            find: "#{intl::STAGE_FULL_MODERATOR_TITLE}",
-            replacement: [
+                },
                 {
                     // Remove the divider and amount of users in stage channel components for the HiddenChannelLockScreen
                     match: /\(0,\i\.jsx\)\(\i\.\i\.Divider.+?}\)]}\)(?=.+?:(\i)\.guild_id)/,
@@ -436,6 +432,13 @@ export default definePlugin({
                     replace: "!$self.isHiddenChannel(arguments[0]?.channel,true)&&$&"
                 }
             ]
+        },
+        {
+            find: "2026-02-private-channel-hiding",
+            replacement: {
+                match: /(?<=enableObfuscation|enableIntegrityCheck):!0/g,
+                replace: ":false"
+            }
         },
         {
             // Make the chat input bar channel list contain hidden channels
@@ -594,7 +597,7 @@ export default definePlugin({
     ), { noop: true }),
 
     EyeRightIcon: ErrorBoundary.wrap(() => (
-        <Tooltip text="Hidden Channel">
+        <Tooltip text={t("Hidden Channel")}>
             {({ onMouseLeave, onMouseEnter }) => (
                 <svg
                     onMouseLeave={onMouseLeave}
@@ -613,7 +616,7 @@ export default definePlugin({
     ), { noop: true }),
 
     LockRightIcon: ErrorBoundary.wrap(() => (
-        <Tooltip text="Hidden Channel">
+        <Tooltip text={t("Hidden Channel")}>
             {({ onMouseLeave, onMouseEnter }) => (
                 <svg
                     onMouseLeave={onMouseLeave}

@@ -1,7 +1,13 @@
-import { DataStore } from "@api/index";
+/*
+ * Vencord, a Discord client mod
+ * Copyright (c) 2026 Vendicated and contributors
+ * SPDX-License-Identifier: GPL-3.0-or-later
+ */
+
 import { HeaderBarButton } from "@api/HeaderBar";
-import { openModal, ModalSize } from "@utils/modal";
-import { ModalRoot, ModalHeader, ModalContent, ModalCloseButton } from "@utils/fluxModals";
+import { DataStore } from "@api/index";
+import { ModalCloseButton,ModalContent, ModalHeader, ModalRoot } from "@utils/fluxModals";
+import { ModalSize,openModal } from "@utils/modal";
 import definePlugin from "@utils/types";
 import { findByPropsLazy } from "@webpack";
 import { Button, Forms, TextInput, useEffect, useMemo, useRef, useState } from "@webpack/common";

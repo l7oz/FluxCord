@@ -9,6 +9,7 @@ import { Button } from "@components/Button";
 import { SettingsSection } from "@components/settings/tabs/plugins/components/Common";
 import { Switch } from "@components/Switch";
 import { classNameFactory } from "@utils/css";
+import { t } from "@utils/i18n";
 import { useForceUpdater } from "@utils/react";
 import { OptionType } from "@utils/types";
 import { React, Select, showToast, TextArea, TextInput, Toasts } from "@webpack/common";
@@ -402,14 +403,13 @@ function FallbackOrderSettings() {
                         data-dragging={dragIndex === index}
                     >
                         <span className={cl("fallback-order-label")}>{serviceLabels[service]}</span>
-                        <span className={cl("fallback-order-handle")}>Drag</span>
+                        <span className={cl("fallback-order-handle")}>{t("Drag")}</span>
                     </div>
                 ))}
             </div>
             <div className={cl("fallback-order-actions")}>
                 <Button size="small" onClick={() => commitOrder(fallbackServiceOrder)}>
-                    Reset to default
-                </Button>
+                    {t("Reset to default")}</Button>
             </div>
         </SettingsSection>
     );
@@ -478,116 +478,116 @@ export function SettingsComponent() {
             </SettingsSection>
 
             {isZipline && (
-                <SettingGroup name="Zipline" description="Connection details for your Zipline instance.">
+                <SettingGroup name="Zipline" description={t("Connection details for your Zipline instance.")}>
                     <SettingTextInput
                         name="Service URL"
-                        description="The URL of your Zipline instance"
+                        description={t("The URL of your Zipline instance")}
                         value={store.serviceUrl}
                         onChange={v => store.serviceUrl = v}
                         placeholder="https://your-zipline-instance.com"
                     />
                     <SettingTextInput
                         name="Zipline Token"
-                        description="Your Zipline API authorization token"
+                        description={t("Your Zipline API authorization token")}
                         value={store.ziplineToken}
                         onChange={v => store.ziplineToken = v}
-                        placeholder="Your Zipline API token"
+                        placeholder={t("Your Zipline API token")}
                     />
                     <SettingTextInput
                         name="Folder ID"
-                        description="Folder ID for uploads (leave empty for no folder)"
+                        description={t("Folder ID for uploads (leave empty for no folder)")}
                         value={store.folderId}
                         onChange={v => store.folderId = v}
-                        placeholder="Leave empty for no folder"
+                        placeholder={t("Leave empty for no folder")}
                     />
                 </SettingGroup>
             )}
 
             {isEzHost && (
-                <SettingGroup name="E-Z Host" description="Connection details for E-Z Host uploads.">
+                <SettingGroup name="E-Z Host" description={t("Connection details for E-Z Host uploads.")}>
                     <SettingTextInput
                         name="E-Z Host API Key"
-                        description="Your E-Z Host API key"
+                        description={t("Your E-Z Host API key")}
                         value={store.ezHostKey}
                         onChange={v => store.ezHostKey = v}
-                        placeholder="Your E-Z Host API key"
+                        placeholder={t("Your E-Z Host API key")}
                     />
                 </SettingGroup>
             )}
 
             {isNest && (
-                <SettingGroup name="Nest" description="Connection details for Nest uploads.">
+                <SettingGroup name="Nest" description={t("Connection details for Nest uploads.")}>
                     <SettingTextInput
                         name="Nest Token"
-                        description="Your Nest API authorization token"
+                        description={t("Your Nest API authorization token")}
                         value={store.nestToken}
                         onChange={v => store.nestToken = v}
-                        placeholder="Your Nest API token"
+                        placeholder={t("Your Nest API token")}
                     />
                 </SettingGroup>
             )}
 
             {isS3 && (
-                <SettingGroup name="S3-Compatible Storage" description="Connection details and object naming for your bucket.">
+                <SettingGroup name="S3-Compatible Storage" description={t("Connection details and object naming for your bucket.")}>
                     <SettingTextInput
                         name="S3 Endpoint URL"
-                        description="S3-compatible endpoint (e.g. https://<accountid>.r2.cloudflarestorage.com)"
+                        description={t("S3-compatible endpoint (e.g. https://<accountid>.r2.cloudflarestorage.com)")}
                         value={store.s3Endpoint}
                         onChange={v => store.s3Endpoint = v}
                         placeholder="https://your-endpoint.example.com"
                     />
                     <SettingTextInput
                         name="Bucket Name"
-                        description="Bucket to upload into"
+                        description={t("Bucket to upload into")}
                         value={store.s3Bucket}
                         onChange={v => store.s3Bucket = v}
                         placeholder="my-bucket"
                     />
                     <SettingTextInput
                         name="Region"
-                        description="AWS region or auto for Cloudflare R2"
+                        description={t("AWS region or auto for Cloudflare R2")}
                         value={store.s3Region}
                         onChange={v => store.s3Region = v}
                         placeholder="auto"
                     />
                     <SettingTextInput
                         name="Access Key ID"
-                        description="S3-compatible access key"
+                        description={t("S3-compatible access key")}
                         value={store.s3AccessKeyId}
                         onChange={v => store.s3AccessKeyId = v}
-                        placeholder="Your access key ID"
+                        placeholder={t("Your access key ID")}
                     />
                     <SettingTextInput
                         name="Secret Access Key"
-                        description="S3-compatible secret key"
+                        description={t("S3-compatible secret key")}
                         value={store.s3SecretAccessKey}
                         onChange={v => store.s3SecretAccessKey = v}
-                        placeholder="Your secret access key"
+                        placeholder={t("Your secret access key")}
                     />
                     <SettingTextInput
                         name="Session Token"
-                        description="Optional temporary credential token"
+                        description={t("Optional temporary credential token")}
                         value={store.s3SessionToken}
                         onChange={v => store.s3SessionToken = v}
-                        placeholder="Optional session token"
+                        placeholder={t("Optional session token")}
                     />
                     <SettingTextInput
                         name="Public Base URL"
-                        description="Optional public URL base to use for returned links"
+                        description={t("Optional public URL base to use for returned links")}
                         value={store.s3PublicUrl}
                         onChange={v => store.s3PublicUrl = v}
                         placeholder="https://cdn.example.com"
                     />
                     <SettingTextInput
                         name="Object Key Prefix"
-                        description="Optional folder/prefix inside the bucket"
+                        description={t("Optional folder/prefix inside the bucket")}
                         value={store.s3Prefix}
                         onChange={v => store.s3Prefix = v}
-                        placeholder="uploads/discord"
+                        placeholder={t("uploads/discord")}
                     />
                     <SettingSwitch
                         name="Use Path-Style Endpoint"
-                        description="Use endpoint/bucket/key format, recommended for R2."
+                        description={t("Use endpoint/bucket/key format, recommended for R2.")}
                         checked={store.s3ForcePathStyle}
                         onChange={v => store.s3ForcePathStyle = v}
                     />
@@ -595,13 +595,13 @@ export function SettingsComponent() {
             )}
 
             {isCatbox && (
-                <SettingGroup name="Catbox" description="Optional account binding for Catbox uploads.">
+                <SettingGroup name="Catbox" description={t("Optional account binding for Catbox uploads.")}>
                     <SettingTextInput
                         name="Catbox Userhash"
-                        description="Your Catbox userhash for account binding, leave empty for anonymous uploads."
+                        description={t("Your Catbox userhash for account binding, leave empty for anonymous uploads.")}
                         value={store.catboxUserhash}
                         onChange={v => store.catboxUserhash = v}
-                        placeholder="Your Catbox userhash"
+                        placeholder={t("Your Catbox userhash")}
                     />
                 </SettingGroup>
             )}
@@ -616,43 +616,43 @@ export function SettingsComponent() {
                             update();
                         }}
                         serialize={v => v}
-                        placeholder="Select expiry"
+                        placeholder={t("Select expiry")}
                     />
                 </SettingsSection>
             )}
 
             {isGofile && (
-                <SettingGroup name="GoFile" description="Optional account binding for GoFile uploads.">
+                <SettingGroup name="GoFile" description={t("Optional account binding for GoFile uploads.")}>
                     <SettingTextInput
                         name="GoFile Token"
-                        description="Optional GoFile token to upload into your account."
+                        description={t("Optional GoFile token to upload into your account.")}
                         value={store.gofileToken}
                         onChange={v => store.gofileToken = v}
-                        placeholder="Optional GoFile token"
+                        placeholder={t("Optional GoFile token")}
                     />
                 </SettingGroup>
             )}
 
             {isPixelVault && (
-                <SettingGroup name="PixelVault" description="Connection details for PixelVault uploads.">
+                <SettingGroup name="PixelVault" description={t("Connection details for PixelVault uploads.")}>
                     <SettingTextInput
                         name="PixelVault Upload Key"
-                        description="Your PixelVault authorization key."
+                        description={t("Your PixelVault authorization key.")}
                         value={store.pixelVaultKey}
                         onChange={v => store.pixelVaultKey = v}
-                        placeholder="Your PixelVault upload key"
+                        placeholder={t("Your PixelVault upload key")}
                     />
                 </SettingGroup>
             )}
 
             {isPixelDrain && (
-                <SettingGroup name="PixelDrain" description="Optional account binding for PixelDrain uploads.">
+                <SettingGroup name="PixelDrain" description={t("Optional account binding for PixelDrain uploads.")}>
                     <SettingTextInput
                         name="PixelDrain API Key"
-                        description="Optional PixelDrain API key for authenticated uploads. Leave empty for anonymous uploads."
+                        description={t("Optional PixelDrain API key for authenticated uploads. Leave empty for anonymous uploads.")}
                         value={store.pixelDrainKey}
                         onChange={v => store.pixelDrainKey = v}
-                        placeholder="Your PixelDrain API key"
+                        placeholder={t("Your PixelDrain API key")}
                     />
                 </SettingGroup>
             )}
@@ -661,7 +661,7 @@ export function SettingsComponent() {
                 <SettingGroup name="ShareX Custom Uploader" description="Paste, import, or validate a ShareX custom uploader config.">
                     <SettingsSection
                         name="ShareX Custom Uploader Config"
-                        description="Paste your ShareX custom uploader JSON (.sxcu/.json). DestinationType must include FileUploader or ImageUploader."
+                        description={t("Paste your ShareX custom uploader JSON (.sxcu/.json). DestinationType must include FileUploader or ImageUploader.")}
                     >
                         <TextArea
                             value={store.sharexConfig}
@@ -672,8 +672,8 @@ export function SettingsComponent() {
                     </SettingsSection>
                     <SettingsSection name="ShareX Config Actions" description="Import from file or validate pasted config">
                         <div className={cl("actions")}>
-                            <Button size="small" onClick={triggerShareXFileUpload}>Import .sxcu/.json</Button>
-                            <Button size="small" onClick={validateShareXConfig}>Validate</Button>
+                            <Button size="small" onClick={triggerShareXFileUpload}>{t("Import .sxcu/.json")}</Button>
+                            <Button size="small" onClick={validateShareXConfig}>{t("Validate")}</Button>
                         </div>
                         <input
                             ref={sharexFileInputRef}
@@ -689,14 +689,14 @@ export function SettingsComponent() {
             <SettingGroup name="Upload Behavior" description="Control what FileUpload does after a host returns a URL.">
                 <SettingSwitch
                     name="Strip Query Parameters"
-                    description="Strip query parameters from the uploaded file URL."
+                    description={t("Strip query parameters from the uploaded file URL.")}
                     checked={store.stripQueryParams}
                     onChange={v => store.stripQueryParams = v}
                 />
 
                 <SettingSwitch
                     name="Use Embed Proxy"
-                    description="Wrap uploaded video links with an embed proxy service for better Discord previews."
+                    description={t("Wrap uploaded video links with an embed proxy service for better Discord previews.")}
                     checked={store.embedProxyEnabled}
                     onChange={v => {
                         store.embedProxyEnabled = v;
@@ -714,81 +714,81 @@ export function SettingsComponent() {
                                 update();
                             }}
                             serialize={v => v}
-                            placeholder="Select an embed proxy service"
+                            placeholder={t("Select an embed proxy service")}
                         />
                     </SettingsSection>
                 )}
 
                 <SettingSwitch
                     name="Convert APNG to GIF"
-                    description="Convert APNG files to GIF format."
+                    description={t("Convert APNG files to GIF format.")}
                     checked={store.apngToGif}
                     onChange={v => store.apngToGif = v}
                 />
 
                 <SettingSwitch
                     name="Preserve Original Filename"
-                    description="Use the original filename instead of naming uploads as upload.ext."
+                    description={t("Use the original filename instead of naming uploads as upload.ext.")}
                     checked={Boolean((store as { preserveOriginalFilename?: boolean; }).preserveOriginalFilename)}
                     onChange={v => (store as { preserveOriginalFilename?: boolean; }).preserveOriginalFilename = v}
                 />
 
                 <SettingSwitch
                     name="Auto Copy URL"
-                    description="Automatically copy the uploaded file URL to clipboard."
+                    description={t("Automatically copy the uploaded file URL to clipboard.")}
                     checked={store.autoCopy}
                     onChange={v => store.autoCopy = v}
                 />
 
                 <SettingSwitch
                     name="Disable Fallback Uploaders"
-                    description="Only use the selected uploader without trying fallback hosts."
+                    description={t("Only use the selected uploader without trying fallback hosts.")}
                     checked={store.disableFallbacks}
                     onChange={v => store.disableFallbacks = v}
                 />
 
                 <SettingSwitch
                     name="Insert URL into Chat Input"
-                    description="After upload, insert the resulting URL into the current chat input."
+                    description={t("After upload, insert the resulting URL into the current chat input.")}
                     checked={store.autoSend}
                     onChange={v => store.autoSend = v}
                 />
 
                 <SettingSwitch
                     name="Format Inserted URL"
-                    description="Wrap inserted URLs in angle brackets to avoid Discord preview embedding."
+                    description={t("Wrap inserted URLs in angle brackets to avoid Discord preview embedding.")}
                     checked={store.autoFormat}
                     onChange={v => store.autoFormat = v}
                 />
             </SettingGroup>
 
-            <SettingGroup name="Discord Integration" description="Choose when FileUpload takes over Discord file handling.">
+            <SettingGroup name="Discord Integration" description={t("Choose when FileUpload takes over Discord file handling.")}>
                 <SettingSwitch
                     name="Bypass Discord Upload Button"
-                    description="Use FileUpload when uploading through Discord's file picker."
+                    description={t("Use FileUpload when uploading through Discord's file picker.")}
                     checked={Boolean((store as { bypassDiscordUpload?: boolean; }).bypassDiscordUpload)}
                     onChange={v => (store as { bypassDiscordUpload?: boolean; }).bypassDiscordUpload = v}
                 />
 
                 <SettingSwitch
                     name="Auto Upload Pasted Files"
-                    description="Automatically upload files from clipboard to image host when pasting in chat input."
+                    description={t("Automatically upload files from clipboard to image host when pasting in chat input.")}
                     checked={store.autoUploadPastedFiles}
                     onChange={v => store.autoUploadPastedFiles = v}
                 />
 
                 <SettingSwitch
                     name="Respect Discord File Size Limit"
-                    description="Use FileUpload only for files larger than your current Discord upload limit."
+                    description={t("Use FileUpload only for files larger than your current Discord upload limit.")}
                     checked={store.bypassDiscordUploadOnlyOverLimit}
                     onChange={v => store.bypassDiscordUploadOnlyOverLimit = v}
                 />
             </SettingGroup>
 
-            <SettingGroup name="Network" description="Configure browser upload proxying and timeouts.">
+            <SettingGroup name="Network" description={t("Configure browser upload proxying and timeouts.")}>
                 <SettingTextInput
                     name="CORS Proxy URL"
-                    description="CORS proxy used for web uploads. Leave empty to use the default proxy."
+                    description={t("CORS proxy used for web uploads. Leave empty to use the default proxy.")}
                     value={store.corsProxyUrl || ""}
                     onChange={v => store.corsProxyUrl = v}
                     placeholder="https://your-cors-proxy.example.com"
@@ -813,7 +813,7 @@ export function SettingsComponent() {
                             update();
                         }}
                         serialize={v => v}
-                        placeholder="Select timeout"
+                        placeholder={t("Select timeout")}
                     />
                 </SettingsSection>
             </SettingGroup>

@@ -1,11 +1,6 @@
 /*
- * ProfileVisibility — FluxCord
- * Copyright (c) 2026 LOSTSTR
- *
- * زرّ في الشريط العلوي يبدّل خصوصية ظهور ملفك الشخصي في ديسكورد بين «خاص»
- * (الأصدقاء فقط) و«ظاهر لكل الخوادم». الإعداد يُحفَظ في حساب ديسكورد نفسه
- * فيبقى ثابتاً عبر إعادة التشغيل.
- *
+ * Vencord, a Discord client mod
+ * Copyright (c) 2026 Vendicated and contributors
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
@@ -21,7 +16,7 @@ import { Toasts } from "@webpack/common";
 // قيم ProfileVisibilityType (محقَّقة من توثيق بروتو إعدادات المستخدم):
 //   0 UNSET (= 3) · 1 FRIENDS_ONLY · 2 FRIENDS_AND_SMALL_GUILDS · 3 FRIENDS_AND_ALL_GUILDS
 const PRIVATE = 1; // الأصدقاء فقط — أقصى خصوصية (يُخفي الملف عن كل الخوادم)
-const OPEN = 3;    // الأصدقاء + كل الخوادم (الافتراضي)
+const OPEN = 3; // الأصدقاء + كل الخوادم (الافتراضي)
 
 const logger = new Logger("ProfileVisibility");
 

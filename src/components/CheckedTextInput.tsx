@@ -64,8 +64,8 @@ export function CheckedTextInput({ initialValue, onChange, validate, placeholder
                 type="text"
                 value={value}
                 onChange={handleChange}
-                error={error}
                 placeholder={placeholder}
+                error={error}
             />
         </>
     );

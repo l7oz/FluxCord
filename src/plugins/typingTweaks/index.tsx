@@ -25,6 +25,7 @@ import { Devs, EquicordDevs } from "@utils/constants";
 import { classNameFactory } from "@utils/css";
 import { openUserProfile } from "@utils/discord";
 import { isNonNullish } from "@utils/guards";
+import { t } from "@utils/i18n";
 import { Logger } from "@utils/Logger";
 import definePlugin, { OptionType } from "@utils/types";
 import { Channel, User } from "@vencord/discord-types";
@@ -67,8 +68,7 @@ export const buildSeveralUsers = ErrorBoundary.wrap(function buildSeveralUsers({
                     {", "}
                 </React.Fragment>
             ))}
-            and {count} others are typing...
-        </>
+            and {count}{" "}{t("others are typing...")}</>
     );
 }, { noop: true });
 
@@ -168,13 +168,14 @@ export default definePlugin({
     ],
 
     useTypingUsers(channel: Channel | undefined): User[] {
+        // Call the hooks unconditionally; a channel that shows up later must not change the hook order
+        const typingUsers = useStateFromStores([TypingStore], () => channel ? TypingStore.getTypingUsers(channel.id) : {});
+        const myId = useStateFromStores([AuthenticationStore], () => AuthenticationStore.getId());
+
         try {
             if (!channel) {
                 throw new Error("No channel");
             }
-
-            const typingUsers = useStateFromStores([TypingStore], () => TypingStore.getTypingUsers(channel.id));
-            const myId = useStateFromStores([AuthenticationStore], () => AuthenticationStore.getId());
 
             return Object.keys(typingUsers)
                 .filter(id => {

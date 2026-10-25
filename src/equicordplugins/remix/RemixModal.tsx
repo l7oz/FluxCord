@@ -4,6 +4,7 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
+import { t } from "@utils/i18n";
 import { RenderModalProps } from "@vencord/discord-types";
 import { Modal, React } from "@webpack/common";
 
@@ -40,13 +41,12 @@ export default function RemixModal({ modalProps, close, url }: Props) {
         <Modal
             {...modalProps}
             size="lg"
-            title="Remix"
+            title={t("Remix")}
             actions={[
                 {
                     text: (
                         <span style={{ display: "flex", alignItems: "center", gap: "6px" }}>
-                            <SendIcon /> Send
-                        </span>
+                            <SendIcon />{" "}{t("Send")}</span>
                     ) as any,
                     variant: "primary",
                     onClick: () => closeModal(close, true)

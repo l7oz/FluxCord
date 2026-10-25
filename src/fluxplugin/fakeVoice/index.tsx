@@ -6,6 +6,7 @@
 
 import { ApplicationCommandInputType, sendBotMessage } from "@api/Commands";
 import { UserAreaButton, UserAreaRenderProps } from "@api/UserArea";
+import { t } from "@utils/i18n";
 import definePlugin from "@utils/types";
 import { findByPropsLazy } from "@webpack";
 import { ChannelStore, ContextMenuApi, FluxDispatcher, MediaEngineStore, Menu, React, SelectedChannelStore, UserStore } from "@webpack/common";

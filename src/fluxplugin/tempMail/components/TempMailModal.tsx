@@ -4,13 +4,13 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
-import { t } from "@utils/fluxI18n";
 import "../styles.css";
 
 import { copyToClipboard } from "@utils/clipboard";
+import { t } from "@utils/fluxI18n";
+import { Logger } from "@utils/Logger";
 import type { RenderModalProps } from "@vencord/discord-types";
 import { Modal, React, showToast, TextInput, Toasts, useEffect, useRef, useState } from "@webpack/common";
-import { Logger } from "@utils/Logger";
 
 const logger = new Logger("TempMail");
 

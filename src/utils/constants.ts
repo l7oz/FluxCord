@@ -76,6 +76,26 @@ export const Devs = /* #__PURE__*/ Object.freeze({
         name: "Apexo",
         id: 228548952687902720n
     },
+    ewlle: {
+        name: "ewlle",
+        id: 1390609041897554050n
+    },
+    rootpoi: {
+        name: "rootpoi",
+        id: 1390609041897554050n
+    },
+    kraethis: {
+        name: "kraethis",
+        id: 904384828143706164n
+    },
+    Sharp: {
+        name: "Sharp",
+        id: 1527382025429061823n
+    },
+    vpg: {
+        name: "vpg",
+        id: 1374807824479162369n
+    },
     Arjix: {
         name: "ArjixWasTaken",
         id: 674710789138939916n,

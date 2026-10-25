@@ -5,9 +5,9 @@
  */
 
 import * as DataStore from "@api/DataStore";
+import { Logger } from "@utils/Logger";
 
 import { TmAccount, TmMessage } from "./api";
-import { Logger } from "@utils/Logger";
 
 const logger = new Logger("TempMail");
 

@@ -25,7 +25,7 @@ export default definePlugin({
     description: "Trims leading indentation from codeblocks",
     dependencies: ["MessageEventsAPI"],
     tags: ["Chat", "Utility"],
-    authors: [Devs.Ven],
+    authors: [Devs.ewlle, Devs.kraethis, Devs.Sharp],
 
     patches: [
         {

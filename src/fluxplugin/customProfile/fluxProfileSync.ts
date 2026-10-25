@@ -1,12 +1,7 @@
 /*
- * FluxCord, a modification for Discord's desktop app
- * Copyright (c) 2026 FluxCord contributors
+ * Vencord, a Discord client mod
+ * Copyright (c) 2026 Vendicated and contributors
  * SPDX-License-Identifier: GPL-3.0-or-later
- *
- * Ported from Endcord's endcordProfileSync.ts (GPL-3.0). The shared profile
- * directory lives in the Flux-bored repo (profiles.json) instead of a
- * dedicated API server. Reads are served from there; there is no remote
- * write endpoint, so uploads resolve locally (see CustomProfile).
  */
 
 export const FLUX_API = "https://raw.githubusercontent.com/l7oz/Flux-bored/main";

@@ -1,17 +1,12 @@
 /*
- * FluxCord — FluxDiagnostics memory guard (optional background leak watch)
- * Copyright (c) 2026 LOSTSTR
+ * Vencord, a Discord client mod
+ * Copyright (c) 2026 Vendicated and contributors
  * SPDX-License-Identifier: GPL-3.0-or-later
- *
- * حارس ذاكرة اختياري — مُطفأ افتراضياً ولا يعمل إلا إذا فعّله المستخدم بنفسه.
- * عيّنة heap واحدة كل 60 ثانية (قراءة خاصية — ميكروثوانٍ)، ونقارن «خطّ الأساس بعد GC»
- * (أدنى قيمة في كل نصف نافذة) لا القيم اللحظية — فتذبذب الاستهلاك الطبيعي لا يُطلق
- * إنذاراً كاذباً؛ فقط النموّ المطّرد الذي لا يُحرّره جامع المهملات. إشعار واحد في الجلسة.
  */
 
 const SAMPLE_MS = 60_000; // عيّنة كل دقيقة
-const WINDOW = 15;        // نافذة 15 دقيقة
-const GROWTH_MB = 150;    // نموّ خطّ الأساس الذي يستحق التنبيه
+const WINDOW = 15; // نافذة 15 دقيقة
+const GROWTH_MB = 150; // نموّ خطّ الأساس الذي يستحق التنبيه
 
 let timer: ReturnType<typeof setInterval> | null = null;
 let samples: number[] = [];

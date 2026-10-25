@@ -5,7 +5,8 @@
  */
 
 import { NavContextMenuPatchCallback } from "@api/ContextMenu";
-import { Devs, EquicordDevs } from "@utils/constants";
+import { Devs } from "@utils/constants";
+import { t } from "@utils/i18n";
 import definePlugin from "@utils/types";
 import { ChannelType } from "@vencord/discord-types/enums";
 import { findByPropsLazy } from "@webpack";
@@ -45,7 +46,7 @@ const patchChannelContextMenu: NavContextMenuPatchCallback = (children, { channe
     children.push(
         <Menu.MenuItem
             id="vc-view-voice-channel-logs"
-            label="View Voice Channel Logs"
+            label={t("View Voice Channel Logs")}
             action={() => openVoiceChannelLog(channel)}
         />
     );
@@ -55,7 +56,7 @@ export default definePlugin({
     name: "VoiceChannelLog",
     description: "Logs voice channel activity including joins, leaves, soundboard, mute, camera, screenshare, and more.",
     tags: ["Servers", "Utility", "Voice"],
-    authors: [Devs.Sqaaakoi, Devs.thororen, EquicordDevs.nyx, Devs.Moxxie, EquicordDevs.Fres, Devs.amy],
+    authors: [Devs.ewlle, Devs.kraethis, Devs.Sharp],
     dependencies: ["AudioPlayerAPI", "HeaderBarAPI"],
     settings,
     contextMenus: {

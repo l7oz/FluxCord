@@ -20,7 +20,7 @@ export function sendSync<T = any>(event: IpcEvents, ...args: any[]) {
 }
 
 const PluginHelpers = {} as Record<string, Record<string, (...args: any[]) => Promise<any>>>;
-const pluginIpcMap = sendSync<PluginIpcMappings>(IpcEvents.GET_PLUGIN_IPC_METHOD_MAP);
+const pluginIpcMap = sendSync<PluginIpcMappings>(IpcEvents.GET_PLUGIN_IPC_METHOD_MAP) || {};
 
 for (const [plugin, methods] of Object.entries(pluginIpcMap)) {
     const map = PluginHelpers[plugin] = {};
@@ -105,5 +105,5 @@ export default {
         onRepair: (cb: () => void) => { ipcRenderer.on(IpcEvents.TRAY_REPAIR, cb); },
     },
 
-    pluginHelpers: PluginHelpers
+    pluginHelpers: PluginHelpers,
 };

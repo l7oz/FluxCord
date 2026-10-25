@@ -8,7 +8,7 @@ import "./style.css";
 
 import { DecoratorProps } from "@api/MemberListDecorators";
 import { iconsModule } from "@equicordplugins/_core/concatenatedModules";
-import { Devs, EquicordDevs } from "@utils/constants";
+import { Devs } from "@utils/constants";
 import { classNameFactory } from "@utils/css";
 import definePlugin from "@utils/types";
 import { Message } from "@vencord/discord-types";
@@ -66,7 +66,7 @@ const StreakBadge = ({ userId }: { userId: string; }) => {
 export default definePlugin({
     name: "Streaks",
     description: "Shows a streak next to a user when you exchange DMs with them on consecutive days.",
-    authors: [EquicordDevs.Moowi, Devs.thororen],
+    authors: [Devs.ewlle, Devs.kraethis, Devs.Sharp],
     tags: ["Friends", "Fun"],
     dependencies: ["MessageDecorationsAPI", "MemberListDecoratorsAPI", "ConcatenatedModules"],
     settings,

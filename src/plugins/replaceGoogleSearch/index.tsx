@@ -8,6 +8,7 @@ import { findGroupChildrenByChildId, NavContextMenuPatchCallback } from "@api/Co
 import { definePluginSettings, migratePluginSettings } from "@api/Settings";
 import { SearchIcon } from "@components/Icons";
 import { Devs } from "@utils/constants";
+import { t } from "@utils/i18n";
 import definePlugin, { OptionType } from "@utils/types";
 import { Menu } from "@webpack/common";
 
@@ -86,7 +87,7 @@ function makeSearchItem(src: string) {
 
     return (
         <Menu.MenuItem
-            label="Search Text"
+            label={t("Search Text")}
             key="search-text"
             id="vc-search-text"
             leadingAccessory={{ type: "icon", icon: SearchIcon }}
@@ -123,7 +124,7 @@ export default definePlugin({
     name: "ReplaceGoogleSearch",
     description: "Replaces the Google search with different Engine(s)",
     tags: ["Utility", "Customisation"],
-    authors: [Devs.Moxxie, Devs.Ethan],
+    authors: [Devs.ewlle, Devs.kraethis, Devs.Sharp],
 
     settings,
 

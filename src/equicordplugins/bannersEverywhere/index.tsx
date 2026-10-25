@@ -43,9 +43,9 @@ const DATASTORE_KEY = "bannersEverywhere";
 
 export default definePlugin({
     name: "BannersEverywhere",
-    description: "Displays banners in the member list ",
+    description: "Displays banners in the member list",
     tags: ["Appearance", "Customisation"],
-    authors: [Devs.ImLvna, Devs.AutumnVN],
+    authors: [Devs.ewlle, Devs.kraethis, Devs.Sharp],
     settings,
     patches: [
         {

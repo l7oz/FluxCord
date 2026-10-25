@@ -544,6 +544,10 @@ export function getQuestPanelSubtitleText(quest: Quest): string | null {
     return `${statusText} for an unrecognized reward.`;
 }
 
+export function hasEnabledAutoCompleteQuestTask(quest: Quest): boolean {
+    return resolveAutoCompleteQuest(quest) != null;
+}
+
 export function canAutoCompleteQuest(quest: Quest): boolean {
     if (!isAutoCompleteRuntimeReady()) {
         return false;

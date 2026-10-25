@@ -4,8 +4,8 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
-import { t } from "@utils/fluxI18n";
 import { HeaderBarButton } from "@api/HeaderBar";
+import { t } from "@utils/fluxI18n";
 import definePlugin from "@utils/types";
 import { openModal, React } from "@webpack/common";
 

@@ -7,6 +7,7 @@
 import { definePluginSettings, Settings } from "@api/Settings";
 import { Button } from "@components/Button";
 import ErrorBoundary from "@components/ErrorBoundary";
+import { t } from "@utils/i18n";
 import { OptionType } from "@utils/types";
 import { Alerts, useState } from "@webpack/common";
 
@@ -140,7 +141,7 @@ export const settings = definePluginSettings({
     permanentlyRemoveLogByDefault: {
         default: false,
         type: OptionType.BOOLEAN,
-        description: "Vencord's base MessageLogger remove log button wiil delete logs permanently",
+        description: "The MessageLogger remove log button will delete logs permanently",
     },
 
     hideMessageFromMessageLoggers: {
@@ -270,8 +271,7 @@ export const settings = definePluginSettings({
         description: "Open Logs",
         component: () =>
             <Button onClick={() => openLogModal()}>
-                Open Logs
-            </Button>
+                {t("Open Logs")}</Button>
     },
     openImageCacheFolder: {
         type: OptionType.COMPONENT,
@@ -285,8 +285,7 @@ export const settings = definePluginSettings({
                 }
                 onClick={() => Native.showItemInFolder(settings.store.imageCacheDir)}
             >
-                Open Image Cache Folder
-            </Button>
+                {t("Open Image Cache Folder")}</Button>
     },
 
     clearLogs: {

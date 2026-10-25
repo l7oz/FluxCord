@@ -10,12 +10,13 @@ import { useSettings } from "@api/Settings";
 import { Heading } from "@components/Heading";
 import { Link } from "@components/Link";
 import { Paragraph } from "@components/Paragraph";
+import { gitRemote } from "@shared/vencordUserAgent";
 import { EquicordDevsById, VencordDevsById } from "@utils/constants";
 import { classNameFactory } from "@utils/css";
 import { fetchUserProfile } from "@utils/discord";
+import { useI18n } from "@utils/i18n";
 import { pluralise } from "@utils/misc";
 import { RenderModalProps, User } from "@vencord/discord-types";
-import { gitRemote } from "@shared/vencordUserAgent";
 import { Modal, openModal, showToast, useEffect, useMemo, UserProfileStore, useStateFromStores } from "@webpack/common";
 
 import Plugins, { PluginMeta } from "~plugins";
@@ -30,6 +31,7 @@ export function openContributorModal(user: User) {
 }
 
 function ContributorModal({ user, modalProps }: { user: User; modalProps: RenderModalProps; }) {
+    const { t } = useI18n();
     useSettings();
 
     const profile = useStateFromStores([UserProfileStore], () => UserProfileStore.getUserProfile(user.id));
@@ -53,10 +55,14 @@ function ContributorModal({ user, modalProps }: { user: User; modalProps: Render
 
         return pluginsByAuthor
             .filter(p => !p.name.endsWith("API"))
+            .filter(p => {
+                if (!p.authors) return false;
+                return p.authors.some(a => String(a.id) === String(user.id) || a.name?.toLowerCase() === user.username?.toLowerCase());
+            })
             .sort((a, b) => Number(a.required ?? false) - Number(b.required ?? false));
     }, [user.id, user.username]);
 
-    const ContributedHyperLink = <Link href={`https://github.com/${gitRemote || "Equicord/Equicord"}`}>contributed</Link>;
+    const ContributedHyperLink = <Link href={`https://github.com/${gitRemote || "Equicord/Equicord"}`}>{t("contributed")}</Link>;
 
     const hasLinks = website || githubName;
 
@@ -116,7 +122,7 @@ function ContributorModal({ user, modalProps }: { user: User; modalProps: Render
                                 key={p.name}
                                 plugin={p}
                                 disabled={p.required ?? false}
-                                onRestartNeeded={() => showToast("Restart to apply changes!")}
+                                onRestartNeeded={() => showToast(t("Restart to apply changes!"))}
                             />
                         )}
                     </div>

@@ -11,7 +11,10 @@ export const settings = definePluginSettings({
     showSupportButtons: {
         type: OptionType.BOOLEAN,
         description: "Show Support Buttons",
-        default: false
+        default: false,
+        // Re-applies the support buttons whenever the setting flips. PluginManager binds
+        // `onChange` handlers via SettingsStore at init (bindPluginSettings).
+        onChange: (newValue: boolean) => manageSupportButtons(newValue)
     }
 });
 
@@ -995,12 +998,8 @@ export default definePlugin({
         // ط­ظ…ط§ظٹط© طھط´ط؛ظٹظ„ ط§ظ„ط£ط²ط±ط§ط± ظˆظ…ط³طھظ…ط¹ ط§ظ„ط¥ط¹ط¯ط§ط¯ط§طھ
         try {
             manageSupportButtons(settings.store.showSupportButtons);
-
-            if (settings && typeof settings.addListener === "function") {
-                settings.addListener(() => {
-                    manageSupportButtons(settings.store.showSupportButtons);
-                });
-            }
+            // Reactive updates run through the setting's own `onChange` handler (bound by
+            // PluginManager) — DefinedSettings has no addListener API.
         } catch (error) {
             console.error("[Ardiscord] Settings init error:", error);
         }

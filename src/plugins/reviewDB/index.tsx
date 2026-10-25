@@ -23,6 +23,7 @@ import { OpenExternalIcon } from "@components/Icons";
 import { Paragraph } from "@components/Paragraph";
 import { Span } from "@components/Span";
 import { Devs } from "@utils/constants";
+import { t } from "@utils/i18n";
 import { classes } from "@utils/misc";
 import { useAwaiter } from "@utils/react";
 import definePlugin from "@utils/types";
@@ -46,7 +47,7 @@ const guildPopoutPatch: NavContextMenuPatchCallback = (children, { guild }: { gu
     if (!guild) return;
     children.push(
         <Menu.MenuItem
-            label="View Reviews"
+            label={t("View Reviews")}
             id="vc-rdb-server-reviews"
             icon={OpenExternalIcon}
             leadingAccessory={{ type: "icon", icon: OpenExternalIcon }}
@@ -59,7 +60,7 @@ const userContextPatch: NavContextMenuPatchCallback = (children, { user }: { use
     if (!user) return;
     children.push(
         <Menu.MenuItem
-            label="View Reviews"
+            label={t("View Reviews")}
             id="vc-rdb-user-reviews"
             icon={OpenExternalIcon}
             leadingAccessory={{ type: "icon", icon: OpenExternalIcon }}
@@ -163,7 +164,7 @@ export default definePlugin({
                                 onClick={() => !reviewData?.hasOptedOut && openReviewsModal(user.id, user.username, ReviewType.User)}
                             >
                                 <div className={classes(ProfileCardOverlayClasses.overlay, ProfileCardContainerClasses.innerContainer, ProfileCardClasses.card)}>
-                                    <Paragraph size={isSideBar ? "sm" : "xs"} weight="medium">User Reviews</Paragraph>
+                                    <Paragraph size={isSideBar ? "sm" : "xs"} weight="medium">{t("User Reviews")}</Paragraph>
                                     {!!reviewData?.reviewCount
                                         ? (
                                             <div className={ProfileCardContainerClasses.icons}>
@@ -206,5 +207,5 @@ export default definePlugin({
                 ? <div className={DMSideBarClasses.widgetPreviews}>{reviewsSection}</div>
                 : reviewsSection;
         },
-    },
+    }
 });

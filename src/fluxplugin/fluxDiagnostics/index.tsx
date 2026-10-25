@@ -24,9 +24,9 @@ function runScan() {
 }
 
 function openDiagnostics() {
-    const initial = runScan();          // single pass at click time
+    const initial = runScan(); // single pass at click time
     const heapMB = sampleHeapMB();
-    const interval = settings.store.liveInterval ?? 5;   // live-monitoring refresh seconds
+    const interval = settings.store.liveInterval ?? 5; // live-monitoring refresh seconds
     openModal(props => (
         <ErrorBoundary>
             <DiagnosticsModal modalProps={props} initial={initial} heapMB={heapMB} rescan={runScan} interval={interval} />

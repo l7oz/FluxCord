@@ -6,6 +6,7 @@
 
 import { BaseText } from "@components/BaseText";
 import { TidalStore, Track } from "@equicordplugins/musicControls/tidal/TidalStore";
+import { t } from "@utils/i18n";
 import { RenderModalProps } from "@vencord/discord-types";
 import { Modal,React } from "@webpack/common";
 
@@ -62,7 +63,7 @@ export function LyricsModal({ rootProps }: { rootProps: RenderModalProps; }) {
                         </BaseText>
                     ))
                 ) : (
-                    <BaseText size="sm" className={cl("modal-no-lyrics")}>No lyrics available :(</BaseText>
+                    <BaseText size="sm" className={cl("modal-no-lyrics")}>{t("No lyrics available :(")}</BaseText>
                 )}
             </div>
         </Modal>

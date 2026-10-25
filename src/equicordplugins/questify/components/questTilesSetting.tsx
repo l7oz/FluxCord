@@ -4,10 +4,11 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
+import { t } from "@utils/i18n";
 import type { Quest } from "@vencord/discord-types";
 import { findComponentByCodeLazy } from "@webpack";
-import { QuestStore, useEffect, useMemo, useRef, useState, useStateFromStores } from "@webpack/common";
-import type { JSX, SyntheticEvent } from "react";
+import { QuestStore, useMemo, useState, useStateFromStores } from "@webpack/common";
+import type { JSX } from "react";
 
 import { getQuestifySettings, useQuestifySettings } from "../settings/access";
 import { defaultQuestTileClaimedColorSetting, defaultQuestTileExpiredColorSetting, defaultQuestTileIgnoredColorSetting, defaultQuestTileUnclaimedColorSetting, type QuestTileColorSetting, type QuestTileGradient } from "../settings/def";
@@ -88,12 +89,6 @@ function cloneDummyQuest(quest: Quest, dummyColor: QuestTileColorSetting): Quest
     };
 }
 
-function stopDummyQuestInteraction(event: SyntheticEvent): void {
-    event.preventDefault();
-    event.stopPropagation();
-    event.nativeEvent.stopImmediatePropagation();
-}
-
 function DummyQuestTile({
     disabled,
     dummyQuest,
@@ -103,60 +98,14 @@ function DummyQuestTile({
     dummyQuest: Quest & { dummyColor: QuestTileColorSetting; };
     dummyGradient: QuestTileGradient;
 }): JSX.Element {
-    const blockerRef = useRef<HTMLDivElement>(null);
     const classes = getQuestTileClasses(q("dummy-quest"), dummyQuest, dummyGradient);
     const style = getQuestTileStyle(dummyQuest);
 
-    useEffect(() => {
-        const blocker = blockerRef.current;
-
-        if (!blocker) return;
-
-        const eventNames = [
-            "auxclick",
-            "click",
-            "contextmenu",
-            "dblclick",
-            "dragstart",
-            "mousedown",
-            "mouseup",
-            "pointercancel",
-            "pointerdown",
-            "pointerup",
-        ];
-
-        function stopEvent(event: Event) {
-            event.preventDefault();
-            event.stopPropagation();
-            event.stopImmediatePropagation();
-        }
-
-        for (const eventName of eventNames) {
-            blocker.addEventListener(eventName, stopEvent, true);
-        }
-
-        return () => {
-            for (const eventName of eventNames) {
-                blocker.removeEventListener(eventName, stopEvent, true);
-            }
-        };
-    }, []);
-
     return (
         <div
-            ref={blockerRef}
             className={q("dummy-quest-preview", disabled ? "dimmed-settings-item" : undefined)}
             style={style}
-            onAuxClickCapture={stopDummyQuestInteraction}
-            onClickCapture={stopDummyQuestInteraction}
-            onContextMenuCapture={stopDummyQuestInteraction}
-            onDoubleClickCapture={stopDummyQuestInteraction}
-            onDragStartCapture={stopDummyQuestInteraction}
-            onMouseDownCapture={stopDummyQuestInteraction}
-            onMouseUpCapture={stopDummyQuestInteraction}
-            onPointerCancelCapture={stopDummyQuestInteraction}
-            onPointerDownCapture={stopDummyQuestInteraction}
-            onPointerUpCapture={stopDummyQuestInteraction}
+            inert={true}
         >
             <QuestTile
                 className={classes}
@@ -246,13 +195,13 @@ export function QuestTilesSetting(): JSX.Element {
 
     return (
         <SettingsCard>
-            <SettingsHeader> Quest Tiles </SettingsHeader>
-            <SettingsDescription> Highlight Quests with optional theme colors for visibility. </SettingsDescription>
-            <SettingsSubheader> Tile Behavior </SettingsSubheader>
+            <SettingsHeader>{" "}{t("Quest Tiles")}{" "}</SettingsHeader>
+            <SettingsDescription>{" "}{t("Highlight Quests with optional theme colors for visibility.")}{" "}</SettingsDescription>
+            <SettingsSubheader>{" "}{t("Tile Behavior")}{" "}</SettingsSubheader>
             <SettingsRow className="quest-tile-behavior-row">
                 <SettingsRowItem className="quest-tile-gradient-row-item">
                     <SettingsSelect
-                        label="Gradient Style:"
+                        label={t("Gradient Style:")}
                         options={gradientManaOptions}
                         value={questTiles.questTileGradient}
                         selectionMode="single"
@@ -270,7 +219,7 @@ export function QuestTilesSetting(): JSX.Element {
                 </SettingsRowItem>
                 <SettingsRowItem className="quest-tile-preload-row-item">
                     <SettingsSelect
-                        label="Asset Preload:"
+                        label={t("Asset Preload:")}
                         options={preloadManaOptions}
                         value={String(questTiles.questTilePreload)}
                         selectionMode="single"
@@ -286,7 +235,7 @@ export function QuestTilesSetting(): JSX.Element {
                     />
                 </SettingsRowItem>
             </SettingsRow>
-            <SettingsSubheader> Tile Colors </SettingsSubheader>
+            <SettingsSubheader>{" "}{t("Tile Colors")}{" "}</SettingsSubheader>
             <SettingsRow className="quest-tile-color-row">
                 {colorOptions.map(({ key, label }) => {
                     const setting = questTiles[key] as QuestTileColorSetting;

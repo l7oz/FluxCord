@@ -23,6 +23,7 @@ import { Heading } from "@components/Heading";
 import { Margins } from "@components/margins";
 import { Paragraph } from "@components/Paragraph";
 import { Devs } from "@utils/constants";
+import { t } from "@utils/i18n";
 import { Logger } from "@utils/Logger";
 import definePlugin, { OptionType } from "@utils/types";
 import { Activity, ActivityAssets, ActivityButton } from "@vencord/discord-types";
@@ -194,9 +195,9 @@ export default definePlugin({
     settingsAboutComponent() {
         return (
             <Card>
-                <Heading tag="h5">How to create an API key</Heading>
-                <Paragraph>Set <strong>Application name</strong> and <strong>Application description</strong> to anything and leave the rest blank.</Paragraph>
-                <LinkButton size="small" href="https://www.last.fm/api/account/create" className={Margins.top8}>Create API Key</LinkButton>
+                <Heading tag="h5">{t("How to create an API key")}</Heading>
+                <Paragraph>{t("Set")}{" "}<strong>{t("Application name")}</strong> and <strong>{t("Application description")}</strong>{" "}{t("to anything and leave the rest blank.")}</Paragraph>
+                <LinkButton size="small" href="https://www.last.fm/api/account/create" className={Margins.top8}>{t("Create API Key")}</LinkButton>
             </Card>
         );
     },

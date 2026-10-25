@@ -10,6 +10,7 @@ import { Paragraph } from "@components/Paragraph";
 import { relativeLuminance } from "@plugins/clientTheme/utils/colorUtils";
 import { createOrUpdateThemeColorVars } from "@plugins/clientTheme/utils/styleUtils";
 import { classNameFactory } from "@utils/css";
+import { t } from "@utils/i18n";
 import { Margins } from "@utils/margins";
 import { findByCodeLazy } from "@webpack";
 import { Button, ClientThemesBackgroundStore, ColorPicker, ThemeStore, useStateFromStores } from "@webpack/common";
@@ -86,8 +87,8 @@ export function ThemeSettingsComponent() {
                     {nitroThemeEnabled && <Paragraph>{">"} Nitro themes aren't supported</Paragraph>}
 
                     <div className={cl("buttons-container")}>
-                        {(contrastWarning && fixableContrast) && <Button onClick={() => setDiscordTheme(oppositeTheme)} color={Button.Colors.RED}>Switch to {oppositeTheme} mode</Button>}
-                        {(nitroThemeEnabled) && <Button onClick={() => setDiscordTheme(currentTheme)} color={Button.Colors.RED}>Disable Nitro Theme</Button>}
+                        {(contrastWarning && fixableContrast) && <Button onClick={() => setDiscordTheme(oppositeTheme)} color={Button.Colors.RED}>{t("Switch to")}{" "}{oppositeTheme} mode</Button>}
+                        {(nitroThemeEnabled) && <Button onClick={() => setDiscordTheme(currentTheme)} color={Button.Colors.RED}>{t("Disable Nitro Theme")}</Button>}
                     </div>
                 </ErrorCard>
             </>)}
@@ -98,7 +99,6 @@ export function ThemeSettingsComponent() {
 export function ResetThemeColorComponent() {
     return (
         <Button onClick={() => onPickColor(0x313338)}>
-            Reset Theme Color
-        </Button>
+            {t("Reset Theme Color")}</Button>
     );
 }

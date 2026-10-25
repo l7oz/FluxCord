@@ -1,11 +1,6 @@
 /*
- * FluxCord — CustomStreamPreview (internal tool for the FluxCord project)
- * Copyright (c) 2026 LOSTSTR
- *
- * A clean rebuild of VencordCustomScreenSharePreview: lets you pick a custom
- * image as your screen-share preview. Uses Vencord's RestAPI (no manual token),
- * DataStore for the saved image, and the User Area button API.
- *
+ * Vencord, a Discord client mod
+ * Copyright (c) 2026 Vendicated and contributors
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
@@ -17,7 +12,7 @@ import { t } from "@utils/fluxI18n";
 import { closeModal, ModalCloseButton as ModalCloseButtonRaw, ModalContent as ModalContentRaw, ModalFooter as ModalFooterRaw, ModalHeader as ModalHeaderRaw, ModalRoot as ModalRootRaw, ModalSize, openModal } from "@utils/modal";
 import definePlugin from "@utils/types";
 import { RenderModalProps } from "@vencord/discord-types";
-import { ApplicationStreamingStore, Button, Forms, React, showToast, Text, Toasts, useEffect, useState, useStateFromStores, UserStore } from "@webpack/common";
+import { ApplicationStreamingStore, Button, Forms, React, showToast, Text, Toasts, useEffect, UserStore,useState, useStateFromStores } from "@webpack/common";
 
 import { StreamCreateEvent, StreamDeleteEvent } from "./types";
 import { getSavedPreview, getStreamingState, imageFileToStreamPreview, isSendingPreview, parseStreamKey, savePreview, startSendingPreview, stopSendingPreview } from "./utilities";

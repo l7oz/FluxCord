@@ -20,6 +20,7 @@ import "./style.css";
 
 import { findGroupChildrenByChildId, NavContextMenuPatchCallback } from "@api/ContextMenu";
 import { Devs, EquicordDevs } from "@utils/constants";
+import { t } from "@utils/i18n";
 import definePlugin from "@utils/types";
 import { ChannelStore, Menu } from "@webpack/common";
 
@@ -36,7 +37,7 @@ const messageCtxPatch: NavContextMenuPatchCallback = (children, { message }) => 
     group.splice(group.findIndex(c => c?.props?.id === "copy-text") + 1, 0, (
         <Menu.MenuItem
             id="ec-trans"
-            label="Translate"
+            label={t("Translate")}
             icon={Icon}
             action={() => handleTranslate(message)}
         />

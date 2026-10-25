@@ -26,6 +26,7 @@ import { SettingsTab, wrapTab } from "@components/settings/tabs/BaseTab";
 import { Span } from "@components/Span";
 import { debounce } from "@shared/debounce";
 import { copyWithToast } from "@utils/discord";
+import { t, useI18n } from "@utils/i18n";
 import { Margins } from "@utils/margins";
 import { stripIndent } from "@utils/text";
 import { ReplaceFn } from "@utils/types";
@@ -42,14 +43,15 @@ const findCandidates = debounce(function ({ find, setModule, setError }) {
     const len = keys.length;
 
     if (len === 0)
-        setError("No match. Perhaps that module is lazy loaded?");
+        setError(t("No match. Perhaps that module is lazy loaded?"));
     else if (len !== 1)
-        setError("Multiple matches. Please refine your filter");
+        setError(t("Multiple matches. Please refine your filter"));
     else
         setModule([keys[0], candidates[keys[0]]]);
 });
 
 function PatchHelper() {
+    const { t } = useI18n();
     const [find, setFind] = useState("");
     const [match, setMatch] = useState("");
     const [replacement, setReplacement] = useState<string | ReplaceFn>("");
@@ -108,13 +110,12 @@ function PatchHelper() {
 
     return (
         <SettingsTab>
-            <Heading className={Margins.top16}>Patch Helper</Heading>
+            <Heading className={Margins.top16}>{t("Patch Helper")}</Heading>
             <Paragraph className={Margins.bottom16}>
-                A developer tool to help you create patches for FluxCord plugins.
+                {t("A developer tool to help you create patches for FluxCord plugins.")}
             </Paragraph>
 
-            <Heading className="">Full Patch</Heading>
-            <Paragraph className={Margins.bottom8}>Paste your full JSON patch here to fill out the fields</Paragraph>
+            <Heading className="">{t("Full Patch")}</Heading>
             <FullPatchInput
                 setFind={onFindChange}
                 setParsedFind={setParsedFind}
@@ -123,7 +124,7 @@ function PatchHelper() {
             />
 
             <div className={Margins.top20}>
-                <Heading className="">Find</Heading>
+                <Heading className="">{t("Find")}</Heading>
                 <TextInput
                     type="text"
                     value={find}
@@ -132,7 +133,7 @@ function PatchHelper() {
                 />
             </div>
             <div className={Margins.top20}>
-                <Heading className="">Match</Heading>
+                <Heading className="">{t("Match")}</Heading>
                 <TextInput
                     type="text"
                     value={match}
@@ -165,16 +166,16 @@ function PatchHelper() {
             {!!(find && match && replacement) && (
                 <>
                     <Divider className={Margins.top16 + " " + Margins.bottom16} />
-                    <Span size="md" weight="medium" color="text-strong">Generated Code</Span>
+                    <Span size="md" weight="medium" color="text-strong">{t("Generated Code")}</Span>
                     <div style={{ width: "100%", marginTop: 8 }}>
                         <CodeBlock lang="js" content={code} />
                     </div>
                     <Flex className={Margins.top8} gap="8px">
                         <Button size="small" onClick={() => copyWithToast(code)}>
-                            Copy to Clipboard
+                            {t("Copy to Clipboard")}
                         </Button>
                         <Button size="small" onClick={() => copyWithToast("```ts\n" + code + "\n```")}>
-                            Copy as Codeblock
+                            {t("Copy as Codeblock")}
                         </Button>
                     </Flex>
                 </>
@@ -183,4 +184,4 @@ function PatchHelper() {
     );
 }
 
-export default !IS_STANDALONE ? wrapTab(PatchHelper, "PatchHelper") : null;
+export default !IS_STANDALONE ? wrapTab(PatchHelper, "Patch Helper") : null;

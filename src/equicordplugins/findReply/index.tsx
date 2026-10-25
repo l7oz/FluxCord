@@ -91,7 +91,7 @@ export default definePlugin({
     description: "Jumps to the earliest reply to a message in a channel (lets you follow past conversations more easily).",
     dependencies: ["MessagePopoverAPI"],
     tags: ["Chat", "Shortcuts"],
-    authors: [Devs.newwares],
+    authors: [Devs.ewlle, Devs.kraethis, Devs.Sharp],
     settings,
     messagePopoverButton: {
         icon: FindReplyIcon,

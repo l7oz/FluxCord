@@ -19,6 +19,7 @@
 // DO NOT REMOVE UNLESS YOU WISH TO FACE THE WRATH OF THE CIRCULAR DEPENDENCY DEMON!!!!!!!
 import "~plugins";
 import "./fixWeirdAppRegionBug.css";
+import "./perf.css";
 
 export * as Api from "./api";
 export * as Plugins from "./api/PluginManager";
@@ -43,11 +44,11 @@ import { NotificationData, showNotification } from "./api/Notifications";
 import { initPluginManager, PMLogger, startAllPlugins } from "./api/PluginManager";
 import { PlainSettings, Settings, SettingsStore } from "./api/Settings";
 import { areLocalSettingsDirty, getCloudSettings, getCloudSyncDirection, markLocalSettingsDirty, putCloudSettings, shouldCloudSync } from "./api/SettingsSync/cloudSync";
+import { getCurrentLang, syncDiscordLocale, t } from "./utils/i18n";
 import { relaunch } from "./utils/native";
 import { checkForUpdates, isOutdated as getIsOutdated, update, UpdateLogger } from "./utils/updater";
 import { onceReady } from "./webpack";
 import { patches } from "./webpack/patchWebpack";
-
 if (IS_REPORTER) {
     require("./debug/runReporter");
 }
@@ -76,7 +77,7 @@ async function syncSettings() {
     ) {
         // show a notification letting them know and tell them how to fix it
         showNotification({
-            title: "Cloud Integrations",
+            title: t("Cloud Integrations"),
             body: "We've noticed you have cloud integrations enabled in another client! Due to limitations, you will " +
                 "need to re-authenticate to continue using them. Click here to go to the settings page to do so!",
             color: "var(--yellow-360)",
@@ -98,8 +99,8 @@ async function syncSettings() {
             // there was an error to notify the user, but besides that we only want to show one notification instead of all
             // of the possible ones it has (such as when your settings are newer).
             showNotification({
-                title: "Cloud Settings",
-                body: "Your settings have been updated! Click here to restart to fully apply changes!",
+                title: t("Cloud Settings"),
+                body: t("Your settings have been updated! Click here to restart to fully apply changes!"),
                 color: "var(--green-360)",
                 onClick: relaunch
             });
@@ -142,26 +143,20 @@ async function runUpdateCheck() {
         if (Settings.autoUpdate) {
             await update();
             if (Settings.autoUpdateNotification) {
-                if (notifiedForUpdatesThisSession) return;
-                notifiedForUpdatesThisSession = true;
-
-                showNotice(
-                    "FluxCord has been updated!",
-                    "Restart",
-                    relaunch
-                );
+                notify({
+                    title: t("FluxCord has been updated!"),
+                    body: t("Click here to restart"),
+                    onClick: relaunch
+                });
             }
             return;
         }
 
-        if (notifiedForUpdatesThisSession) return;
-        notifiedForUpdatesThisSession = true;
-
-        showNotice(
-            "A new version of FluxCord is available!",
-            "View Update",
-            () => openSettingsTabModal(UpdaterTab!)
-        );
+        notify({
+            title: t("A new version of FluxCord is available!"),
+            body: t("Click here to view the update"),
+            onClick: () => openSettingsTabModal(UpdaterTab!)
+        });
     } catch (err) {
         UpdateLogger.error("Failed to check for updates", err);
     }
@@ -202,16 +197,18 @@ async function init() {
     await onceReady;
     startAllPlugins(StartAt.WebpackReady);
 
+    try {
+        syncDiscordLocale(getCurrentLang());
+    } catch { }
+
     syncSettings();
     initTrayIpc();
 
     if (!IS_DEV && !IS_WEB && !IS_UPDATER_DISABLED) {
         runUpdateCheck();
 
-        // this tends to get really annoying, so only do this if the user has auto-update without notification enabled
-        if (Settings.autoUpdate && !Settings.autoUpdateNotification) {
-            setInterval(runUpdateCheck, 1000 * 60 * 30); // 30 minutes
-        }
+        // Check for updates in the background every 15 minutes for all users
+        setInterval(runUpdateCheck, 1000 * 60 * 15); // 15 minutes
     }
 
     if (IS_DEV) {

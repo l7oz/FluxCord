@@ -1,11 +1,6 @@
 /*
- * FluxCord — CustomStreamPreview (internal tool for the FluxCord project)
- * Copyright (c) 2026 LOSTSTR
- *
- * Rebuilt from the older VencordCustomScreenSharePreview plugin to use Vencord's
- * RestAPI (no manual token handling) and DataStore instead of raw fetch + a custom
- * state manager.
- *
+ * Vencord, a Discord client mod
+ * Copyright (c) 2026 Vendicated and contributors
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 

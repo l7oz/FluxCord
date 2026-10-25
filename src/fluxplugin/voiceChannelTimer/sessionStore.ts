@@ -52,7 +52,7 @@ async function appendCompletedSession(session: CompletedVoiceSession) {
 function completeSession(leftAt: number = Date.now()) {
     if (!activeSession) return;
 
-    const joinedAt = activeSession.joinedAt;
+    const { joinedAt } = activeSession;
     const duration = Math.max(0, Math.floor((leftAt - joinedAt) / 1000));
 
     void appendCompletedSession({

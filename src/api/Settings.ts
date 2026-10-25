@@ -40,6 +40,7 @@ export type SettingsPluginUiElements = {
 };
 
 export interface Settings {
+    language: "en" | "fr" | "es" | "ru" | "zh" | "ar";
     autoUpdate: boolean;
     autoUpdateNotification: boolean;
     useQuickCss: boolean;
@@ -72,6 +73,9 @@ export interface Settings {
     | undefined;
     windowsMaterial: "none" | "mica" | "tabbed" | "acrylic";
     disableMinSize: boolean;
+    disableBackgroundMemoryTrim: boolean;
+    /** GPU rasterization and out-of-process canvas: smoother on some GPUs, but more memory in the GPU process */
+    gpuRasterization: boolean;
     winNativeTitleBar: boolean;
     plugins: {
         [plugin: string]: {
@@ -110,6 +114,7 @@ export interface Settings {
 }
 
 const DefaultSettings: Settings = {
+    language: "en",
     autoUpdate: true,
     autoUpdateNotification: true,
     useQuickCss: true,
@@ -129,6 +134,8 @@ const DefaultSettings: Settings = {
     macosVibrancyStyle: undefined,
     windowsMaterial: "none",
     disableMinSize: false,
+    disableBackgroundMemoryTrim: false,
+    gpuRasterization: false,
     winNativeTitleBar: false,
     plugins: {},
 

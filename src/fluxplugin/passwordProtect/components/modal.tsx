@@ -5,9 +5,9 @@
  */
 
 import { classNameFactory } from "@api/Styles";
+import { Divider } from "@components/Divider";
 import { ModalContent, ModalFooter, ModalHeader, ModalProps, ModalRoot } from "@utils/fluxModals";
 import { Button, Forms, Text, TextInput, useEffect, useState } from "@webpack/common";
-import { Divider } from "@components/Divider";
 
 import { checkPassword } from "../data";
 

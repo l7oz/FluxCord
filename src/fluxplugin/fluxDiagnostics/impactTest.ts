@@ -1,17 +1,7 @@
 /*
- * FluxCord — FluxDiagnostics impact test (قياس الأثر السببي)
- * Copyright (c) 2026 LOSTSTR
+ * Vencord, a Discord client mod
+ * Copyright (c) 2026 Vendicated and contributors
  * SPDX-License-Identifier: GPL-3.0-or-later
- *
- * قياس سببي حقيقي لا تخمين: نقيس أداء الخيط الرئيسي (تأخّر الحلقة، المهامّ الطويلة،
- * FPS) لمدة مرحلة والإضافة تعمل، ثم نوقفها مؤقتاً بنفس مسار بطاقة الإعدادات
- * (stopPlugin/startPlugin — لا يلمس الإعدادات المحفوظة)، ونعيد القياس، ثم نعيد
- * تشغيلها حتماً (finally). الفرق بين المرحلتين = أثر الإضافة الفعلي على جهازك الآن.
- *
- * حدود صادقة (تُعرَض للمستخدم):
- * - مؤهَّلة فقط الإضافات التي لا تتطلب إعادة تشغيل (بلا ترقيعات webpack) — الترقيعات
- *   لا تُزال إلا بإعادة التشغيل فقياسها هكذا وهمٌ، ونرفضه.
- * - مرحلتان قصيرتان = عيّنة واحدة قد تتأثر بضجيج اللحظة؛ كرّر القياس للتأكيد.
  */
 
 import { isPluginEnabled, pluginRequiresRestart, startPlugin, stopPlugin } from "@api/PluginManager";
@@ -29,8 +19,8 @@ export interface PhaseMetrics {
 export interface ImpactResult {
     plugin: string;
     phaseSec: number;
-    on: PhaseMetrics;   // الإضافة تعمل
-    off: PhaseMetrics;  // الإضافة متوقفة
+    on: PhaseMetrics; // الإضافة تعمل
+    off: PhaseMetrics; // الإضافة متوقفة
     /** موجب = الإيقاف حسّن الأداء (الإضافة لها كلفة) */
     lagImprovementMs: number;
     fpsGain: number | null;

@@ -18,6 +18,7 @@ import {
 import { gitHashShort } from "@shared/vencordUserAgent";
 import { Devs } from "@utils/constants";
 import { isTruthy } from "@utils/guards";
+import { t } from "@utils/i18n";
 import definePlugin, { IconProps, OptionType } from "@utils/types";
 import { waitFor } from "@webpack";
 import { React } from "@webpack/common";
@@ -97,19 +98,21 @@ interface SettingsLayoutBuilder {
 const settings = definePluginSettings({
     settingsLocation: {
         type: OptionType.SELECT,
-        description: "Where to put the FluxCord settings section",
-        options: [
-            { label: "At the very top", value: "top" },
-            { label: "Above Billing section", value: "aboveNitro", default: true },
-            { label: "Below Billing section", value: "belowNitro" },
-            { label: "Above Games & Apps Settings", value: "aboveActivity" },
-            { label: "Below Games & Apps Settings", value: "belowActivity" },
-            { label: "At the very bottom", value: "bottom" },
-        ] as { label: string; value: SettingsLocation; default?: boolean; }[]
+        get description() { return t("Where to put the FluxCord settings section"); },
+        get options() {
+            return [
+                { label: t("At the very top"), value: "top" },
+                { label: t("Above the Nitro section"), value: "aboveNitro", default: true },
+                { label: t("Below the Nitro section"), value: "belowNitro" },
+                { label: t("Above Activity Settings"), value: "aboveActivity" },
+                { label: t("Below Activity Settings"), value: "belowActivity" },
+                { label: t("At the very bottom"), value: "bottom" },
+            ] as { label: string; value: SettingsLocation; default?: boolean; }[];
+        }
     },
     includeVencordInfoWhenCopying: {
         type: OptionType.BOOLEAN,
-        description: "Also copy FluxCord info (FluxCord, Electron, Chromium) when clicking the version info in the bottom left area of the Settings page",
+        get description() { return t("Also copy FluxCord info (FluxCord, Electron, Chromium) when clicking the version info in the bottom left area of the Settings page"); },
         default: true
     }
 });
@@ -158,7 +161,7 @@ export default definePlugin({
         const panel: SettingsLayoutNode = {
             key: key + "_panel",
             type: LayoutTypes.PANEL,
-            useTitle: () => panelTitle,
+            useTitle: () => t(panelTitle),
             buildLayout: () => [{
                 type: LayoutTypes.CATEGORY,
                 key: key + "_category",
@@ -166,7 +169,7 @@ export default definePlugin({
                     type: LayoutTypes.CUSTOM,
                     key: key + "_custom",
                     Component: Component,
-                    useSearchTerms: () => [title]
+                    useSearchTerms: () => [t(title), title]
                 }]
             }]
         };
@@ -174,7 +177,7 @@ export default definePlugin({
         return ({
             key,
             type: LayoutTypes.SIDEBAR_ITEM,
-            useTitle: () => title,
+            useTitle: () => t(title),
             icon: () => <Icon width={20} height={20} />,
             buildLayout: () => [panel]
         });

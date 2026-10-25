@@ -7,9 +7,9 @@
 import { ChatBarButton, ChatBarButtonFactory } from "@api/ChatButtons";
 import { definePluginSettings } from "@api/Settings";
 import { Flex } from "@components/Flex";
+import { closeModal, ModalCloseButton, ModalContent, ModalHeader, ModalRoot, openModal } from "@utils/fluxModals";
 import { Margins } from "@utils/margins";
 import { ModalSize } from "@utils/modal";
-import { closeModal, ModalCloseButton, ModalContent, ModalHeader, ModalRoot, openModal } from "@utils/fluxModals";
 import definePlugin, { IconComponent, OptionType } from "@utils/types";
 import {
     Button,
@@ -179,12 +179,14 @@ const settings = definePluginSettings({
         ),
     },
     caretOpacity: {
-        type: OptionType.HIDDEN,
+        type: OptionType.NUMBER,
+        hidden: true,
         description: "Caret opacity (0.25–1)",
         default: 1,
     },
     caretGlow: {
-        type: OptionType.HIDDEN,
+        type: OptionType.NUMBER,
+        hidden: true,
         description: "Soft glow radius (px, 0 = off)",
         default: 0,
     },
@@ -386,6 +388,7 @@ function SmoothTypeQuickPanel({ close }: { close(): void; }) {
             <ColorPicker
                 color={settings.store.caretColor}
                 onChange={c => {
+                    if (c == null) return;
                     settings.store.caretColor = c;
                     applyCSS();
                 }}

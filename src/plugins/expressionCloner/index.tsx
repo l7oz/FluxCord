@@ -26,6 +26,7 @@ import { PlusIcon } from "@components/Icons";
 import { Paragraph } from "@components/Paragraph";
 import { Devs } from "@utils/constants";
 import { getGuildAcronym, hasGuildFeature } from "@utils/discord";
+import { t } from "@utils/i18n";
 import { Logger } from "@utils/Logger";
 import definePlugin from "@utils/types";
 import { Guild, GuildSticker, Message } from "@vencord/discord-types";
@@ -342,7 +343,7 @@ function buildMenuItem(type: "Emoji" | "Sticker", fetchData: () => Promisable<Om
                                         height={24}
                                         width={24}
                                     />
-                                    <BaseText tag="h3" size="md" weight="medium">Clone {data.name}</BaseText>
+                                    <BaseText tag="h3" size="md" weight="medium">{t("Clone")}{" "}{data.name}</BaseText>
                                 </Flex>
                             }
                         >

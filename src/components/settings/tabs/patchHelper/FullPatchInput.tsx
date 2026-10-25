@@ -5,9 +5,10 @@
  */
 
 import { Paragraph } from "@components/Paragraph";
+import { t } from "@utils/i18n";
+import { Margins } from "@utils/margins";
 import { Patch, ReplaceFn } from "@utils/types";
 import { TextArea, useEffect, useRef, useState } from "@webpack/common";
-
 export interface FullPatchInputProps {
     setFind(v: string): void;
     setParsedFind(v: string | RegExp): void;
@@ -68,6 +69,9 @@ export function FullPatchInput({ setFind, setParsedFind, setMatch, setReplacemen
 
     return (
         <>
+            <Paragraph className={Margins.bottom8}>
+                {t("Paste your full JSON patch here to fill out the fields")}
+            </Paragraph>
             <TextArea
                 inputRef={textAreaRef}
                 value={patch}

@@ -28,7 +28,7 @@ export default definePlugin({
     name: "StartupTimings",
     description: "Adds Startup Timings to the Settings menu",
     tags: ["Developers"],
-    authors: [Devs.Megu],
+    authors: [Devs.ewlle, Devs.kraethis, Devs.Sharp],
     start() {
         SettingsPlugin.customEntries.push({
             key: "vencord_startup_timings",

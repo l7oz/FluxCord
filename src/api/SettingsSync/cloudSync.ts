@@ -7,13 +7,14 @@
 import * as DataStore from "@api/DataStore";
 import { showNotification } from "@api/Notifications";
 import { PlainSettings, Settings } from "@api/Settings";
+import { t } from "@utils/i18n";
 import { localStorage } from "@utils/localStorage";
 import { Logger } from "@utils/Logger";
 import { relaunch } from "@utils/native";
 import { SettingsRouter } from "@webpack/common";
 import { deflateSync, inflateSync } from "fflate";
 
-import { deauthorizeCloud, getCloudAuth, getCloudUrl } from "./cloudSetup";
+import { checkCloudUrlCsp, deauthorizeCloud, getCloudAuth, getCloudUrl } from "./cloudSetup";
 import { exportSettings, importSettings } from "./offline";
 import { ManifestEntry, SyncRequest, SyncResponse } from "./types";
 
@@ -458,6 +459,8 @@ export function shouldCloudSync(direction: "push" | "pull") {
 }
 
 export async function putCloudSettings(manual?: boolean) {
+    if (!await checkCloudUrlCsp()) return;
+
     try {
         const version = await getApiVersion();
         if (version === "v2") {
@@ -478,6 +481,8 @@ export async function putCloudSettings(manual?: boolean) {
 }
 
 export async function getCloudSettings(shouldNotify = true, force = false) {
+    if (!await checkCloudUrlCsp()) return false;
+
     try {
         const version = await getApiVersion();
         if (version === "v2") {
@@ -499,6 +504,8 @@ export async function getCloudSettings(shouldNotify = true, force = false) {
 }
 
 export async function deleteCloudSettings() {
+    if (!await checkCloudUrlCsp()) return;
+
     try {
         const version = await getApiVersion();
         if (version === "v2")
@@ -508,7 +515,7 @@ export async function deleteCloudSettings() {
     } catch (e: any) {
         logger.error("Failed to delete", e);
         showNotification({
-            title: "Cloud Settings",
+            title: t("Cloud Settings"),
             body: `Could not delete settings (${e.toString()}).`,
             color: "var(--red-360)",
         });
@@ -516,6 +523,8 @@ export async function deleteCloudSettings() {
 }
 
 export async function eraseAllCloudData() {
+    if (!await checkCloudUrlCsp()) return;
+
     const res = await fetch(new URL("/v1/", getCloudUrl()), {
         method: "DELETE",
         headers: { Authorization: await getCloudAuth() },
@@ -524,7 +533,7 @@ export async function eraseAllCloudData() {
     if (!res.ok) {
         logger.error(`Failed to erase data, API returned ${res.status}`);
         showNotification({
-            title: "Cloud Integrations",
+            title: t("Cloud Integrations"),
             body: `Could not erase all data (API returned ${res.status}), please contact support.`,
             color: "var(--red-360)",
         });
@@ -536,8 +545,8 @@ export async function eraseAllCloudData() {
     await saveLocalManifest([]);
 
     showNotification({
-        title: "Cloud Integrations",
-        body: "Successfully erased all data.",
-        color: "var(--green-360)",
+        title: t("Cloud Integrations"),
+        body: t("Successfully erased all data."),
+        color: "var(--green-360)"
     });
 }

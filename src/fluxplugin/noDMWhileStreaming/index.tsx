@@ -184,7 +184,13 @@ export default definePlugin({
                     return new originalNotification(title, options);
                 };
                 window.Notification.prototype = originalNotification.prototype;
-                window.Notification.permission = originalNotification.permission;
+                // `permission` is a readonly static on the DOM Notification type, but this is a
+                // freshly assigned function object — define it directly instead of assigning.
+                Object.defineProperty(window.Notification, "permission", {
+                    value: originalNotification.permission,
+                    configurable: true,
+                    writable: true
+                });
                 window.Notification.requestPermission = originalNotification.requestPermission;
             } catch { }
         }

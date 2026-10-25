@@ -6,7 +6,7 @@
 
 import "./style.css";
 
-import { EquicordDevs } from "@utils/constants";
+import { Devs } from "@utils/constants";
 import definePlugin from "@utils/types";
 import { FluxDispatcher } from "@webpack/common";
 
@@ -27,7 +27,7 @@ export default definePlugin({
     name: "GifCollections",
     description: "Allows you to create collections of gifs.",
     tags: ["Chat", "Emotes"],
-    authors: [EquicordDevs.creations],
+    authors: [Devs.ewlle, Devs.kraethis, Devs.Sharp],
     settings,
     contextMenus: {
         "message": addCollectionContextMenuPatch,

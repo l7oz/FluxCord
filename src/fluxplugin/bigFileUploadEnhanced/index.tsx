@@ -6,17 +6,17 @@
 
 import { NavContextMenuPatchCallback } from "@api/ContextMenu";
 import { definePluginSettings, useSettings } from "@api/Settings";
-import { t } from "@utils/fluxI18n";
 import { Divider } from "@components/Divider";
 import { FormSwitch } from "@components/FormSwitch";
 import { OpenExternalIcon } from "@components/Icons";
 import { EquicordDevs } from "@utils/constants";
 import { copyWithToast, insertTextIntoChatInputBox, openImageModal, sendMessage } from "@utils/discord";
+import { t } from "@utils/fluxI18n";
+import { Logger } from "@utils/Logger";
 import { Margins } from "@utils/margins";
 import definePlugin, { OptionType, PluginNative } from "@utils/types";
 import { chooseFile } from "@utils/web";
 import { Alerts, Button, DraftType, Forms, Menu, PermissionsBits, PermissionStore, React, Select, showToast, TextArea, TextInput, Toasts, UploadManager, useMemo } from "@webpack/common";
-import { Logger } from "@utils/Logger";
 
 const logger = new Logger("BigFileUploadEnhanced");
 

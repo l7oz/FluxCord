@@ -7,6 +7,7 @@
 import { NavContextMenuPatchCallback } from "@api/ContextMenu";
 import { copyToClipboard } from "@utils/clipboard";
 import { EquicordDevs } from "@utils/constants";
+import { t } from "@utils/i18n";
 import { Logger } from "@utils/Logger";
 import definePlugin from "@utils/types";
 import { User } from "@vencord/discord-types";
@@ -82,7 +83,7 @@ export function ColorIcon() {
 }
 // spawn in the context menu
 const userContextMenuPatch: NavContextMenuPatchCallback = (children, { user, guildId }: { user?: User; guildId?: string; }) => {
-    if (!user) return;
+    if (!user || !children) return;
 
     const effectiveGuildId = guildId ?? SelectedGuildStore.getGuildId();
     const guildProfile = effectiveGuildId
@@ -94,7 +95,7 @@ const userContextMenuPatch: NavContextMenuPatchCallback = (children, { user, gui
         <Menu.MenuItem
             id="CopyProfileColors"
             icon={ColorIcon}
-            label="Copy Profile Colors"
+            label={t("Copy Profile Colors")}
             action={() => copyProfileColors(user.id)}
         />
     );
@@ -104,7 +105,7 @@ const userContextMenuPatch: NavContextMenuPatchCallback = (children, { user, gui
             <Menu.MenuItem
                 id="CopyServerProfileColors"
                 icon={ColorIcon}
-                label="Copy Server Profile Colors"
+                label={t("Copy Server Profile Colors")}
                 action={() => copyProfileColors(user.id, effectiveGuildId)}
             />
         );

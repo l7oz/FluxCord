@@ -16,7 +16,8 @@ import {
 import { RenderSongInfo } from "@song-spotlight/api/handlers";
 import { UserData } from "@song-spotlight/api/structs";
 import { sid } from "@song-spotlight/api/util";
-import { classes } from "@utils/index";
+import { t } from "@utils/i18n";
+import { classes } from "@utils/misc";
 import {
     SelectedChannelStore,
     SelectedGuildStore,
@@ -81,7 +82,7 @@ export default function CollapsedProfileSongs({ data, user, isSideBar }: Collaps
                         }}
                     >
                         <div className={classes(OverlayClasses.overlay, ContainerClasses.innerContainer, ProfileCardClasses.card)}>
-                            <BaseText size={isSideBar ? "sm" : "xs"} weight="medium">Song Spotlight</BaseText>
+                            <BaseText size={isSideBar ? "sm" : "xs"} weight="medium">{t("Song Spotlight")}</BaseText>
                             <div className={ContainerClasses.icons}>
                                 {previews && data
                                     ? previews.map((song, i) => {

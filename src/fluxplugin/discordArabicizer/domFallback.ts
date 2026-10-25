@@ -1,12 +1,7 @@
 /*
- * DiscordArabicizer — طبقة DOM احتياطية للنصوص «المتجاوِزة»
- * Copyright (c) 2026 LOSTSTR
+ * Vencord, a Discord client mod
+ * Copyright (c) 2026 Vendicated and contributors
  * SPDX-License-Identifier: GPL-3.0-or-later
- *
- * بعض نصوص ديسكورد تُرسَم عبر وحدات التقطت مرجع دالّة الترجمة كـ«قيمة محليّة» قبل
- * ترقيعنا، فلا تمرّ بمحرّك intl إطلاقاً (لا 🟢 ولا 🔴 في الوضع التشخيصي). هذه الطبقة
- * تستبدل قائمةً قصيرة جداً منها مباشرةً في الـDOM بعد الرسم — مراقِب حدثي خفيف:
- * صفر استهلاك عند ثبات الشاشة، يُفصَل نهائياً عند الإيقاف.
  */
 
 import { translations as AR } from "./translations";
@@ -169,8 +164,8 @@ function onMutations(records: MutationRecord[]): void {
 
 /** يبدأ الطبقة: كنسة أوّلية مرّة واحدة + مراقِب حدثي (لا فحص دوري). آمن للاستدعاء المتكرّر. */
 export function startDomFallback(): void {
-    if (observer != null) return;                       // idempotent — لا مراقِبَين
-    if (bypassMap.size === 0) return;                   // لا شيء لترجمته
+    if (observer != null) return; // idempotent — لا مراقِبَين
+    if (bypassMap.size === 0) return; // لا شيء لترجمته
     if (typeof MutationObserver === "undefined" || document.body == null) return;
 
     try { scanElement(document.body); } catch { /* تجاهل */ } // الموجود سلفاً على الشاشة

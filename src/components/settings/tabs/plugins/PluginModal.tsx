@@ -29,6 +29,7 @@ import { Paragraph } from "@components/Paragraph";
 import { debounce } from "@shared/debounce";
 import { gitRemote } from "@shared/vencordUserAgent";
 import { classNameFactory } from "@utils/css";
+import { useI18n } from "@utils/i18n";
 import { proxyLazy } from "@utils/lazy";
 import { Margins } from "@utils/margins";
 import { classes, isObjectEmpty } from "@utils/misc";
@@ -75,38 +76,48 @@ export function makeDummyUser(user: { username: string; id?: string; avatar?: st
 }
 
 function PluginTags({ tags }: { tags: PluginTag[]; }) {
+    const { t } = useI18n();
     return (
         <div className={cl("tags")}>
             {tags.map(tag => (
-                <div key={tag} className={cl("tag")}>{tag}</div>
+                <div key={tag} className={cl("tag")}>{t(tag)}</div>
             ))}
         </div>
     );
 }
 
 export default function PluginModal({ plugin, onRestartNeeded, onClose, transitionState }: PluginModalProps) {
+    const { t, tPluginDesc } = useI18n();
     const pluginSettings = useSettings([`plugins.${plugin.name}.*`]).plugins[plugin.name];
     const hasSettings = hasAnyVisibleSettings(plugin);
 
     // avoid layout shift by showing dummy users while loading users
-    const fallbackAuthors = useMemo(() => [makeDummyUser({ username: "Loading...", id: "-1465912127305809920" })], []);
+    const fallbackAuthors = useMemo(() => [makeDummyUser({ username: t("Loading..."), id: "-1465912127305809920" })], []);
     const [authors, setAuthors] = useState<Partial<User>[]>([]);
 
     useEffect(() => {
+        let active = true;
         (async () => {
-            for (const [index, user] of plugin.authors.slice(0, 6).entries()) {
+            const list: Partial<User>[] = [];
+            for (const user of plugin.authors.slice(0, 6)) {
                 try {
-                    const author = user.id
-                        ? await UserUtils.getUser(String(user.id))
-                            .catch(() => makeDummyUser({ username: user.name }))
+                    const idStr = user.id ? String(user.id) : undefined;
+                    const cached = idStr ? UserStore.getUser(idStr) : null;
+                    if (cached) {
+                        list.push(cached);
+                        continue;
+                    }
+                    const author = idStr
+                        ? await UserUtils.getUser(idStr).catch(() => makeDummyUser({ username: user.name, id: idStr }))
                         : makeDummyUser({ username: user.name });
-
-                    setAuthors(a => [...a, author]);
-                } catch (e) {
-                    continue;
+                    list.push(author);
+                } catch {
+                    list.push(makeDummyUser({ username: user.name, id: user.id ? String(user.id) : undefined }));
                 }
             }
+            if (active) setAuthors(list);
         })();
+        return () => { active = false; };
     }, [plugin.authors]);
 
     function handleResetClick() {
@@ -116,7 +127,7 @@ export default function PluginModal({ plugin, onRestartNeeded, onClose, transiti
     function renderSettings() {
         const { settings } = plugin;
         if (!hasSettings || !settings)
-            return <Paragraph>There are no settings for this plugin.</Paragraph>;
+            return <Paragraph>{t("There are no settings for this plugin.")}</Paragraph>;
 
         const options = Object.entries(settings.def).map(([key, setting]) => {
             if (setting.type === OptionType.CUSTOM) return null;
@@ -188,7 +199,7 @@ export default function PluginModal({ plugin, onRestartNeeded, onClose, transiti
             subtitle={
                 <div className={cl("info")}>
                     <div>
-                        <Paragraph size="md">{plugin.description}</Paragraph>
+                        <Paragraph size="md">{tPluginDesc(plugin.name, plugin.description)}</Paragraph>
                         {!!plugin.tags?.length && <PluginTags tags={plugin.tags} />}
                     </div>
                 </div>
@@ -205,7 +216,7 @@ export default function PluginModal({ plugin, onRestartNeeded, onClose, transiti
             )}
             <div className={"vc-settings-modal-content"}>
                 <section>
-                    <Text variant="heading-lg/semibold" className={classes(Margins.top8, Margins.bottom8)}>Authors</Text>
+                    <Text variant="heading-lg/semibold" className={classes(Margins.top8, Margins.bottom8)}>{t("Authors")}</Text>
                     <div style={{ width: "fit-content" }}>
                         <ErrorBoundary noop>
                             <UserSummaryItem
@@ -217,7 +228,7 @@ export default function PluginModal({ plugin, onRestartNeeded, onClose, transiti
                                 renderUser={(user: User) => (
                                     <Clickable
                                         className={AvatarStyles.clickableAvatar}
-                                        onClick={() => isEquicordPlugin ? openContributorModal(user) : openContributorModal(user)}
+                                        onClick={() => openContributorModal(user)}
                                     >
                                         <img
                                             className={AvatarStyles.avatar}
@@ -233,7 +244,7 @@ export default function PluginModal({ plugin, onRestartNeeded, onClose, transiti
                 </section>
 
                 <section>
-                    <BaseText size="lg" weight="semibold" color="text-strong" className={classes(Margins.top16, Margins.bottom8)}>Settings</BaseText>
+                    <BaseText size="lg" weight="semibold" color="text-strong" className={classes(Margins.top16, Margins.bottom8)}>{t("Settings")}</BaseText>
                     {renderSettings()}
                 </section>
             </div>

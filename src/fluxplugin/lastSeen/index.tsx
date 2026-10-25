@@ -1,16 +1,16 @@
 /*
- * Nightcord, a Discord client mod
- * Copyright (c) 2024 contributors
+ * Vencord, a Discord client mod
+ * Copyright (c) 2026 Vendicated and contributors
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
-import ErrorBoundary from "@components/ErrorBoundary";
-import { BaseText } from "@components/BaseText";
-import definePlugin, { OptionType } from "@utils/types";
-import { FluxDispatcher, React, useStateFromStores } from "@webpack/common";
-import { findByPropsLazy, findComponentByCodeLazy } from "@webpack";
 import { DataStore } from "@api/index";
 import { definePluginSettings } from "@api/Settings";
+import { BaseText } from "@components/BaseText";
+import ErrorBoundary from "@components/ErrorBoundary";
+import definePlugin, { OptionType } from "@utils/types";
+import { findByPropsLazy, findComponentByCodeLazy } from "@webpack";
+import { FluxDispatcher, React, useStateFromStores } from "@webpack/common";
 
 const Section = findComponentByCodeLazy("headingVariant:", '"section"', "headingIcon:");
 const PresenceStore = findByPropsLazy("getStatus", "getActivities");
@@ -166,7 +166,7 @@ function LastSeenText({ userId }: { userId: string; }) {
     }
 
     return (
-        <BaseText size="sm" color="text-normal" style={{ userSelect: "text" }}>
+        <BaseText size="sm" color="text-default" style={{ userSelect: "text" }}>
             {content}
         </BaseText>
     );

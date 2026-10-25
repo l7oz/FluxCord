@@ -7,6 +7,7 @@
 import { definePluginSettings } from "@api/Settings";
 import { Notice } from "@components/Notice";
 import { EquicordDevs } from "@utils/constants";
+import { t } from "@utils/i18n";
 import definePlugin, { OptionType } from "@utils/types";
 import { UserStore } from "@webpack/common";
 
@@ -56,7 +57,7 @@ export default definePlugin({
     authors: [EquicordDevs.Drag, EquicordDevs.neoarz],
     settingsAboutComponent: () => (
         <Notice.Warning>
-            We can't guarantee this plugin won't get you warned or banned.
+            {t("We can't guarantee this plugin won't get you warned or banned.")}
         </Notice.Warning>
     ),
     settings: settings,

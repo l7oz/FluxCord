@@ -21,6 +21,7 @@ export default definePlugin({
                     replace: "(Vencord.Api.ChatButtons._injectButtons($1,arguments[0]),$&)"
                 },
                 {
+                    // Lets plugins wrap the whole button row (HideChatButtons, CollapsibleUI)
                     match: /(?<="submit"\)\).{0,100}"div",\{className:\i\.\i,children:)(\i)\}/,
                     replace: "Vencord.Api.ChatButtons._wrapButtons($1)}"
                 }

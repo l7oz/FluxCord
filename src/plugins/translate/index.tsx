@@ -20,6 +20,7 @@ import "./styles.css";
 
 import { findGroupChildrenByChildId, NavContextMenuPatchCallback } from "@api/ContextMenu";
 import { Devs } from "@utils/constants";
+import { t } from "@utils/i18n";
 import definePlugin from "@utils/types";
 import { Message } from "@vencord/discord-types";
 import { ChannelStore, Menu } from "@webpack/common";
@@ -39,7 +40,7 @@ const messageCtxPatch: NavContextMenuPatchCallback = (children, { message }: { m
     group.splice(group.findIndex(c => c?.props?.id === "copy-text") + 1, 0, (
         <Menu.MenuItem
             id="vc-trans"
-            label="Translate"
+            label={t("Translate")}
             icon={TranslateIcon}
             leadingAccessory={{ type: "icon", icon: TranslateIcon }}
             action={async () => {
@@ -66,7 +67,7 @@ export default definePlugin({
     description: "Translate messages with Google Translate, DeepL or Kagi.",
     dependencies: ["ChatInputButtonAPI", "MessageAccessoriesAPI", "MessagePopoverAPI"],
     tags: ["Chat", "Utility"],
-    authors: [Devs.Ven, Devs.AshtonMemer, Devs.koish1],
+    authors: [Devs.ewlle, Devs.kraethis, Devs.Sharp],
     settings,
     contextMenus: {
         "message": messageCtxPatch

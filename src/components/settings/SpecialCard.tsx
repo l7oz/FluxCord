@@ -24,7 +24,7 @@ import { Heading } from "@components/Heading";
 import { Paragraph } from "@components/Paragraph";
 import { classNameFactory } from "@utils/css";
 import { Clickable } from "@webpack/common";
-import type { PropsWithChildren } from "react";
+import type { CSSProperties, PropsWithChildren, ReactNode } from "react";
 
 const cl = classNameFactory("vc-special-");
 
@@ -79,3 +79,64 @@ export function SpecialCard({ title, subtitle, description, cardImage, backgroun
         </Card>
     );
 }
+
+/**
+ * Crisp pixel art drawn from rows of characters. Each character maps
+ * to a colour in `palette`; "." is transparent.
+ */
+export function PixelArt({ rows, palette, pixel = 5, style }: { rows: string[]; palette: Record<string, string>; pixel?: number; style?: CSSProperties; }) {
+    const width = Math.max(...rows.map(r => r.length));
+    const rects: ReactNode[] = [];
+    rows.forEach((row, y) => {
+        for (let x = 0; x < row.length; x++) {
+            const fill = palette[row[x]];
+            if (fill) rects.push(<rect key={`${x}-${y}`} x={x} y={y} width={1.02} height={1.02} fill={fill} />);
+        }
+    });
+    return (
+        <svg
+            className="ec-card-pixel-art"
+            width={width * pixel}
+            height={rows.length * pixel}
+            viewBox={`0 0 ${width} ${rows.length}`}
+            shapeRendering="crispEdges"
+            style={style}
+        >
+            {rects}
+        </svg>
+    );
+}
+
+// The sleeping panda mascot
+export const PANDA_ROWS = [
+    "..kkk.......kkk..",
+    ".kKKKk.....kKKKk.",
+    ".KKKKKWWWWWKKKKK.",
+    "..KKKWWWWWWWKKK..",
+    "..WWWWWWWWWWWWW..",
+    ".WWWWWWWWWWWWWWw.",
+    ".WWKKKWWWWWKKKWw.",
+    "WWKKEKKWWWKKEKKWw",
+    "WWKKKKKWWWKKKKKWw",
+    "WWWKKKWWWWWKKKWWw",
+    "WWPPWWWKKKWWWPPWw",
+    "WWPPWWWWKWWWWPPWw",
+    ".WWWWWWKWKWWWWWw.",
+    "..WWWWWWWWWWWWw..",
+    "...wWWWWWWWWWw...",
+    ".....wwwwwww.....",
+];
+// The fur is a shade lighter than the card and the ears have a rim light, so the silhouette reads on dark blue
+export const PANDA_PALETTE = { K: "#232C40", k: "#4A5A80", W: "#F3F6FB", w: "#C9D3E4", E: "#FFFFFF", P: "#F4A6B8" };
+
+export const HEART_ROWS = [
+    ".HH...HH.",
+    "HLHH.HHHH",
+    "HLHHHHHHH",
+    "HHHHHHHHH",
+    ".HHHHHHH.",
+    "..HHHHH..",
+    "...HHH...",
+    "....H....",
+];
+export const HEART_PALETTE = { H: "#F0776B", L: "#F8B4AC" };

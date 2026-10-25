@@ -5,7 +5,6 @@
  */
 
 import { definePluginSettings } from "@api/Settings";
-import { EquicordDevs } from "@utils/constants";
 import definePlugin, { OptionType, type PluginNative, ReporterTestable } from "@utils/types";
 import { ChannelStore, DraftType, FluxDispatcher, SelectedChannelStore, showToast, UploadHandler } from "@webpack/common";
 

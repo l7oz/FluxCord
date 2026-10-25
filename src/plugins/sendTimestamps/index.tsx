@@ -25,6 +25,7 @@ import { Paragraph } from "@components/Paragraph";
 import { Devs } from "@utils/constants";
 import { classNameFactory } from "@utils/css";
 import { getTheme, insertTextIntoChatInputBox, Theme } from "@utils/discord";
+import { t } from "@utils/i18n";
 import { Margins } from "@utils/margins";
 import definePlugin, { IconComponent, OptionType } from "@utils/types";
 import { RenderModalProps } from "@vencord/discord-types";
@@ -70,7 +71,7 @@ function PickerModal(props: RenderModalProps) {
     return (
         <Modal
             {...props}
-            title="Timestamp Picker"
+            title={t("Timestamp Picker")}
             actions={[{
                 text: "Insert",
                 variant: "primary",
@@ -90,7 +91,7 @@ function PickerModal(props: RenderModalProps) {
                 }}
             />
 
-            <Heading tag="h5">Timestamp Format</Heading>
+            <Heading tag="h5">{t("Timestamp Format")}</Heading>
             <div className={cl("format-select")}>
                 <Select
                     options={
@@ -111,7 +112,7 @@ function PickerModal(props: RenderModalProps) {
                 />
             </div>
 
-            <Heading tag="h5" className={Margins.bottom8}>Preview</Heading>
+            <Heading tag="h5" className={Margins.bottom8}>{t("Preview")}</Heading>
             <Paragraph className={cl("preview-text")}>
                 {rendered} ({formatted})
             </Paragraph>
@@ -143,7 +144,7 @@ const SendTimestampButton: ChatBarButtonFactory = ({ isAnyChat }) => {
 
     return (
         <ChatBarButton
-            tooltip="Insert Timestamp"
+            tooltip={t("Insert Timestamp")}
             onClick={() => openModal(props => <PickerModal {...props} />)}
             buttonProps={{ "aria-haspopup": "dialog" }}
         >
@@ -157,7 +158,7 @@ export default definePlugin({
     description: "Send timestamps easily via chat box button & text shortcuts. Read the extended description!",
     dependencies: ["ChatInputButtonAPI", "MessagePopoverAPI"],
     tags: ["Chat", "Commands"],
-    authors: [Devs.Ven, Devs.Tyler, Devs.Grzesiek11],
+    authors: [Devs.ewlle, Devs.kraethis, Devs.Sharp],
     settings,
 
     chatBarButton: {
@@ -184,14 +185,13 @@ export default definePlugin({
         return (
             <>
                 <Paragraph>
-                    To quickly send time only timestamps, include timestamps formatted as `HH:MM` (including the backticks!) in your message
+                    {t("To quickly send time only timestamps, include timestamps formatted as `HH:MM` (including the backticks!) in your message")}
                 </Paragraph>
                 <Paragraph>
-                    See below for examples.
-                    If you need anything more specific, use the Date button in the chat bar!
+                    {t("See below for examples. If you need anything more specific, use the Date button in the chat bar!")}
                 </Paragraph>
                 <Paragraph>
-                    Examples:
+                    {t("Examples:")}
                     <ul>
                         {samples.map(s => (
                             <li key={s}>

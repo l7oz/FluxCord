@@ -4,9 +4,9 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
-import { t } from "@utils/fluxI18n";
 import { ApplicationCommandInputType, ApplicationCommandOptionType, findOption, sendBotMessage } from "@api/Commands";
 import { getCurrentChannel } from "@utils/discord";
+import { t } from "@utils/fluxI18n";
 import definePlugin from "@utils/types";
 import { DraftType, UploadHandler, UserStore } from "@webpack/common";
 

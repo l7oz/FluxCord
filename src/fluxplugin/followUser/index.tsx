@@ -10,10 +10,10 @@ import { DataStore } from "@api/index";
 import { definePluginSettings } from "@api/Settings";
 import { EquicordDevs } from "@utils/constants";
 import { t } from "@utils/fluxI18n";
+import { Logger } from "@utils/Logger";
 import definePlugin, { OptionType } from "@utils/types";
 import { findByPropsLazy, findStoreLazy } from "@webpack";
 import { Menu, React, Toasts, useEffect,useState } from "@webpack/common";
-import { Logger } from "@utils/Logger";
 
 const logger = new Logger("FollowUser");
 

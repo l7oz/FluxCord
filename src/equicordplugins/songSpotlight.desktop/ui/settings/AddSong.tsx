@@ -12,6 +12,7 @@ import { cl, logger } from "@equicordplugins/songSpotlight.desktop/lib/utils";
 import { Native } from "@equicordplugins/songSpotlight.desktop/service";
 import { parsers } from "@song-spotlight/api/handlers";
 import { Song } from "@song-spotlight/api/structs";
+import { t } from "@utils/i18n";
 import { RenderModalProps } from "@vencord/discord-types";
 import { Clickable, closeModal, Modal, openModal, TextInput, useState } from "@webpack/common";
 
@@ -31,7 +32,7 @@ function AddSongModal({ modalProps, close, onAdd }: AddSongModalProps) {
             <Modal
                 {...modalProps}
                 size="md"
-                title="Add a new song"
+                title={t("Add a new song")}
                 actions={[
                     {
                         text: "Add song",
@@ -65,7 +66,7 @@ function AddSongModal({ modalProps, close, onAdd }: AddSongModalProps) {
             >
                 <Flex flexDirection="column" gap="10px">
                     <BaseText size="md" weight="normal" className={cl("sub")}>
-                        Song Spotlight supports these services: <b>{parsers.map(x => x.label).join(", ")}</b>
+                        {t("Song Spotlight supports these services:")}{" "}<b>{parsers.map(x => x.label).join(", ")}</b>
                     </BaseText>
                     <TextInput
                         placeholder="https://open.spotify.com/..."
@@ -106,7 +107,7 @@ export default function AddSong({ onAdd }: AddSongProps) {
             <Flex alignItems="center" gap="12px" className={cl("editable-song", "add-song")}>
                 <PlusIcon width={28} height={28} className={cl("icon")} />
                 <Flex flexDirection="column" justifyContent="center" gap={0}>
-                    <BaseText size="md" weight="medium">Add song</BaseText>
+                    <BaseText size="md" weight="medium">{t("Add song")}</BaseText>
                 </Flex>
             </Flex>
         </Clickable>

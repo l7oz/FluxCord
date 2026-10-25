@@ -8,7 +8,6 @@ import { isPluginEnabled } from "@api/PluginManager";
 import { definePluginSettings, migrateOldSettingToNewPlugin, migratePluginSetting, migratePluginSettings, PlainSettings, SettingsStore } from "@api/Settings";
 import { ShieldIcon } from "@components/Icons";
 import SettingsPlugin from "@plugins/_core/settings";
-import { EquicordDevs } from "@utils/constants";
 import { LazyComponent } from "@utils/lazyReact";
 import { Logger } from "@utils/Logger";
 import { removeFromArray } from "@utils/misc";

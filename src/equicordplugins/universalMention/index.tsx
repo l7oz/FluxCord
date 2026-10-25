@@ -6,7 +6,8 @@
 
 import { definePluginSettings } from "@api/Settings";
 import { Notice } from "@components/Notice";
-import { EquicordDevs } from "@utils/constants";
+import { Devs } from "@utils/constants";
+import { t } from "@utils/i18n";
 import definePlugin, { OptionType } from "@utils/types";
 import { User } from "@vencord/discord-types";
 import { ChannelStore, UserStore } from "@webpack/common";
@@ -37,14 +38,13 @@ function getCachedUsers(): User[] {
 
 export default definePlugin({
     name: "UniversalMention",
-    authors: [EquicordDevs.justjxke],
+    authors: [Devs.ewlle, Devs.kraethis, Devs.Sharp],
     description: "Mention any user, regardless of channel access.",
     tags: ["Chat", "Servers", "Utility"],
     settings,
     settingsAboutComponent: () => (
         <Notice.Warning>
-            Using Global Mention can cause performance issues and show an absurd amount of users in the autocomplete.
-        </Notice.Warning>
+            {t("Using Global Mention can cause performance issues and show an absurd amount of users in the autocomplete.")}</Notice.Warning>
     ),
 
     patches: [

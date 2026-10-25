@@ -22,6 +22,7 @@ import { UserAreaRenderProps } from "@api/UserArea";
 import { getUserSettingLazy } from "@api/UserSettings";
 import equicordToolbox from "@equicordplugins/equicordToolbox";
 import { Devs } from "@utils/constants";
+import { t } from "@utils/i18n";
 import definePlugin, { OptionType } from "@utils/types";
 import { findByPropsLazy, findComponentByCodeLazy } from "@webpack";
 import { ConnectedAccountsStore, Menu, Popout, useRef, useState, useStateFromStores } from "@webpack/common";
@@ -165,7 +166,7 @@ export default definePlugin({
         return (
             <Menu.MenuCheckboxItem
                 id="game-activity-toggle-toolbox"
-                label="Enable Game Activity"
+                label={t("Enable Game Activity")}
                 checked={showCurrentGame}
                 action={() => ShowCurrentGame.updateSetting(old => !old)}
             />

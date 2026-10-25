@@ -4,11 +4,11 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
-import { t } from "@utils/fluxI18n";
 import { showNotification } from "@api/Notifications";
 import { classNameFactory } from "@utils/css";
-import { ModalSize } from "@utils/modal";
+import { t } from "@utils/fluxI18n";
 import { ModalCloseButton, ModalContent, ModalHeader, ModalRoot, RenderModalProps } from "@utils/fluxModals";
+import { ModalSize } from "@utils/modal";
 import { saveFile } from "@utils/web";
 import { ChannelStore, GuildStore, NavigationRouter, React, SelectedGuildStore, useCallback, useEffect, useRef, useState } from "@webpack/common";
 

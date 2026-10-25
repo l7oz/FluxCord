@@ -6,10 +6,10 @@
 
 import { definePluginSettings } from "@api/Settings";
 import { BanRiskWarning } from "@utils/fluxBanWarning";
+import { Logger } from "@utils/Logger";
 import definePlugin, { OptionType } from "@utils/types";
 import { findByPropsLazy, findStoreLazy } from "@webpack";
 import { ChannelStore, Constants, PermissionsBits, PermissionStore, RestAPI, UserStore } from "@webpack/common";
-import { Logger } from "@utils/Logger";
 
 const logger = new Logger("AutoUnmute");
 

@@ -20,6 +20,7 @@ import { Button } from "@components/Button";
 import { Heart } from "@components/Heart";
 import { OpenExternalIcon } from "@components/Icons";
 import { openInviteModal } from "@utils/discord";
+import { t } from "@utils/i18n";
 import { ButtonProps } from "@vencord/discord-types";
 import { showToast } from "@webpack/common";
 
@@ -39,7 +40,7 @@ export function DonateButton({
             className={className || "vc-donate-button"}
         >
             <Heart />
-            Donate
+            {t("Donate")}
         </Button>
     );
 }

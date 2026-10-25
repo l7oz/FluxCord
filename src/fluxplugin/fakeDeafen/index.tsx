@@ -1,6 +1,6 @@
 /*
- * Vencord / FluxCord, a Discord client mod
- * Copyright (c) 2024 Vendicated and contributors
+ * Vencord, a Discord client mod
+ * Copyright (c) 2026 Vendicated and contributors
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
@@ -9,6 +9,7 @@ import { openPluginModal } from "@components/settings";
 import definePlugin, { OptionType } from "@utils/types";
 import { ContextMenuApi, FluxDispatcher, Menu } from "@webpack/common";
 import type { MouseEvent } from "react";
+
 import plugins from "~plugins";
 
 // --- بداية التعديل: استبدال PhilsPluginLibrary بأداة مدمجة لإنشاء الزر بدون أخطاء البناء ---
@@ -27,12 +28,12 @@ function addSettingsPanelButton(props: any) {
             btn.id = "fake-deafen-custom-btn";
             btn.className = deafenBtn.className;
             btn.style.cssText = "background: transparent; border: none; display: flex; align-items: center; justify-content: center; cursor: pointer; color: var(--interactive-normal); width: 32px; height: 32px; border-radius: 4px; padding: 0;";
-            
+
             // أيقونة الزر
-            btn.innerHTML = `<svg x="0" y="0" aria-hidden="true" role="img" xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" viewBox="0 0 24 24"><path d="M12 3a9 9 0 0 0-9 9v3a3 3 0 0 0 3 3h2a1 1 0 0 0 1-1v-6a1 1 0 0 0-1-1H5.1A7 7 0 0 1 12 5a7 7 0 0 1 6.9 6H16a1 1 0 0 0-1 1v6a1 1 0 0 0 1 1h2a3 3 0 0 0 3-3v-3a9 9 0 0 0-9-9Z"></path></svg>`;
+            btn.innerHTML = "<svg x=\"0\" y=\"0\" aria-hidden=\"true\" role=\"img\" xmlns=\"http://www.w3.org/2000/svg\" width=\"20\" height=\"20\" fill=\"currentColor\" viewBox=\"0 0 24 24\"><path d=\"M12 3a9 9 0 0 0-9 9v3a3 3 0 0 0 3 3h2a1 1 0 0 0 1-1v-6a1 1 0 0 0-1-1H5.1A7 7 0 0 1 12 5a7 7 0 0 1 6.9 6H16a1 1 0 0 0-1 1v6a1 1 0 0 0 1 1h2a3 3 0 0 0 3-3v-3a9 9 0 0 0-9-9Z\"></path></svg>";
 
             btn.onclick = props.onClick;
-            btn.oncontextmenu = (e) => props.onContextMenu(e as any);
+            btn.oncontextmenu = e => props.onContextMenu(e as any);
             btn.onmouseenter = () => btn.style.color = "var(--interactive-hover)";
             btn.onmouseleave = () => btn.style.color = "var(--interactive-normal)";
 

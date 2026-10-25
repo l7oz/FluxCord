@@ -16,18 +16,23 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
+import { addAudioProcessor, removeAudioProcessor } from "@api/AudioPlayer";
 import { addProfileBadge, removeProfileBadge } from "@api/Badges";
 import { addChatBarButton, addChatBarButtonWrapper, removeChatBarButton, removeChatBarButtonWrapper } from "@api/ChatButtons";
 import { registerCommand, unregisterCommand } from "@api/Commands";
 import { addContextMenuPatch, removeContextMenuPatch } from "@api/ContextMenu";
+import { addChannelToolbarButton, addHeaderBarButton, removeChannelToolbarButton, removeHeaderBarButton } from "@api/HeaderBar";
 import { addMemberListDecorator, removeMemberListDecorator } from "@api/MemberListDecorators";
 import { addMessageAccessory, removeMessageAccessory } from "@api/MessageAccessories";
 import { addMessageDecoration, removeMessageDecoration } from "@api/MessageDecorations";
 import { addMessageClickListener, addMessagePreEditListener, addMessagePreSendListener, removeMessageClickListener, removeMessagePreEditListener, removeMessagePreSendListener } from "@api/MessageEvents";
 import { addMessagePopoverButton, removeMessagePopoverButton } from "@api/MessagePopover";
 import { addNicknameIcon, removeNicknameIcon } from "@api/NicknameIcons";
+import { addProfileCollection, removeProfileCollection } from "@api/ProfileCollections";
+import { addProfileSection, removeProfileSection } from "@api/ProfileSections";
 import { Settings, SettingsStore } from "@api/Settings";
 import { disableStyle, enableStyle } from "@api/Styles";
+import { addUserAreaButton, removeUserAreaButton } from "@api/UserArea";
 import { traceFunction } from "@debug/Tracer";
 import { Logger } from "@utils/Logger";
 import { onlyOnce } from "@utils/onlyOnce";
@@ -37,16 +42,16 @@ import { FluxEvents } from "@vencord/discord-types";
 import { FluxDispatcher } from "@webpack/common";
 import { patches } from "@webpack/patcher";
 
-import Plugins from "~plugins";
+import Plugins, { PluginMeta } from "~plugins";
 export { Plugins as plugins };
 
-import { addAudioProcessor, removeAudioProcessor } from "./AudioPlayer";
-import { addChannelToolbarButton, addHeaderBarButton, removeChannelToolbarButton, removeHeaderBarButton } from "./HeaderBar";
-import { addProfileCollection, removeProfileCollection } from "./ProfileCollections";
-import { addProfileSection, removeProfileSection } from "./ProfileSections";
-import { addUserAreaButton, removeUserAreaButton } from "./UserArea";
-
 const logger = new Logger("PluginManager", "#a6d189");
+
+/** Plain CSS imported inside a plugin folder, registered at build time and only injected while that plugin runs */
+function getFolderStyles(name: string): string[] {
+    const folder = PluginMeta[name]?.folderName;
+    return (folder && window.VencordPluginStyles?.[folder]) || [];
+}
 
 export const PMLogger = logger;
 
@@ -265,6 +270,7 @@ export const startPlugin = traceFunction("startPlugin", function startPlugin(p: 
     }
 
     if (managedStyle) enableStyle(managedStyle);
+    for (const style of getFolderStyles(name)) enableStyle(style);
 
     if (userProfileBadges) userProfileBadges.forEach(e => addProfileBadge(e));
 
@@ -344,6 +350,7 @@ export const stopPlugin = traceFunction("stopPlugin", function stopPlugin(p: Plu
     }
 
     if (managedStyle) disableStyle(managedStyle);
+    for (const style of getFolderStyles(name)) disableStyle(style);
 
     if (userProfileBadges) userProfileBadges.forEach(e => removeProfileBadge(e));
 
@@ -375,9 +382,26 @@ export const stopPlugin = traceFunction("stopPlugin", function stopPlugin(p: Plu
     return true;
 }, p => `stopPlugin ${p.name}`);
 
+function bindPluginSettings(p: Plugin) {
+    if (!p.settings) return;
+    p.settings.pluginName = p.name;
+
+    try {
+        for (const [key, def] of Object.entries(p.settings.def ?? {})) {
+            if (def.onChange)
+                SettingsStore.addChangeListener(`plugins.${p.name}.${key}`, def.onChange);
+        }
+    } catch (e) {
+        logger.error(`Failed to bind settings for ${p.name}\n`, e);
+    }
+}
+
 export const initPluginManager = onlyOnce(function init() {
-    const pluginsValues = Object.values(Plugins);
     const settings = Settings.plugins;
+
+    // Bind settings change listeners for every plugin (FluxCord builds plugins eagerly,
+    // so every plugin module is already evaluated by this point).
+    for (const name in Plugins) bindPluginSettings(Plugins[name]);
 
     const pluginKeysToBind: Array<keyof PluginDef & `${"on" | "render"}${string}`> = [
         "onBeforeMessageEdit", "onBeforeMessageSend", "onMessageClick",
@@ -392,7 +416,8 @@ export const initPluginManager = onlyOnce(function init() {
     //
     // FIXME: might need to revisit this if there's ever nested (dependencies of dependencies) dependencies since this only
     // goes for the top level and their children, but for now this works okay with the current API plugins
-    for (const p of pluginsValues) if (isPluginEnabled(p.name)) {
+    for (const name in Plugins) if (isPluginEnabled(name)) {
+        const p = Plugins[name];
         p.dependencies?.forEach(d => {
             const dep = Plugins[d];
 
@@ -418,7 +443,7 @@ export const initPluginManager = onlyOnce(function init() {
         if (p.renderMessageAccessory) neededApiPlugins.add("MessageAccessoriesAPI");
         if (p.renderMessageDecoration) neededApiPlugins.add("MessageDecorationsAPI");
         if (p.messagePopoverButton) neededApiPlugins.add("MessagePopoverAPI");
-        if (p.userProfileBadge) neededApiPlugins.add("BadgeAPI");
+        if (p.userProfileBadge || (p as any).userProfileBadges) neededApiPlugins.add("BadgeAPI");
 
         // Custom
         if (p.renderNicknameIcon) neededApiPlugins.add("NicknameIconsAPI");
@@ -439,17 +464,11 @@ export const initPluginManager = onlyOnce(function init() {
         settings[p].enabled = true;
     }
 
-    for (const p of pluginsValues) {
-        if (p.settings) {
-            p.settings.pluginName = p.name;
+    for (const name in Plugins) {
+        if (!isPluginEnabled(name)) continue;
+        const p = Plugins[name];
 
-            for (const [key, def] of Object.entries(p.settings.def)) {
-                if (def.onChange)
-                    SettingsStore.addChangeListener(`plugins.${p.name}.${key}`, def.onChange);
-            }
-        }
-
-        if (p.patches && isPluginEnabled(p.name)) {
+        if (p.patches) {
             if (!IS_REPORTER || isReporterTestable(p, ReporterTestable.Patches)) {
                 for (const patch of p.patches) {
                     addPatch(patch, p.name);

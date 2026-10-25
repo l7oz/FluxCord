@@ -7,13 +7,41 @@
 import * as DataStore from "@api/DataStore";
 import { showNotification } from "@api/Notifications";
 import { Settings } from "@api/Settings";
+import { t } from "@utils/i18n";
 import { Logger } from "@utils/Logger";
-import { OAuth2AuthorizeModal, openModal, UserStore } from "@webpack/common";
+import { relaunch } from "@utils/native";
+import { ConfirmModal, OAuth2AuthorizeModal, openModal, UserStore } from "@webpack/common";
 
 export const logger = new Logger("SettingsSync:CloudSetup", "#39b7e0");
 
 export const getCloudUrl = () => new URL(Settings.cloud.url);
 const getCloudUrlOrigin = () => getCloudUrl().origin;
+
+export async function checkCloudUrlCsp() {
+    if (IS_WEB) return true;
+
+    const { host } = getCloudUrl();
+
+    if (await VencordNative.csp.isDomainAllowed(Settings.cloud.url, ["connect-src"])) {
+        return true;
+    }
+
+    const res = await VencordNative.csp.requestAddOverride(Settings.cloud.url, ["connect-src"], "Cloud Sync");
+    if (res === "ok") {
+        openModal(props => (
+            <ConfirmModal
+                {...props}
+                title={t("Cloud Integration enabled")}
+                subtitle={`${host} has been added to the whitelist. Please restart the app for the changes to take effect.`}
+                confirmText={t("Restart now")}
+                cancelText={t("Later!")}
+                variant="primary"
+                onConfirm={relaunch}
+            />
+        ));
+    }
+    return false;
+}
 
 const getUserId = () => {
     const id = UserStore.getCurrentUser()?.id;
@@ -65,13 +93,15 @@ export async function authorizeCloud() {
         return;
     }
 
+    if (!await checkCloudUrlCsp()) return;
+
     try {
         const oauthConfiguration = await fetch(new URL("/v1/oauth/settings", getCloudUrl()));
         var { clientId, redirectUri } = await oauthConfiguration.json();
     } catch {
         showNotification({
-            title: "Cloud Integration",
-            body: "Setup failed (couldn't retrieve OAuth configuration)."
+            title: t("Cloud Integration"),
+            body: t("Setup failed (couldn't retrieve OAuth configuration).")
         });
         Settings.cloud.authenticated = false;
         return;
@@ -100,14 +130,14 @@ export async function authorizeCloud() {
                     logger.info("Authorized with cloud");
                     await setAuthorization(data.secret);
                     showNotification({
-                        title: "Cloud Integration",
-                        body: "Cloud integrations enabled!"
+                        title: t("Cloud Integration"),
+                        body: t("Cloud integrations enabled!")
                     });
                     Settings.cloud.authenticated = true;
                 } else {
                     logger.error("OAuth callback returned no secret", data);
                     showNotification({
-                        title: "Cloud Integration",
+                        title: t("Cloud Integration"),
                         body: data.error
                             ? `Setup failed: ${data.error}`
                             : "Setup failed (no secret returned)."
@@ -117,7 +147,7 @@ export async function authorizeCloud() {
             } catch (e: any) {
                 logger.error("Failed to authorize", e);
                 showNotification({
-                    title: "Cloud Integration",
+                    title: t("Cloud Integration"),
                     body: `Setup failed (${e.toString()}).`
                 });
                 Settings.cloud.authenticated = false;

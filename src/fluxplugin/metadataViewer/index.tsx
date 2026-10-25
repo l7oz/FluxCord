@@ -4,12 +4,12 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
-import { t } from "@utils/fluxI18n";
 import { findGroupChildrenByChildId } from "@api/ContextMenu";
 import { definePluginSettings } from "@api/Settings";
 import { SafetyIcon } from "@components/Icons";
-import { Logger } from "@utils/Logger";
+import { t } from "@utils/fluxI18n";
 import { openModal } from "@utils/fluxModals";
+import { Logger } from "@utils/Logger";
 import definePlugin, { OptionType } from "@utils/types";
 import { Menu, MessageStore, React, UploadHandler } from "@webpack/common";
 

@@ -19,6 +19,7 @@
 import { definePluginSettings } from "@api/Settings";
 import { Button } from "@components/Button";
 import { openInviteModal } from "@utils/discord";
+import { t } from "@utils/i18n";
 import { OptionType } from "@utils/types";
 
 import { authorize, getToken } from "./auth";
@@ -30,8 +31,7 @@ export const settings = definePluginSettings({
         type: OptionType.COMPONENT,
         component: () => (
             <Button onClick={() => authorize()}>
-                Authorize with ReviewDB
-            </Button>
+                {t("Authorize with ReviewDB")}</Button>
         )
     },
     notifyReviews: {
@@ -58,7 +58,7 @@ export const settings = definePluginSettings({
         type: OptionType.COMPONENT,
         component: () => (
             <div className={cl("button-grid")} >
-                <Button onClick={openBlockModal}>Manage Blocked Users</Button>
+                <Button onClick={openBlockModal}>{t("Manage Blocked Users")}</Button>
 
                 <Button
                     variant="positive"
@@ -66,8 +66,7 @@ export const settings = definePluginSettings({
                         VencordNative.native.openExternal("https://github.com/sponsors/mantikafasi");
                     }}
                 >
-                    Support ReviewDB development
-                </Button>
+                    {t("Support ReviewDB development")}</Button>
 
                 <Button variant="link" onClick={async () => {
                     let url = "https://reviewdb.mantikafasi.dev";
@@ -77,12 +76,10 @@ export const settings = definePluginSettings({
 
                     VencordNative.native.openExternal(url);
                 }}>
-                    ReviewDB website
-                </Button>
+                    {t("ReviewDB website")}</Button>
 
                 <Button variant="link" onClick={() => openInviteModal("eWPBSbvznt")}>
-                    ReviewDB Support Server
-                </Button>
+                    {t("ReviewDB Support Server")}</Button>
             </div >
         )
     }

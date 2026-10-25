@@ -1,11 +1,6 @@
 /*
- * ConsoleWatcher — أداة مطوّر لمراقبة أحداث الكونسول وجمعها للصيانة
- * Copyright (c) 2026 LOSTSTR
- *
- * مبنية على FluxCord المرخّصة GPL-3.0-or-later وتخضع لنفس الرخصة. تعترض دوال
- * الكونسول أثناء التسجيل النشط فقط، ثم تستعيد الأصل بالكامل عند الإيقاف — بلا
- * تسريب ذاكرة ولا تأثير على عملية main (تعمل في طرف العرض فقط).
- *
+ * Vencord, a Discord client mod
+ * Copyright (c) 2026 Vendicated and contributors
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
@@ -47,7 +42,7 @@ const original: Partial<Record<HookedMethod, (...a: any[]) => void>> = {};
 let recording = false;
 let hooked = false;
 let capturing = false; // حارس إعادة الدخول — يمنع التكرار اللانهائي
-let errorCount = 0;    // عدّاد أخطاء حيّ — يظهر في تلميح الزر أثناء التسجيل
+let errorCount = 0; // عدّاد أخطاء حيّ — يظهر في تلميح الزر أثناء التسجيل
 
 // ── فُتات Flux (breadcrumbs) — سياق «ماذا كان يحدث قبل الخطأ مباشرة» ─────────
 // أثناء التسجيل فقط: نغلّف FluxDispatcher.dispatch لنحفظ أنواع آخر الأحداث في

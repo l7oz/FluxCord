@@ -9,8 +9,10 @@ import "./styles.css";
 import { definePluginSettings } from "@api/Settings";
 import { BaseText } from "@components/BaseText";
 import ErrorBoundary from "@components/ErrorBoundary";
+import { TooltipContainer } from "@components/TooltipContainer";
 import { Devs } from "@utils/constants";
 import { getIntlMessage } from "@utils/discord";
+import { t } from "@utils/i18n";
 import { canonicalizeMatch } from "@utils/patches";
 import definePlugin, { OptionType } from "@utils/types";
 import { Message } from "@vencord/discord-types";
@@ -69,7 +71,7 @@ export default definePlugin({
     name: "ShowTimeoutDuration",
     description: "Shows how much longer a user's timeout will last, either in the timeout icon tooltip or next to it",
     tags: ["Servers", "Utility"],
-    authors: [Devs.Ven, Devs.Sqaaakoi],
+    authors: [Devs.ewlle, Devs.kraethis, Devs.Sharp],
 
     settings,
 
@@ -94,16 +96,11 @@ export default definePlugin({
             );
 
         return (
-            <Tooltip text={renderTimeout(message, false)}>
-                {tooltipProps => (
-                    <div {...tooltipProps} className="vc-std-wrapper">
-                        {children}
-                        <BaseText tag="span" size="md" color="text-danger">
-                            {renderTimeout(message, true)} timeout remaining
-                        </BaseText>
-                    </div>
-                )}
-            </Tooltip>
+            <div className="vc-std-wrapper">
+                <TooltipContainer text={text}>{children}</TooltipContainer>
+                <BaseText tag="span" size="md" color="text-danger">
+                    {renderTimeout(message, true)}{" "}{t("timeout remaining")}</BaseText>
+            </div>
         );
     }, { noop: true })
 });

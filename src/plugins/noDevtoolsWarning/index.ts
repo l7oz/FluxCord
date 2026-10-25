@@ -21,8 +21,9 @@ import definePlugin from "@utils/types";
 
 export default definePlugin({
     name: "NoDevtoolsWarning",
+    required: true,
     description: "Disables the 'HOLD UP' banner in the console. As a side effect, also prevents Discord from hiding your token, which prevents random logouts.",
-    authors: [Devs.Ven],
+    authors: [Devs.ewlle, Devs.kraethis, Devs.Sharp],
     tags: ["Developers", "Console"],
     patches: [{
         find: "setDevtoolsCallbacks",

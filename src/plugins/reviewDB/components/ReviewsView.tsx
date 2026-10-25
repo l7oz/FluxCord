@@ -22,6 +22,7 @@ import { Review, ReviewType } from "@plugins/reviewDB/entities";
 import { addReview, getReviews, REVIEWS_PER_PAGE, UserReviewsData } from "@plugins/reviewDB/reviewDbApi";
 import { settings } from "@plugins/reviewDB/settings";
 import { cl, showToast } from "@plugins/reviewDB/utils";
+import { t } from "@utils/i18n";
 import { useAwaiter, useForceUpdater } from "@utils/react";
 import { findByCodeLazy, findByPropsLazy, findComponentByCodeLazy } from "@webpack";
 import { React, RelationshipStore, useRef, UserStore } from "@webpack/common";
@@ -117,7 +118,7 @@ function ReviewList({ refetch, reviews, hideOwnReview, profileId, type }: { refe
 
             {reviews?.length === 0 && (
                 <Paragraph className={cl("placeholder")}>
-                    Looks like nobody reviewed this {type === ReviewType.User ? "user" : "server"} yet. You could be the first!
+                    {t("Looks like nobody reviewed this")}{" "}{type === ReviewType.User ? "user" : "server"}{" "}{t("yet. You could be the first!")}
                 </Paragraph>
             )}
         </div>

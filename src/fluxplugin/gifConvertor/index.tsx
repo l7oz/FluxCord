@@ -32,7 +32,7 @@ type Stage = "idle" | "converting" | "preview" | "sending" | "error";
 
 interface PopoverPosition {
     bottom: number; // px from bottom of viewport
-    left: number;   // px from left of viewport (centre of button)
+    left: number; // px from left of viewport (centre of button)
 }
 
 // ─── Utilities ────────────────────────────────────────────────────────────────

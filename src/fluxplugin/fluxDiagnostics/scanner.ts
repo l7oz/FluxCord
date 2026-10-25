@@ -24,11 +24,11 @@ export type PluginType = "continuous" | "ondemand";
 
 export interface RawPluginStat {
     name: string;
-    patches: number;     // webpack code patches
-    listeners: number;   // Flux events + message listeners
-    uiInjects: number;   // context menus + every declarative UI surface
-    hooks: number;       // slash commands
-    type: PluginType;    // continuous (background) vs on-demand (user-triggered)
+    patches: number; // webpack code patches
+    listeners: number; // Flux events + message listeners
+    uiInjects: number; // context menus + every declarative UI surface
+    hooks: number; // slash commands
+    type: PluginType; // continuous (background) vs on-demand (user-triggered)
     /**
      * ترقيعات لم تُطبَّق بعد: ما زالت في قائمة الانتظار لأن وحدتها لم تُطابَق.
      * بيانات حقيقية من مصفوفة patchWebpack (تُسحَب منها المُطبَّقة). تنبيه صادق:

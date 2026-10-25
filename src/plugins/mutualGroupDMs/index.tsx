@@ -22,6 +22,7 @@ import { BaseText } from "@components/BaseText";
 import ErrorBoundary from "@components/ErrorBoundary";
 import { Devs } from "@utils/constants";
 import { isNonNullish } from "@utils/guards";
+import { t } from "@utils/i18n";
 import { Logger } from "@utils/Logger";
 import { classes } from "@utils/misc";
 import definePlugin from "@utils/types";
@@ -194,7 +195,7 @@ export default definePlugin({
                     : (
                         <div className={ProfileListClasses.empty}>
                             <div className={ProfileListClasses.textContainer}>
-                                <BaseText tag="h3" size="md" weight="medium" style={{ color: "var(--text-strong)" }}>You don't have any group chats in common</BaseText>
+                                <BaseText tag="h3" size="md" weight="medium" style={{ color: "var(--text-strong)" }}>{t("You don't have any group chats in common")}</BaseText>
                             </div>
                         </div>
                     )
@@ -212,7 +213,7 @@ export default definePlugin({
                 {hasDivider && Divider}
                 <ExpandableList
                     listClassName={classes(listStyle, "vc-mutual-gdms-dm-page-list")}
-                    header={"Mutual Groups"}
+                    header={t("Mutual Groups")}
                     isLoading={false}
                     items={renderClickableGDMs(mutualGDms)}
                 />

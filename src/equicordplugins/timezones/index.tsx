@@ -10,7 +10,8 @@ import { NavContextMenuPatchCallback } from "@api/ContextMenu";
 import * as DataStore from "@api/DataStore";
 import { definePluginSettings } from "@api/Settings";
 import ErrorBoundary from "@components/ErrorBoundary";
-import { Devs, EquicordDevs } from "@utils/constants";
+import { Devs } from "@utils/constants";
+import { t } from "@utils/i18n";
 import definePlugin, { OptionType } from "@utils/types";
 import { Message, User } from "@vencord/discord-types";
 import { findByPropsLazy, findCssClassesLazy } from "@webpack";
@@ -97,8 +98,7 @@ export const settings = definePluginSettings({
             <Button onClick={() => {
                 openModal(modalProps => <SetTimezoneModal userId={UserStore.getCurrentUser().id} modalProps={modalProps} database={true} />);
             }}>
-                Set Timezone on Database
-            </Button>
+                {t("Set Timezone on Database")}</Button>
         )
     },
 
@@ -118,8 +118,7 @@ export const settings = definePluginSettings({
                     }
                 }}
             >
-                Reset Database Timezone
-            </Button>
+                {t("Reset Database Timezone")}</Button>
         )
     },
 
@@ -243,7 +242,7 @@ const userContextMenuPatch: NavContextMenuPatchCallback = (children, { user }: {
 
     const setTimezoneItem = (
         <Menu.MenuItem
-            label="Set Local Timezone"
+            label={t("Set Local Timezone")}
             id="set-timezone"
             action={() => openModal(modalProps => <SetTimezoneModal userId={user.id} modalProps={modalProps} />)}
         />
@@ -254,7 +253,7 @@ const userContextMenuPatch: NavContextMenuPatchCallback = (children, { user }: {
 
 export default definePlugin({
     name: "Timezones",
-    authors: [Devs.Aria, EquicordDevs.creations],
+    authors: [Devs.ewlle, Devs.kraethis, Devs.Sharp],
     description: "Shows the local time of users in profiles and message headers",
     tags: ["Appearance", "Chat", "Utility"],
     contextMenus: {
@@ -320,8 +319,7 @@ export default definePlugin({
                                     openModal(modalProps => <SetTimezoneModal userId={UserStore.getCurrentUser().id} modalProps={modalProps} database={true} />);
                                 }}
                             >
-                                Want to save your timezone to the database? Click here to set it.
-                            </Button>
+                                {t("Want to save your timezone to the database? Click here to set it.")}</Button>
                         ),
                         position: Toasts.Position.BOTTOM
                     }

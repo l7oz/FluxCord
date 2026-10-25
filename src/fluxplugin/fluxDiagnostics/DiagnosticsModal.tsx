@@ -9,18 +9,15 @@
 import "./styles.css";
 
 import { get as dsGet, set as dsSet } from "@api/DataStore";
-import type { RenderModalProps } from "@vencord/discord-types";
 import { t } from "@utils/fluxI18n";
 import { saveFile } from "@utils/web";
+import type { RenderModalProps } from "@vencord/discord-types";
 import { Button, Modal, React, TextInput, Tooltip, useEffect, useState } from "@webpack/common";
 
-import type { ImpactPhase, ImpactResult } from "./impactTest";
-import { isImpactTestRunning, listImpactCandidates, runImpactTest } from "./impactTest";
-import type { RuntimeReport } from "./runtimeProfiler";
-import { runtimeProfiler } from "./runtimeProfiler";
+import { type ImpactPhase, type ImpactResult, isImpactTestRunning, listImpactCandidates, runImpactTest } from "./impactTest";
+import { runtimeProfiler,type RuntimeReport } from "./runtimeProfiler";
 import { sampleHeapMB } from "./scanner";
-import type { ScoredPlugin, SnapshotSummary } from "./scoring";
-import { summarize } from "./scoring";
+import { type ScoredPlugin, type SnapshotSummary, summarize } from "./scoring";
 
 type SortKey = "name" | "type" | "hooks" | "listeners" | "patches" | "pendingPatches" | "uiInjects" | "risk";
 

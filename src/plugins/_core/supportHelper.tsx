@@ -31,6 +31,7 @@ import customIdle from "@plugins/customIdle";
 import { gitHash, gitHashShort, gitRemote } from "@shared/vencordUserAgent";
 import { CONTRIB_ROLE_ID, Devs, DONOR_ROLE_ID, EQUICORD_TEAM, GUILD_ID, SUPPORT_CHANNEL_ID, SUPPORT_CHANNEL_IDS, VC_CONTRIB_ROLE_ID, VC_DONOR_ROLE_ID, VC_GUILD_ID, VC_REGULAR_ROLE_ID, VENCORD_CONTRIB_ROLE_ID } from "@utils/constants";
 import { sendMessage } from "@utils/discord";
+import { t } from "@utils/i18n";
 import { Logger } from "@utils/Logger";
 import { Margins } from "@utils/margins";
 import { isAnyPluginDev, isEquicordGuild, isEquicordSupport, isSupportChannel, tryOrElse } from "@utils/misc";
@@ -288,8 +289,8 @@ function DevBuildConfirmModal(props: RenderModalProps) {
     return (
         <ConfirmModal
             {...props}
-            title="Hold on!"
-            confirmText="Understood"
+            title={t("Hold on!")}
+            confirmText={t("Understood")}
             variant="primary"
             checkboxProps={{
                 checked: s.dismissedDevBuildWarning === true,
@@ -304,7 +305,7 @@ function DevBuildConfirmModal(props: RenderModalProps) {
                     Either <Link href={officialBuildUrl}>switch to an official build</Link> or figure your issue out yourself.
                 </Paragraph>
 
-                <Text variant="text-md/bold" className={Margins.top8}>You will be banned from receiving support if you ignore this rule.</Text>
+                <Text variant="text-md/bold" className={Margins.top8}>{t("You will be banned from receiving support if you ignore this rule.")}</Text>
             </div>
         </ConfirmModal>
     );
@@ -313,7 +314,7 @@ function DevBuildConfirmModal(props: RenderModalProps) {
 export default definePlugin({
     name: "SupportHelper",
     required: true,
-    description: "Helps us provide support to you",
+    description: t("Helps us provide support to you"),
     authors: [Devs.Ven],
     dependencies: ["UserSettingsAPI", "CommandsAPI", "MessageAccessoriesAPI"],
     tags: ["Utility"],
@@ -457,7 +458,7 @@ export default definePlugin({
                         }
                     }}
                 >
-                    Update Now
+                    {t("Update Now")}
                 </Button>
             );
         }

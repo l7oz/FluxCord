@@ -28,14 +28,15 @@ import { HeadingSecondary } from "@components/Heading";
 import { Paragraph } from "@components/Paragraph";
 import { Devs } from "@utils/constants";
 import { copyWithToast, fetchUserProfile } from "@utils/discord";
+import { t } from "@utils/i18n";
 import { Margins } from "@utils/margins";
 import { classes } from "@utils/misc";
 import { useAwaiter } from "@utils/react";
+import { safeRecordMerge } from "@utils/safeRecordMerge";
 import definePlugin, { OptionType } from "@utils/types";
 import { User, UserProfile } from "@vencord/discord-types";
 import { findComponentByCodeLazy } from "@webpack";
 import { Button, ColorPicker, Forms, React, UserProfileStore, UserStore, useState } from "@webpack/common";
-import virtualMerge from "virtual-merge";
 
 interface Colors {
     primary: number;
@@ -123,14 +124,14 @@ function SettingsAboutComponent() {
             <Paragraph className={Margins.top8}>
                 <strong>To set your own profile theme colors:</strong>
                 <ul>
-                    <li>&mdash; use the color pickers below to choose your colors</li>
-                    <li>&mdash; click the "Copy 3y3" button</li>
-                    <li>&mdash; paste the invisible text anywhere in your bio</li>
+                    <li>{"— "}{t("use the color pickers below to choose your colors")}</li>
+                    <li>{"— "}{t("click the \"Copy 3y3\" button")}</li>
+                    <li>{"— "}{t("paste the invisible text anywhere in your bio")}</li>
                 </ul>
                 <Divider
                     className={classes(Margins.top8, Margins.bottom8)}
                 />
-                <Forms.FormTitle tag="h3">Color pickers</Forms.FormTitle>
+                <Forms.FormTitle tag="h3">{t("Color pickers")}</Forms.FormTitle>
                 <Flex gap="1em">
                     <ColorPicker
                         color={color1}
@@ -169,8 +170,7 @@ function SettingsAboutComponent() {
                         size={Button.Sizes.XLARGE}
                         style={{ marginBottom: "auto" }}
                     >
-                        Copy 3y3
-                    </Button>
+                        {t("Copy 3y3")}</Button>
                 </Flex>
                 <Divider
                     className={classes(Margins.top8, Margins.bottom8)}
@@ -234,10 +234,10 @@ export default definePlugin({
             if (settings.store.nitroFirst && user.themeColors) return user;
             const colors = decode(user.bio);
             if (colors) {
-                return virtualMerge(user, {
+                return safeRecordMerge(user, {
                     premiumType: 2,
                     themeColors: colors
-                });
+                }, `fpt:${colors[0]}:${colors[1]}`);
             }
         }
         return user;

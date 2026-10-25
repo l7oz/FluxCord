@@ -17,11 +17,11 @@
 */
 
 import { TextButton } from "@components/Button";
-import { Heading } from "@components/Heading";
 import { SessionInfo } from "@plugins/betterSessions/types";
 import { getDefaultName, savedSessionsCache, saveSessionsToDataStore } from "@plugins/betterSessions/utils";
+import { t } from "@utils/i18n";
 import { RenderModalProps } from "@vencord/discord-types";
-import { Modal, React, TextInput } from "@webpack/common";
+import { Forms, Modal, React, TextInput } from "@webpack/common";
 import { KeyboardEvent } from "react";
 
 export function RenameModal({ props, session, state }: { props: RenderModalProps, session: SessionInfo["session"], state: [string, React.Dispatch<React.SetStateAction<string>>]; }) {
@@ -43,7 +43,7 @@ export function RenameModal({ props, session, state }: { props: RenderModalProps
     return (
         <Modal
             {...props}
-            title="Rename"
+            title={t("Rename")}
             actions={[
                 {
                     text: "Cancel",
@@ -58,7 +58,7 @@ export function RenameModal({ props, session, state }: { props: RenderModalProps
             ]}
         >
             <div>
-                <Heading tag="h5">New device name</Heading>
+                <Forms.FormTitle tag="h5">{t("New device name")}</Forms.FormTitle>
                 <TextInput
                     style={{ marginBottom: "10px" }}
                     placeholder={getDefaultName(session.client_info)}
@@ -77,8 +77,7 @@ export function RenameModal({ props, session, state }: { props: RenderModalProps
                     }}
                     onClick={() => setValue("")}
                 >
-                    Reset Name
-                </TextButton>
+                    {t("Reset Name")}</TextButton>
             </div>
         </Modal>
     );

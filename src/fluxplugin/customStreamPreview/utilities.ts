@@ -1,6 +1,6 @@
 /*
- * FluxCord — CustomStreamPreview (internal tool for the FluxCord project)
- * Copyright (c) 2026 LOSTSTR
+ * Vencord, a Discord client mod
+ * Copyright (c) 2026 Vendicated and contributors
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 

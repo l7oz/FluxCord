@@ -1,5 +1,5 @@
 /*
- * FluxCord, a modification for Discord desktop app
+ * Vencord, a Discord client mod
  * Copyright (c) 2026 Vendicated and contributors
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
@@ -7,10 +7,9 @@
 import "./styles.css";
 
 import { BadgePosition, ProfileBadge } from "@api/Badges";
-import BadgeAPIPlugin from "@plugins/_api/badges";
-import { fetchAllFluxProfiles, markProfileFresh, onFluxProfile, queueFluxProfile } from "./fluxProfileSync";
 import { addHeaderBarButton, HeaderBarButton, removeHeaderBarButton } from "@api/HeaderBar";
 import { DataStore } from "@api/index";
+import BadgeAPIPlugin from "@plugins/_api/badges";
 import {
     ModalCloseButton as ModalCloseButton_,
     ModalContent as ModalContent_,
@@ -20,8 +19,10 @@ import {
     openModal
 } from "@utils/fluxModals";
 import definePlugin from "@utils/types";
-import { AuthenticationStore, Button, FluxDispatcher, IconUtils, Menu, React, RestAPI, Select, SnowflakeUtils, UserProfileStore, UserStore, Toasts } from "@webpack/common";
+import { AuthenticationStore, Button, FluxDispatcher, IconUtils, React, RestAPI, Select, SnowflakeUtils, Toasts,UserStore } from "@webpack/common";
 import virtualMerge from "virtual-merge";
+
+import { fetchAllFluxProfiles, markProfileFresh, onFluxProfile, queueFluxProfile } from "./fluxProfileSync";
 
 const t = (s: string) => s;
 
@@ -509,7 +510,6 @@ function buildUserBadgesArray(data: CustomProfileData, enabled: boolean): any[] 
     }
     return userBadges;
 }
-
 
 let _uploadTimer: any = null;
 
@@ -2381,8 +2381,6 @@ export default definePlugin({
             _avatarPatchApplied = true;
         }
     },
-
-
 
     stop() {
         if (_profilePoll) {

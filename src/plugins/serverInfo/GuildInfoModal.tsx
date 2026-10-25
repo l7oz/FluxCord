@@ -9,6 +9,7 @@ import "./styles.css";
 import { Heading } from "@components/Heading";
 import { classNameFactory } from "@utils/css";
 import { getGuildAcronym, openImageModal, openUserProfile } from "@utils/discord";
+import { t } from "@utils/i18n";
 import { classes } from "@utils/misc";
 import { useAwaiter } from "@utils/react";
 import { Guild, RenderModalProps, User } from "@vencord/discord-types";
@@ -129,7 +130,7 @@ function GuildInfoModal({ guild, modalProps }: GuildProps & { modalProps: Render
                 >
                     <div style={{ textAlign: "center" }}>
                         <div>
-                            Server Info
+                            {t("Server Info")}
                         </div>
                     </div>
                 </TabBar.Item>
@@ -139,7 +140,7 @@ function GuildInfoModal({ guild, modalProps }: GuildProps & { modalProps: Render
                 >
                     <div style={{ textAlign: "center" }}>
                         <div>
-                            Friends
+                            {t("Friends")}
                         </div>
                         {friendCount !== undefined ? ` (${friendCount})` : ""}
                     </div>
@@ -160,7 +161,7 @@ function GuildInfoModal({ guild, modalProps }: GuildProps & { modalProps: Render
                 >
                     <div style={{ textAlign: "center" }}>
                         <div>
-                            Blocked Users
+                            {t("Blocked Users")}
                         </div>
                         {blockedCount !== undefined ? ` (${blockedCount})` : ""}
                     </div>
@@ -171,9 +172,9 @@ function GuildInfoModal({ guild, modalProps }: GuildProps & { modalProps: Render
                 >
                     <div style={{ textAlign: "center" }}>
                         <div>
-                            Ignored Users
+                            {t("Ignored Users")}
                         </div>
-                        {ignoredCount !== undefined ? `(${ignoredCount})` : ""}
+                        {ignoredCount !== undefined ? ` (${ignoredCount})` : ""}
 
                     </div>
                 </TabBar.Item>

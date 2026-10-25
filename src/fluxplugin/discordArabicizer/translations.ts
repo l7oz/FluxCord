@@ -1,13 +1,6 @@
 /*
- * DiscordArabicizer — تعريب واجهة ديسكورد إلى العربية
- * Copyright (c) 2026 LOSTSTR
- *
- * مبنية على FluxCord المرخّصة GPL-3.0-or-later وتخضع لنفس الرخصة. تعترض دوال
- * i18n.intl لترجمة نصوص واجهة ديسكورد إلى العربية، مع الإبقاء على الأسماء
- * العَلَم (الألعاب والثيمات وأسماء المستخدمين) بلغتها الأصلية.
- *
- * «اشراق / Esharq» وشعاراته وشاراته علامات محفوظة لصاحبها، ولا تشملها رخصة GPL.
- *
+ * Vencord, a Discord client mod
+ * Copyright (c) 2026 Vendicated and contributors
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
@@ -6253,8 +6246,6 @@ export const translations: Record<string, string> = {
     "View File": "عرض الملفّ",
 
     // ── coverage batch 41 ──
-
-
 
     // ── coverage batch 42 (native UI: welcome · channels & roles · events · server theme) ──
     "{0} is here.": "{0} هنا.",

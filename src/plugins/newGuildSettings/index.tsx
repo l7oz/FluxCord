@@ -23,6 +23,7 @@ import {
 import { definePluginSettings } from "@api/Settings";
 import { CogWheel } from "@components/Icons";
 import { Devs } from "@utils/constants";
+import { t } from "@utils/i18n";
 import { sleep } from "@utils/misc";
 import definePlugin, { OptionType } from "@utils/types";
 import { Guild } from "@vencord/discord-types";
@@ -101,7 +102,7 @@ const makeContextMenuPatch: (shouldAddIcon: boolean) => NavContextMenuPatchCallb
 
         group.push(
             <Menu.MenuItem
-                label="Apply NewGuildSettings"
+                label={t("Apply NewGuildSettings")}
                 id="vc-newguildsettings-apply"
                 icon={shouldAddIcon ? CogWheel : void 0}
                 leadingAccessory={shouldAddIcon ? { type: "icon", icon: CogWheel } : void 0}
@@ -115,7 +116,7 @@ const makeContextMenuPatch: (shouldAddIcon: boolean) => NavContextMenuPatchCallb
 
         children.push(
             <Menu.MenuItem
-                label="Apply NewGuildSettings to Folder"
+                label={t("Apply NewGuildSettings to Folder")}
                 id="vc-newguildsettings-apply-folder"
                 icon={shouldAddIcon ? CogWheel : void 0}
                 leadingAccessory={shouldAddIcon ? { type: "icon", icon: CogWheel } : void 0}
@@ -195,7 +196,7 @@ export default definePlugin({
         {
             find: "{joinGuild:",
             replacement: {
-                match: /guildId:(\i),lurker:(\i).{0,20}}\)\);/,
+                match: /guildId:(\i),lurker:(\i).{0,20}}\);/,
                 replace: (m, guildId, lurker) => `${m}if(!${lurker})$self.applyDefaultSettings(${guildId});`
             }
         }

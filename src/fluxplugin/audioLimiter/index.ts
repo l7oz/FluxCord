@@ -6,10 +6,10 @@
 
 import { definePluginSettings } from "@api/Settings";
 import { t } from "@utils/fluxI18n";
+import { Logger } from "@utils/Logger";
 import definePlugin, { makeRange, OptionType } from "@utils/types";
 import { findByPropsLazy } from "@webpack";
 import { UserStore } from "@webpack/common";
-import { Logger } from "@utils/Logger";
 
 const logger = new Logger("AudioLimiter");
 

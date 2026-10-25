@@ -20,6 +20,7 @@ import { ChatBarButton, ChatBarButtonFactory } from "@api/ChatButtons";
 import { generateId, sendBotMessage } from "@api/Commands";
 import { EyeIcon } from "@components/Icons";
 import { Devs } from "@utils/constants";
+import { t } from "@utils/i18n";
 import definePlugin, { IconComponent, StartAt } from "@utils/types";
 import { CloudUpload, MessageAttachment } from "@vencord/discord-types";
 import { DraftStore, DraftType, UploadAttachmentStore, UserStore, useStateFromStores } from "@webpack/common";
@@ -28,7 +29,7 @@ const objectURLMap = new Map<string, string[]>();
 
 const getDraft = (channelId: string) => DraftStore.getDraft(channelId, DraftType.ChannelMessage);
 
-const getImageBox = (url: string): Promise<{ width: number, height: number; } | null> =>
+const getImageBox = (url: string): Promise<{ width: number; height: number; } | null> =>
     new Promise(res => {
         const img = new Image();
         img.onload = () =>
@@ -95,7 +96,7 @@ const PreviewButton: ChatBarButtonFactory = ({ isAnyChat, isEmpty, type: { attac
 
     return (
         <ChatBarButton
-            tooltip="Preview Message"
+            tooltip={t("Preview Message")}
             onClick={async () => {
                 const attachments = hasAttachments ? await getAttachments(channelId) : undefined;
                 const message = sendBotMessage(
@@ -127,7 +128,7 @@ export default definePlugin({
     description: "Lets you preview your message before sending it.",
     dependencies: ["ChatInputButtonAPI"],
     tags: ["Chat", "Utility"],
-    authors: [Devs.Aria],
+    authors: [Devs.ewlle, Devs.kraethis, Devs.Sharp],
     // start early to ensure we're the first plugin to add our button
     // This makes the popping in less awkward
     startAt: StartAt.Init,

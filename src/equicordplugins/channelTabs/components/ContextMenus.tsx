@@ -6,10 +6,12 @@
 
 import { BaseText } from "@components/BaseText";
 import { Heading } from "@components/Heading";
+import { OpenExternalIcon, PencilIcon, StarFilled, StarOutlined, TrashIcon, UnsendIcon, WindowTopOutlineIcon, XLargeBoldIcon } from "@components/Icons";
 import { Paragraph } from "@components/Paragraph";
 import { bookmarkFolderColors, bookmarkPlaceholderName, closeOtherTabs, closeTab, closeTabsToTheLeft, closeTabsToTheRight, createTab, getDiscordFolderIcon, getDiscordFolderIconNames, hasClosedTabs, isBookmarkFolder, openedTabs, reopenClosedTab, settings, toggleCompactTab } from "@equicordplugins/channelTabs/util";
 import { Bookmark, BookmarkFolder, Bookmarks, ChannelTabsProps, UseBookmarkMethods } from "@equicordplugins/channelTabs/util/types";
 import { getIntlMessage } from "@utils/discord";
+import { t } from "@utils/i18n";
 import { Margins } from "@utils/margins";
 import { RenderModalProps } from "@vencord/discord-types";
 import { Button, ChannelStore, closeModal, ColorPicker, FluxDispatcher, Menu, Modal, openModal, ReadStateStore, ReadStateUtils, Select, TextInput, useMemo, useState } from "@webpack/common";
@@ -54,7 +56,9 @@ export function BasicContextMenu() {
                 <Menu.MenuCheckboxItem
                     checked={showBookmarkBar}
                     id="show-bookmark-bar"
-                    label="Bookmark Bar"
+                    label={t("Bookmark Bar")}
+                    icon={StarOutlined}
+                    leadingAccessory={{ type: "icon", icon: StarOutlined }}
                     action={() => {
                         settings.store.showBookmarkBar = !settings.store.showBookmarkBar;
                     }}
@@ -423,12 +427,16 @@ export function BookmarkContextMenu({ bookmarks, index, methods }: { bookmarks: 
                 {isFolder
                     ? <Menu.MenuItem
                         id="open-all-in-folder"
-                        label={"Open All Bookmarks"}
+                        label={t("Open All Bookmarks")}
+                        icon={StarFilled}
+                        leadingAccessory={{ type: "icon", icon: StarFilled }}
                         action={() => bookmark.bookmarks.forEach(b => createTab(b))}
                     />
                     : < Menu.MenuItem
                         id="open-in-tab"
-                        label={"Open in New Tab"}
+                        label={t("Open in New Tab")}
+                        icon={OpenExternalIcon}
+                        leadingAccessory={{ type: "icon", icon: OpenExternalIcon }}
                         action={() => createTab(bookmark)}
                     />
                 }
@@ -436,7 +444,9 @@ export function BookmarkContextMenu({ bookmarks, index, methods }: { bookmarks: 
             <Menu.MenuGroup>
                 <Menu.MenuItem
                     id="edit-bookmark"
-                    label="Edit Bookmark"
+                    label={t("Edit Bookmark")}
+                    icon={PencilIcon}
+                    leadingAccessory={{ type: "icon", icon: PencilIcon }}
                     action={() => {
                         const key = openModal(modalProps =>
                             <EditModal
@@ -457,7 +467,9 @@ export function BookmarkContextMenu({ bookmarks, index, methods }: { bookmarks: 
                 />
                 <Menu.MenuItem
                     id="delete-bookmark"
-                    label="Delete Bookmark"
+                    label={t("Delete Bookmark")}
+                    icon={TrashIcon}
+                    leadingAccessory={{ type: "icon", icon: TrashIcon }}
                     action={() => {
                         if (isFolder) {
                             const key = openModal(modalProps =>
@@ -475,7 +487,9 @@ export function BookmarkContextMenu({ bookmarks, index, methods }: { bookmarks: 
                 />
                 <Menu.MenuItem
                     id="add-to-folder"
-                    label="Add Bookmark to Folder"
+                    label={t("Add Bookmark to Folder")}
+                    icon={PencilIcon}
+                    leadingAccessory={{ type: "icon", icon: PencilIcon }}
                     disabled={isFolder}
                     action={() => {
                         const key = openModal(modalProps =>
@@ -502,7 +516,9 @@ export function BookmarkContextMenu({ bookmarks, index, methods }: { bookmarks: 
                 <Menu.MenuCheckboxItem
                     checked={showBookmarkBar}
                     id="show-bookmark-bar"
-                    label="Bookmark Bar"
+                    label={t("Bookmark Bar")}
+                    icon={StarOutlined}
+                    leadingAccessory={{ type: "icon", icon: StarOutlined }}
                     action={() => {
                         settings.store.showBookmarkBar = !settings.store.showBookmarkBar;
                     }}
@@ -535,7 +551,9 @@ export function TabContextMenu({ tab }: { tab: ChannelTabsProps; }) {
                 <Menu.MenuCheckboxItem
                     checked={compact}
                     id="toggle-compact-tab"
-                    label="Compact"
+                    label={t("Compact")}
+                    icon={WindowTopOutlineIcon}
+                    leadingAccessory={{ type: "icon", icon: WindowTopOutlineIcon }}
                     action={() => {
                         setCompact(compact => !compact);
                         toggleCompactTab(tab.id);
@@ -545,29 +563,39 @@ export function TabContextMenu({ tab }: { tab: ChannelTabsProps; }) {
             {openedTabs.length !== 1 && <Menu.MenuGroup>
                 <Menu.MenuItem
                     id="close-tab"
-                    label="Close Tab"
+                    label={t("Close Tab")}
+                    icon={XLargeBoldIcon}
+                    leadingAccessory={{ type: "icon", icon: XLargeBoldIcon }}
                     action={() => closeTab(tab.id)}
                 />
                 <Menu.MenuItem
                     id="close-other-tabs"
-                    label="Close Other Tabs"
+                    label={t("Close Other Tabs")}
+                    icon={XLargeBoldIcon}
+                    leadingAccessory={{ type: "icon", icon: XLargeBoldIcon }}
                     action={() => closeOtherTabs(tab.id)}
                 />
                 <Menu.MenuItem
                     id="close-right-tabs"
-                    label="Close Tabs to the Right"
+                    label={t("Close Tabs to the Right")}
+                    icon={XLargeBoldIcon}
+                    leadingAccessory={{ type: "icon", icon: XLargeBoldIcon }}
                     disabled={openedTabs.indexOf(tab) === openedTabs.length - 1}
                     action={() => closeTabsToTheRight(tab.id)}
                 />
                 <Menu.MenuItem
                     id="close-left-tabs"
-                    label="Close Tabs to the Left"
+                    label={t("Close Tabs to the Left")}
+                    icon={XLargeBoldIcon}
+                    leadingAccessory={{ type: "icon", icon: XLargeBoldIcon }}
                     disabled={openedTabs.indexOf(tab) === 0}
                     action={() => closeTabsToTheLeft(tab.id)}
                 />
                 <Menu.MenuItem
                     id="reopen-closed-tab"
-                    label="Reopen Closed Tab"
+                    label={t("Reopen Closed Tab")}
+                    icon={UnsendIcon}
+                    leadingAccessory={{ type: "icon", icon: UnsendIcon }}
                     disabled={!hasClosedTabs()}
                     action={() => reopenClosedTab()}
                 />
@@ -576,7 +604,9 @@ export function TabContextMenu({ tab }: { tab: ChannelTabsProps; }) {
                 <Menu.MenuCheckboxItem
                     checked={showBookmarkBar}
                     id="show-bookmark-bar"
-                    label="Bookmark Bar"
+                    label={t("Bookmark Bar")}
+                    icon={StarOutlined}
+                    leadingAccessory={{ type: "icon", icon: StarOutlined }}
                     action={() => {
                         settings.store.showBookmarkBar = !settings.store.showBookmarkBar;
                     }}

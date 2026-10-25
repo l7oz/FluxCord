@@ -4,15 +4,15 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
-import { t } from "@utils/fluxI18n";
 import "./style.css";
 
 import { HeaderBarButton } from "@api/HeaderBar";
 import { DataStore } from "@api/index";
 import { classNameFactory } from "@utils/css";
 import { copyWithToast } from "@utils/discord";
-import { ModalSize } from "@utils/modal";
+import { t } from "@utils/fluxI18n";
 import { closeModal, ModalCloseButton, ModalContent, ModalHeader, ModalRoot, openModal } from "@utils/fluxModals";
+import { ModalSize } from "@utils/modal";
 import definePlugin from "@utils/types";
 import { moment, React, useEffect, useRef, useState } from "@webpack/common";
 

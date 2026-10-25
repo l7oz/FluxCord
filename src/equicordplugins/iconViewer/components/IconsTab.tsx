@@ -9,14 +9,15 @@ import { Heading } from "@components/Heading";
 import { SettingsTab, wrapTab } from "@components/settings";
 import { TooltipContainer } from "@components/TooltipContainer";
 import { iconsModule } from "@equicordplugins/_core/concatenatedModules";
+import { IconsDef } from "@equicordplugins/iconViewer/types";
 import { debounce } from "@shared/debounce";
+import { t } from "@utils/i18n";
 import { Margins } from "@utils/margins";
 import { classes } from "@utils/misc";
 import { useIntersection } from "@utils/react";
 import { Icon } from "@vencord/discord-types";
 import { Clickable, TextInput, useCallback, useEffect, useMemo, useState } from "@webpack/common";
 
-import { IconsDef } from "../types";
 import { openIconModal } from "./Modals";
 
 let cachedIcons: IconsDef | null = null;
@@ -107,7 +108,7 @@ function IconsTab() {
         <SettingsTab>
             <div className={classes(Margins.top16, "vc-icon-tab-search-bar-grid")}>
                 <TextInput autoFocus value={searchInput} placeholder={`Search ${Object.keys(icons).length} icons...`} onChange={onSearch} />
-                <TooltipContainer text="Search by function context">
+                <TooltipContainer text={t("Search by function context")}>
                     <Button
                         size="small"
                         aria-label="Search by function context"
@@ -115,8 +116,7 @@ function IconsTab() {
                         variant={searchByFunction ? "positive" : "primary"}
                         onClick={() => setSearchByFunction(!searchByFunction)}
                     >
-                        Func
-                    </Button>
+                        {t("Func")}</Button>
                 </TooltipContainer>
             </div>
             <div className="vc-icons-tab-grid-container">

@@ -4,11 +4,10 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
+import { LogEventType } from "@equicordplugins/voiceChannelLog/types";
+import { cl } from "@equicordplugins/voiceChannelLog/utils";
 import { classes } from "@utils/misc";
 import { React } from "@webpack/common";
-
-import { LogEventType } from "../types";
-import { cl } from "../utils";
 
 const iconProps = { xmlns: "http://www.w3.org/2000/svg", height: "18", width: "18" };
 

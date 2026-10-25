@@ -52,7 +52,7 @@ export default definePlugin({
     description: "Automatically removes tracking elements from URLs you send",
     dependencies: ["MessageEventsAPI"],
     tags: ["Privacy", "Utility"],
-    authors: [Devs.adryd, Devs.thororen],
+    authors: [Devs.ewlle, Devs.kraethis, Devs.Sharp],
 
     rules: [] as RuleSet[],
 

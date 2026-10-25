@@ -17,6 +17,7 @@
 */
 
 import { classNameFactory } from "@utils/css";
+import { t } from "@utils/i18n";
 import { Message } from "@vencord/discord-types";
 import { useState } from "@webpack/common";
 
@@ -28,8 +29,7 @@ function Dismiss({ onDismiss }: { onDismiss: () => void; }) {
             onClick={onDismiss}
             className={cl("dismiss")}
         >
-            Dismiss
-        </button>
+            {t("Dismiss")}</button>
     );
 }
 // thanks <@408047304864432139>

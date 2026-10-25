@@ -10,6 +10,7 @@ import ErrorBoundary from "@components/ErrorBoundary";
 import alwaysExpandProfiles from "@equicordplugins/alwaysExpandProfiles";
 import { Devs } from "@utils/constants";
 import { fetchUserProfile, getCurrentChannel, openUserProfile } from "@utils/discord";
+import { t } from "@utils/i18n";
 import definePlugin, { OptionType } from "@utils/types";
 import { User } from "@vencord/discord-types";
 import { findComponentByCodeLazy } from "@webpack";
@@ -50,7 +51,7 @@ const AccountPanelContextMenu = ErrorBoundary.wrap(() => {
             />
             <Menu.MenuCheckboxItem
                 id="vc-ap-prioritize-server-profile"
-                label="Prioritize Server Profile"
+                label={t("Prioritize Server Profile")}
                 checked={prioritizeServerProfile}
                 action={() => settings.store.prioritizeServerProfile = !prioritizeServerProfile}
             />
@@ -87,7 +88,7 @@ export default definePlugin({
                     replace: "$&$self.onPopoutClose();"
                 },
                 {
-                    match: /ref:(\i),style:\i(?=.{0,250}#{intl::USER_PROFILE_ACCOUNT_POPOUT_BUTTON_A11Y_LABEL})/,
+                    match: /ref:(\i),style:(?:\i|\{[^}]{0,40}\})(?=.{0,250}#{intl::USER_PROFILE_ACCOUNT_POPOUT_BUTTON_A11Y_LABEL})/,
                     replace: "$&,onContextMenu:($self.grabRef($1),$self.openAccountPanelContextMenu)"
                 }
             ]

@@ -17,6 +17,7 @@ import AddSong from "@equicordplugins/songSpotlight.desktop/ui/settings/AddSong"
 import { Song, UserData } from "@song-spotlight/api/structs";
 import { sid } from "@song-spotlight/api/util";
 import { copyWithToast } from "@utils/discord";
+import { t } from "@utils/i18n";
 import {
     ContextMenuApi,
     FluxDispatcher,
@@ -55,7 +56,7 @@ function EditableSong({ song, insert, setSongRef, onDrag, onDrop, onRemove }: Ed
                     >
                         <Menu.MenuItem
                             id="copy-link"
-                            label="Copy link"
+                            label={t("Copy link")}
                             icon={LinkIcon}
                             action={() => render && copyWithToast(render.link)}
                             disabled={!render}
@@ -63,7 +64,7 @@ function EditableSong({ song, insert, setSongRef, onDrag, onDrop, onRemove }: Ed
                         <Menu.MenuItem
                             id="remove-song"
                             color="danger"
-                            label="Remove song"
+                            label={t("Remove song")}
                             icon={TrashIcon}
                             action={() => onRemove(song)}
                         />
@@ -88,7 +89,7 @@ function EditableSong({ song, insert, setSongRef, onDrag, onDrop, onRemove }: Ed
             <Flex alignItems="center" gap="12px" className={cl("editable-song")}>
                 <ServiceIcon width={28} height={28} service={song.service} />
                 {failed
-                    ? <BaseText size="md" weight="normal" className={cl("errored")}>Failed to load!</BaseText>
+                    ? <BaseText size="md" weight="normal" className={cl("errored")}>{t("Failed to load!")}</BaseText>
                     : (
                         <Flex flexDirection="column" justifyContent="center" gap={0}>
                             <BaseText size="md" weight="medium" className={cl("clamped")}>

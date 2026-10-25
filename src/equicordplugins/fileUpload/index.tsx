@@ -11,6 +11,7 @@ import ErrorBoundary from "@components/ErrorBoundary";
 import { OpenExternalIcon } from "@components/Icons";
 import { Devs, EquicordDevs } from "@utils/constants";
 import { classNameFactory } from "@utils/css";
+import { t } from "@utils/i18n";
 import definePlugin from "@utils/types";
 import { findByPropsLazy } from "@webpack";
 import { DraftType, FluxDispatcher, Menu, PermissionsBits, PermissionStore, React, useEffect, UserStore, useState } from "@webpack/common";
@@ -153,8 +154,7 @@ const ProgressBarInner = () => {
                             type="button"
                             onClick={cancelCurrentUpload}
                         >
-                            Cancel
-                        </button>
+                            {t("Cancel")}</button>
                     )}
                 </div>
             </div>
@@ -263,9 +263,9 @@ export default definePlugin({
         },
         // forces an early return on the file size limit nitro upsell modal
         {
-            find: "#{intl::tRuxk9::raw}",
+            find: "#{intl::UPLOAD_AREA_TOO_LARGE_HELP_PREMIUM_TIER_1}",
             replacement: {
-                match: /(?<=MAX_FILE_SIZE_250_MB.{0,250})Array\.from\(\i\)\.some/,
+                match: /(?<=#{intl::UPLOAD_AREA_TOO_LARGE_HELP}.{0,250})Array\.from\(\i\)\.some/,
                 replace: "$self.shouldBypassDiscordUploadSizeCheck()?false:$&"
             }
         },

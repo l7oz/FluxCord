@@ -1,13 +1,6 @@
 /*
- * DiscordArabicizer — تعريب واجهة ديسكورد إلى العربية
- * Copyright (c) 2026 LOSTSTR
- *
- * مبنية على FluxCord المرخّصة GPL-3.0-or-later وتخضع لنفس الرخصة. تعترض دوال
- * i18n.intl لترجمة نصوص واجهة ديسكورد إلى العربية، مع الإبقاء على الأسماء
- * العَلَم (الألعاب والثيمات وأسماء المستخدمين) بلغتها الأصلية.
- *
- * «اشراق / Esharq» وشعاراته وشاراته علامات محفوظة لصاحبها، ولا تشملها رخصة GPL.
- *
+ * Vencord, a Discord client mod
+ * Copyright (c) 2026 Vendicated and contributors
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
@@ -49,7 +42,7 @@ function StatsAndTools() {
     return (
         <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
             <div style={{ color: "var(--text-muted)", fontSize: 13 }}>
-                🟢 مُترجَم في القاموس: <b>{total}</b>　·　🔴 غير مُترجَم (هذه الجلسة): <b>{missing.length}</b>
+                🟢 مُترجَم في القاموس: <b>{total}</b> · 🔴 غير مُترجَم (هذه الجلسة): <b>{missing.length}</b>
             </div>
             <div style={{ color: "var(--text-muted)", fontSize: 13 }}>
                 📊 {t("تغطية الجلسة الفعلية:", "Live session coverage:")}{" "}

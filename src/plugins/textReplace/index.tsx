@@ -28,6 +28,7 @@ import { Span } from "@components/Span";
 import { TooltipContainer } from "@components/TooltipContainer";
 import { Devs, EquicordDevs, SUPPORT_CHANNEL_IDS } from "@utils/constants";
 import { classNameFactory } from "@utils/css";
+import { t } from "@utils/i18n";
 import { Logger } from "@utils/Logger";
 import definePlugin, { OptionType } from "@utils/types";
 import { Message } from "@vencord/discord-types";
@@ -77,13 +78,13 @@ const settings = definePluginSettings({
                 <>
                     <TextReplaceTesting />
                     <TextReplace
-                        title="Simple Replacements"
-                        description="Simple find and replace rules. For example, find 'brb' and replace it with 'be right back'"
+                        title={t("Simple Replacements")}
+                        description={t("Simple find and replace rules. For example, find 'brb' and replace it with 'be right back'")}
                         rulesArray={stringRules}
                     />
                     <TextReplace
-                        title="Regex Replacements"
-                        description="More powerful replacements using Regular Expressions. This section is for advanced users. If you don't understand it, just ignore it"
+                        title={t("Regex Replacements")}
+                        description={t("More powerful replacements using Regular Expressions. This section is for advanced users. If you don't understand it, just ignore it")}
                         rulesArray={regexRules}
                         isRegex
                     />
@@ -278,26 +279,26 @@ function TextReplace({ title, description, rulesArray, isRegex = false }: TextRe
                                 <>
                                     <div className={cl("input-grid")}>
                                         <TextRow
-                                            label="Name"
-                                            description="An optional name to help you identify this rule."
+                                            label={t("Name")}
+                                            description={t("An optional name to help you identify this rule.")}
                                             value={rule.name ?? ""}
                                             onChange={e => onChange(e, index, "name")}
                                         />
                                         <TextRow
-                                            label="Find"
-                                            description={isRegex ? "The regex pattern" : "The text to replace"}
+                                            label={t("Find")}
+                                            description={isRegex ? t("The regex pattern") : t("The text to replace")}
                                             value={rule.find}
                                             onChange={e => onChange(e, index, "find")}
                                         />
                                         <TextRow
-                                            label="Replace"
-                                            description="The text to replace the found text with"
+                                            label={t("Replace")}
+                                            description={t("The text to replace the found text with")}
                                             value={rule.replace}
                                             onChange={e => onChange(e, index, "replace")}
                                         />
                                         <TextRow
-                                            label="Only if includes"
-                                            description="Optionally, only apply this rule if the message includes this text."
+                                            label={t("Only if includes")}
+                                            description={t("Optionally, only apply this rule if the message includes this text.")}
                                             value={rule.onlyIfIncludes}
                                             onChange={e => onChange(e, index, "onlyIfIncludes")}
                                         />
@@ -316,7 +317,7 @@ function TextReplace({ title, description, rulesArray, isRegex = false }: TextRe
                                         variant="dangerPrimary"
                                         onClick={() => onClickRemove(index)}
                                     >
-                                        Delete Rule
+                                        {t("Delete Rule")}
                                     </Button>
                                 </>
                             )}
@@ -352,8 +353,7 @@ function TextReplace({ title, description, rulesArray, isRegex = false }: TextRe
                     }}
                     disabled={rulesArray.length > 0 && isEmptyRule(rulesArray[rulesArray.length - 1])}
                 >
-                    Add Rule
-                </Button>
+                    {t("Add Rule")}</Button>
             </Flex>
         </>
     );
@@ -364,10 +364,10 @@ function TextReplaceTesting() {
 
     return (
         <div>
-            <HeadingSecondary>Rule Tester</HeadingSecondary>
+            <HeadingSecondary>{t("Rule Tester")}</HeadingSecondary>
             <Flex flexDirection="column" gap={6}>
-                <TextInput placeholder="Type a message to test rules on" onChange={setValue} />
-                <TextInput placeholder="Message with rules applied" editable={false} value={applyRules(value, "allMessages")} style={{ opacity: 0.7 }} />
+                <TextInput placeholder={t("Type a message to test rules on")} onChange={setValue} />
+                <TextInput placeholder={t("Message with rules applied")} editable={false} value={applyRules(value, "allMessages")} style={{ opacity: 0.7 }} />
             </Flex>
         </div>
     );

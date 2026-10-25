@@ -1,9 +1,6 @@
 /*
- * ConsoleWatcher — أداة مطوّر لمراقبة أحداث الكونسول وجمعها للصيانة
- * Copyright (c) 2026 LOSTSTR
- *
- * مبنية على FluxCord المرخّصة GPL-3.0-or-later وتخضع لنفس الرخصة.
- *
+ * Vencord, a Discord client mod
+ * Copyright (c) 2026 Vendicated and contributors
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
@@ -191,9 +188,9 @@ export function attributeProbablePlugin(text: string, stack?: string): string | 
 export function normalizeGroupKey(text: string): string {
     return text
         .replace(/https?:\/\/\S+/g, "<url>")
-        .replace(/[a-f0-9]{16,}/gi, "<id>")   // hex/snowflake-ish طويلة
-        .replace(/\d{5,}/g, "<id>")           // معرّفات رقمية
-        .replace(/\d+/g, "#")                 // بقية الأرقام (أسطر/أحجام)
+        .replace(/[a-f0-9]{16,}/gi, "<id>") // hex/snowflake-ish طويلة
+        .replace(/\d{5,}/g, "<id>") // معرّفات رقمية
+        .replace(/\d+/g, "#") // بقية الأرقام (أسطر/أحجام)
         .slice(0, 140);
 }
 

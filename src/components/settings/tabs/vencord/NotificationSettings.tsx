@@ -12,24 +12,25 @@ import { Flex } from "@components/Flex";
 import { FormSwitch } from "@components/FormSwitch";
 import { Heading } from "@components/Heading";
 import { Paragraph } from "@components/Paragraph";
+import { t, useI18n } from "@utils/i18n";
 import { Margins } from "@utils/margins";
 import { identity } from "@utils/misc";
 import { Modal, openModal, Select, Slider } from "@webpack/common";
 
 export function NotificationSection() {
+    const { t } = useI18n();
     return (
         <section className={Margins.top16}>
-            <Heading>Notifications</Heading>
+            <Heading>{t("Notifications")}</Heading>
             <Paragraph className={Margins.bottom8}>
-                Settings for Notifications sent by Vencord.
-                This does NOT include Discord notifications (messages, etc)
+                {t("Settings for Notifications sent by Vencord. This does NOT include Discord notifications (messages, etc)")}
             </Paragraph>
             <Flex>
                 <Button onClick={openNotificationSettingsModal}>
-                    Notification Settings
+                    {t("Notification Settings")}
                 </Button>
                 <Button onClick={openNotificationLogModal}>
-                    View Notification Log
+                    {t("View Notification Log")}
                 </Button>
             </Flex>
         </section>
@@ -41,7 +42,7 @@ export function openNotificationSettingsModal() {
         <Modal
             {...props}
             size="lg"
-            title="Notification Settings"
+            title={t("Notification Settings")}
         >
             <NotificationSettings />
         </Modal>
@@ -49,30 +50,31 @@ export function openNotificationSettingsModal() {
 }
 
 function NotificationSettings() {
+    const { t } = useI18n();
     const settings = useSettings(["notifications.*"]).notifications;
 
     return (
         <>
-            <Heading tag="h5">Notification Style</Heading>
+            <Heading tag="h5">{t("Notification Style")}</Heading>
             {settings.useNative !== "never" && Notification?.permission === "denied" && (
                 <ErrorCard style={{ padding: "1em" }} className={Margins.bottom8}>
-                    <Heading>Desktop Notification Permission denied</Heading>
-                    <Paragraph>You have denied Notification Permissions. Thus, Desktop notifications will not work!</Paragraph>
+                    <Heading>{t("Desktop Notification Permission denied")}</Heading>
+                    <Paragraph>{t("You have denied Notification Permissions. Thus, Desktop notifications will not work!")}</Paragraph>
                 </ErrorCard>
             )}
             <Paragraph className={Margins.bottom8}>
-                Some plugins may show you notifications. These come in two styles:
+                {t("Some plugins may show you notifications. These come in two styles:")}
                 <ul>
-                    <li><strong>FluxCord Notifications</strong>: These are in-app notifications</li>
-                    <li><strong>Desktop Notifications</strong>: Native Desktop notifications (like when you get a ping)</li>
+                    <li><strong>{t("FluxCord Notifications")}</strong>: {t("These are in-app notifications")}</li>
+                    <li><strong>{t("Desktop Notifications")}</strong>: {t("Native Desktop notifications (like when you get a ping)")}</li>
                 </ul>
             </Paragraph>
             <Select
-                placeholder="Notification Style"
+                placeholder={t("Notification Style")}
                 options={[
-                    { label: "Only use Desktop notifications when Discord is not focused", value: "not-focused", default: true },
-                    { label: "Always use Desktop notifications", value: "always" },
-                    { label: "Always use FluxCord notifications", value: "never" },
+                    { label: t("Only use Desktop notifications when Discord is not focused"), value: "not-focused", default: true },
+                    { label: t("Always use Desktop notifications"), value: "always" },
+                    { label: t("Always use FluxCord notifications"), value: "never" },
                 ] satisfies Array<{ value: typeof settings["useNative"]; } & Record<string, any>>}
                 closeOnSelect={true}
                 select={v => settings.useNative = v}
@@ -80,28 +82,28 @@ function NotificationSettings() {
                 serialize={identity}
             />
 
-            <Heading className={Margins.top16 + " " + Margins.bottom8}>Notification Position</Heading>
+            <Heading className={Margins.top16 + " " + Margins.bottom8}>{t("Notification Position")}</Heading>
             <Select
                 isDisabled={settings.useNative === "always"}
-                placeholder="Notification Position"
+                placeholder={t("Notification Position")}
                 options={[
-                    { label: "Bottom Right", value: "bottom-right", default: true },
-                    { label: "Top Right", value: "top-right" },
+                    { label: t("Bottom Right"), value: "bottom-right", default: true },
+                    { label: t("Top Right"), value: "top-right" },
                 ] satisfies Array<{ value: typeof settings["position"]; } & Record<string, any>>}
                 select={v => settings.position = v}
                 isSelected={v => v === settings.position}
                 serialize={identity}
             />
 
-            <Heading className={Margins.top16 + " " + Margins.bottom8}>Missed Notification Count</Heading>
+            <Heading className={Margins.top16 + " " + Margins.bottom8}>{t("Missed Notification Count")}</Heading>
             <FormSwitch
-                title="When refocusing discord a notification will popup with how you missed"
+                title={t("When refocusing discord a notification will popup with how you missed")}
                 value={settings.missed}
                 onChange={(v: boolean) => settings.missed = v}
             />
 
-            <Heading className={Margins.top16 + " " + Margins.bottom8}>Notification Timeout</Heading>
-            <Paragraph className={Margins.bottom16}>Set to 0s to never automatically time out</Paragraph>
+            <Heading className={Margins.top16 + " " + Margins.bottom8}>{t("Notification Timeout")}</Heading>
+            <Paragraph className={Margins.bottom16}>{t("Set to 0s to never automatically time out")}</Paragraph>
             <Slider
                 disabled={settings.useNative === "always"}
                 markers={[0, 1000, 2500, 5000, 10_000, 20_000]}
@@ -114,10 +116,10 @@ function NotificationSettings() {
                 stickToMarkers={false}
             />
 
-            <Heading className={Margins.top16 + " " + Margins.bottom8}>Notification Log Limit</Heading>
+            <Heading className={Margins.top16 + " " + Margins.bottom8}>{t("Notification Log Limit")}</Heading>
             <Paragraph className={Margins.bottom16}>
-                The amount of notifications to save in the log until old ones are removed.
-                Set to <code>0</code> to disable Notification log and <code>∞</code> to never automatically remove old Notifications
+                {t("The amount of notifications to save in the log until old ones are removed.")}{" "}
+                {t("Set to")} <code>0</code> {t("to disable Notification log and")} <code>∞</code> {t("to never automatically remove old Notifications")}
             </Paragraph>
             <Slider
                 markers={[0, 25, 50, 75, 100, 200]}

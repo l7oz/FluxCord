@@ -119,10 +119,27 @@ const ToastsExports = mapMangledModuleLazy(".currentToastMap.has(", {
 
 export const createToast: t.createToast = findByCodeLazy('variant:"default",icon:', ".duration");
 
+/** Toast variants used by plugins written for other client mods, mapped to Discord's toast types. */
+const VariantToType: Record<string, t.ToastType> = {
+    success: "success",
+    positive: "success",
+    critical: "failure",
+    danger: "failure",
+    error: "failure",
+    failure: "failure",
+    link: "link",
+    default: "message"
+};
+
 /**
- * Show a simple toast. If you need more options, use Toasts.show manually
+ * Show a simple toast. If you need more options, use Toasts.show manually.
+ * Also accepts `{ text, variant }`, the form many community plugins use.
  */
-export function showToast(message: string, type: t.ToastType = "message", options?: ToastOptions) {
+export function showToast(message: string | { text: string; variant?: string; }, type: t.ToastType = "message", options?: ToastOptions) {
+    if (typeof message === "object" && message !== null) {
+        type = VariantToType[message.variant ?? ""] ?? "message";
+        message = String(message.text);
+    }
     // FIXME once Discord makes up their mind and stops changing this API every update
     try {
         ToastsExports.showToast(createToast(message, type, options));
@@ -148,7 +165,9 @@ export function showToast(message: string, type: t.ToastType = "message", option
  * (i.e. anything produced by `Toasts.create`) are passed straight through.
  */
 export const Toasts = {
-    Type: ToastType,
+    // Widened from the `as const` literal types so default parameters
+    // (e.g. `type = Toasts.Type.MESSAGE`) infer the full ToastType union.
+    Type: ToastType as Record<keyof typeof ToastType, t.ToastType>,
     Position: ToastPosition,
     genId: () => (Math.random() || Math.random()).toString(36).slice(2),
 

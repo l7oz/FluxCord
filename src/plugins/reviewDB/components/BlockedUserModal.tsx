@@ -9,13 +9,14 @@ import { Auth } from "@plugins/reviewDB/auth";
 import { ReviewDBUser } from "@plugins/reviewDB/entities";
 import { fetchBlocks, unblockUser } from "@plugins/reviewDB/reviewDbApi";
 import { cl } from "@plugins/reviewDB/utils";
+import { t } from "@utils/i18n";
 import { Logger } from "@utils/Logger";
 import { useAwaiter } from "@utils/react";
 import { Modal, openModal, Tooltip, useState } from "@webpack/common";
 
 function UnblockButton(props: { onClick?(): void; }) {
     return (
-        <Tooltip text="Unblock user">
+        <Tooltip text={t("Unblock user")}>
             {tooltipProps => (
                 <div
                     {...tooltipProps}
@@ -65,9 +66,9 @@ function BlockedUsersList() {
     if (pending)
         return null;
     if (error)
-        return <Paragraph>Failed to fetch blocks: ${String(error)}</Paragraph>;
+        return <Paragraph>{t("Failed to fetch blocks: $")}{String(error)}</Paragraph>;
     if (!blocks.length)
-        return <Paragraph>No blocked users.</Paragraph>;
+        return <Paragraph>{t("No blocked users.")}</Paragraph>;
 
     return (
         <>
@@ -87,10 +88,10 @@ export function openBlockModal() {
     openModal(modalProps => (
         <Modal
             {...modalProps}
-            title="Blocked Users"
+            title={t("Blocked Users")}
         >
             <div className={cl("block-modal")}>
-                {Auth.token ? <BlockedUsersList /> : <Paragraph>You are not logged into ReviewDB!</Paragraph>}
+                {Auth.token ? <BlockedUsersList /> : <Paragraph>{t("You are not logged into ReviewDB!")}</Paragraph>}
             </div>
         </Modal>
     ));

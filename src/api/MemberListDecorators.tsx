@@ -42,7 +42,9 @@ export function removeMemberListDecorator(identifier: string) {
     decoratorsFactories.delete(identifier);
 }
 
-export function __getDecorators(props: DecoratorProps, type: "guild" | "dm"): JSX.Element {
+export function __getDecorators(props: DecoratorProps, type: "guild" | "dm"): JSX.Element | null {
+    if (decoratorsFactories.size === 0) return null;
+
     const decorators = Array.from(
         decoratorsFactories.entries(),
         ([key, { render: Decorator, onlyIn }]) => {

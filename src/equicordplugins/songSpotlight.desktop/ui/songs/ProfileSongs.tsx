@@ -22,7 +22,8 @@ import {
 import { openSettingsModal } from "@equicordplugins/songSpotlight.desktop/ui/settings";
 import { sid } from "@song-spotlight/api/util";
 import { copyWithToast } from "@utils/discord";
-import { classes } from "@utils/index";
+import { t } from "@utils/i18n";
+import { classes } from "@utils/misc";
 import { User } from "@vencord/discord-types";
 import {
     ContextMenuApi,
@@ -90,9 +91,8 @@ export default function ProfileSongs({ user, isSideBar }: ProfileSongsProps) {
         >
             <Flex justifyContent="space-between">
                 <BaseText size="xs" weight={isSideBar ? "semibold" : "medium"} className={cl("header")}>
-                    Song Spotlight
-                </BaseText>
-                <Tooltip text="More">
+                    {t("Song Spotlight")}</BaseText>
+                <Tooltip text={t("More")}>
                     {props => (
                         <MoreHorizontalIcon
                             {...props}
@@ -108,14 +108,14 @@ export default function ProfileSongs({ user, isSideBar }: ProfileSongsProps) {
                                         {owned && (
                                             <Menu.MenuItem
                                                 id="edit-songs"
-                                                label="Edit songs"
+                                                label={t("Edit songs")}
                                                 icon={PencilIcon}
                                                 action={() => openSettingsModal()}
                                             />
                                         )}
                                         <Menu.MenuItem
                                             id="copy-link"
-                                            label="Copy JSON"
+                                            label={t("Copy JSON")}
                                             icon={LinkIcon}
                                             action={() => copyWithToast(JSON.stringify(data))}
                                         />
@@ -134,7 +134,7 @@ export default function ProfileSongs({ user, isSideBar }: ProfileSongsProps) {
                     onClick={() => setClamped(false)}
                 >
                     <BaseText size="sm" weight="medium" className={cl("sub")} style={{ textAlign: "center" }}>
-                        Show {data.length - profileSongsLimit} more
+                        {t("Show")}{" "}{data.length - profileSongsLimit} more
                     </BaseText>
                 </Link>
             )}

@@ -37,9 +37,11 @@ export default definePlugin({
         {
             find: ".handleSendMessage,onResize:",
             replacement: {
-                match: /(?<=channel:\i\}\)\.then\()(?:async )?(\i=>.+?let (\i)=\i\.\i\.parse\((\i),.+?\.getSendMessageOptions\((\{.+?\})\),.{0,100}?\};)(?=.+?(\i)\.flags=)(?<=\)\(({.+?})\)\.then.+?)/,
-                replace: (m, restCode, parsedMessage, channel, contentOptions, options, props) => "async " + restCode +
-                    `if(await Vencord.Api.MessageEvents._handlePreSend(${channel}.id,${parsedMessage},${options},${props},${contentOptions}))` +
+                // Keep the send callback async. Discord sometimes drops the async keyword,
+                // and injecting await into a non-async function throws and aborts uploads.
+                match: /(?<=channel:\i\}\)\.then\()(?:async )?(\i=>.+?let (\i)=\i\.\i\.parse\((\i),.+?\.getSendMessageOptions\(\{.+?\}\)?;)(?=.+?(\i)\.flags=)(?<=\)\(({.+?})\)\.then.+?)/,
+                replace: (m, restCode, parsedMessage, channel, options, props) => "async " + restCode +
+                    `if(await Vencord.Api.MessageEvents._handlePreSend(${channel}.id,${parsedMessage},${options},${props}))` +
                     "return{shouldClear:false,shouldRefocus:true};"
             }
         },

@@ -11,9 +11,10 @@ import ErrorBoundary from "@components/ErrorBoundary";
 import { Flex } from "@components/Flex";
 import { Heading, HeadingSecondary } from "@components/Heading";
 import { Paragraph } from "@components/Paragraph";
-import { Devs, EquicordDevs } from "@utils/constants";
+import { Devs } from "@utils/constants";
 import { classNameFactory } from "@utils/css";
 import { getIntlMessage, openUserProfile } from "@utils/discord";
+import { t } from "@utils/i18n";
 import { Margins } from "@utils/margins";
 import { classes, getUserAvatarUrl } from "@utils/misc";
 import definePlugin, { OptionType } from "@utils/types";
@@ -62,8 +63,7 @@ function Watching({ userIds, guildId }: WatchingProps): JSX.Element {
                 )
                 : (
                     <span className={cl("no-viewers")}>
-                        No spectators
-                    </span>
+                        {t("No spectators")}</span>
                 )
             }
         </div>
@@ -83,7 +83,7 @@ export default definePlugin({
     name: "WhosWatching",
     description: "Hover over the screenshare icon to view what users are watching your stream",
     tags: ["Activity"],
-    authors: [EquicordDevs.Fres, Devs.thororen],
+    authors: [Devs.ewlle, Devs.kraethis, Devs.Sharp],
     settings,
     patches: [
         {
@@ -160,8 +160,7 @@ export default definePlugin({
                             />
                         </div>
                         : <Paragraph>
-                            No spectators
-                        </Paragraph>
+                            {t("No spectators")}</Paragraph>
                     }
                 </div>
             </div>

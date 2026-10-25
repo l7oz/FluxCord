@@ -4,11 +4,10 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
+import { settings } from "@equicordplugins/musicControls/settings";
 import { Logger } from "@utils/Logger";
 import { proxyLazyWebpack } from "@webpack";
 import { Flux, FluxDispatcher } from "@webpack/common";
-
-import { settings } from "../settings";
 
 export interface Track {
     id: string;

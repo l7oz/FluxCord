@@ -8,8 +8,8 @@ import "./styles.css";
 
 import * as DataStore from "@api/DataStore";
 import { HeaderBarButton } from "@api/HeaderBar";
-import { showNotification } from "@api/Notifications";
 import { popNotice, showNotice } from "@api/Notices";
+import { showNotification } from "@api/Notifications";
 import { getUserSettingLazy } from "@api/UserSettings";
 import { t } from "@utils/fluxI18n";
 import { Logger } from "@utils/Logger";
@@ -297,7 +297,7 @@ function toggle() {
     autoByLoad = false; // تدخّل يدوي ⇒ مراقب الحمل لا يملك عكس هذه الحالة تلقائياً
     if (active) {
         revertMode();
-        manualOff = true;  // إيقاف يدوي ⇒ يطغى على الكشف التلقائي حتى تُفعّله بنفسك
+        manualOff = true; // إيقاف يدوي ⇒ يطغى على الكشف التلقائي حتى تُفعّله بنفسك
     } else {
         applyMode();
         manualOff = false; // تفعيل يدوي ⇒ يُمحى العلَم ويستأنف الكشف التلقائي بعدها

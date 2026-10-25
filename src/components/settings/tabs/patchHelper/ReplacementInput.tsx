@@ -7,9 +7,9 @@
 import { FormSwitch } from "@components/FormSwitch";
 import { Heading } from "@components/Heading";
 import { Paragraph } from "@components/Paragraph";
+import { t } from "@utils/i18n";
 import { Margins } from "@utils/margins";
 import { Parser, TextInput, useEffect, useState } from "@webpack/common";
-
 const RegexGuide = {
     "\\i": "Special regex escape sequence that matches identifiers (varnames, classnames, etc.)",
     "$$": "Insert a $",
@@ -54,7 +54,7 @@ export function ReplacementInput({ replacement, setReplacement, replacementError
     return (
         <>
             {/* FormTitle adds a class if className is not set, so we set it to an empty string to prevent that */}
-            <Heading className="">Replacement</Heading>
+            <Heading className="">{t("Replacement")}</Heading>
             <TextInput
                 value={replacement?.toString()}
                 onChange={onChange}
@@ -62,7 +62,7 @@ export function ReplacementInput({ replacement, setReplacement, replacementError
             />
             {!isFunc && (
                 <div>
-                    <Heading className={Margins.top8}>Cheat Sheet</Heading>
+                    <Heading className={Margins.top8}>{t("Cheat Sheet")}</Heading>
 
                     {Object.entries(RegexGuide).map(([placeholder, desc]) => (
                         <Paragraph key={placeholder}>
@@ -77,7 +77,7 @@ export function ReplacementInput({ replacement, setReplacement, replacementError
                 value={isFunc}
                 onChange={setIsFunc}
                 title={"Treat Replacement as function"}
-                description='"Replacement" will be evaluated as a function if this is enabled'
+                description={t("\"Replacement\" will be evaluated as a function if this is enabled")}
                 hideBorder
             />
         </>

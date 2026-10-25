@@ -8,6 +8,7 @@ import { Link } from "@components/Link";
 import { Paragraph } from "@components/Paragraph";
 import { settings } from "@plugins/decor/settings";
 import { DecorationModalClasses, requireAvatarDecorationModal } from "@plugins/decor/ui";
+import { t } from "@utils/i18n";
 import { RenderModalProps } from "@vencord/discord-types";
 import { ConfirmModal, openModal } from "@webpack/common";
 
@@ -17,8 +18,8 @@ function GuidelinesModal(props: RenderModalProps) {
     return (
         <ConfirmModal
             {...props}
-            title="Hold on"
-            confirmText="Continue"
+            title={t("Hold on")}
+            confirmText={t("Continue")}
             variant="primary"
             onConfirm={() => {
                 settings.store.agreedToGuidelines = true;

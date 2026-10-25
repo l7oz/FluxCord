@@ -4,13 +4,13 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
-import { t } from "@utils/fluxI18n";
 import "./style.css";
 
 import { copyToClipboard } from "@utils/clipboard";
+import { t } from "@utils/fluxI18n";
+import { ModalCloseButton, ModalHeader, ModalRoot, type RenderModalProps } from "@utils/fluxModals";
 import { Logger } from "@utils/Logger";
 import { ModalSize } from "@utils/modal";
-import { ModalCloseButton, ModalHeader, ModalRoot, type RenderModalProps } from "@utils/fluxModals";
 import type { PluginNative } from "@utils/types";
 import { findStoreLazy } from "@webpack";
 import { Button, React, ReactDOM, showToast, Toasts, useEffect, useMemo, useState, useStateFromStores } from "@webpack/common";

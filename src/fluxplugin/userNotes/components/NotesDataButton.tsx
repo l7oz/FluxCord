@@ -4,10 +4,10 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
-import { getTestcordIconColor } from "../iconColors";
 import { findComponentByCodeLazy } from "@webpack";
 import type { CSSProperties } from "react";
 
+import { getTestcordIconColor } from "../iconColors";
 import { NotesDataIcon } from "./Icons";
 import { openNotesDataModal } from "./NotesDataModal";
 

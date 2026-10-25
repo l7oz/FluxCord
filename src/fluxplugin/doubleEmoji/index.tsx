@@ -4,9 +4,9 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
-import definePlugin from "@utils/types";
 import { t } from "@utils/fluxI18n";
 import { Logger } from "@utils/Logger";
+import definePlugin from "@utils/types";
 
 const logger = new Logger("DoubleEmoji");
 

@@ -19,7 +19,8 @@
 import "./styles.css";
 
 import ErrorBoundary from "@components/ErrorBoundary";
-import { Devs, EquicordDevs } from "@utils/constants";
+import { Devs } from "@utils/constants";
+import { t } from "@utils/i18n";
 import definePlugin from "@utils/types";
 
 import { settings, toggleHoverControls } from "./settings";
@@ -32,7 +33,7 @@ import { TidalPlayer } from "./tidal/TidalPlayer";
 export default definePlugin({
     name: "MusicControls",
     description: "Music Controls and Lyrics for multiple services ",
-    authors: [Devs.Ven, Devs.afn, Devs.KraXen72, Devs.Av32000, Devs.nin0dev, Devs.thororen, EquicordDevs.vmohammad, Devs.Joona],
+    authors: [Devs.ewlle, Devs.kraethis, Devs.Sharp],
     settings,
     tags: ["Media", "Activity"],
     searchTerms: [
@@ -93,8 +94,8 @@ export default definePlugin({
                 <ErrorBoundary
                     fallback={() => (
                         <div className="vc-tidal-fallback">
-                            <p>Failed to render Modal :(</p>
-                            <p>Check the console for errors</p>
+                            <p>{t("Failed to render Modal :(")}</p>
+                            <p>{t("Check the console for errors")}</p>
                         </div>
                     )}
                 >

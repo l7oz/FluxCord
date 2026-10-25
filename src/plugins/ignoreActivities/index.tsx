@@ -14,6 +14,7 @@ import { Heading } from "@components/Heading";
 import { Paragraph } from "@components/Paragraph";
 import CustomRpcPlugin from "@plugins/customRPC";
 import { Devs } from "@utils/constants";
+import { t } from "@utils/i18n";
 import { Margins } from "@utils/margins";
 import definePlugin, { OptionType } from "@utils/types";
 import { FluxDispatcher, Menu, RunningGameStore, showToast, TextArea, Tooltip, useEffect, useState } from "@webpack/common";
@@ -100,8 +101,7 @@ function ImportCustomRPCComponent() {
                         }
                     }}
                 >
-                    Import CustomRPC ID
-                </Button>
+                    {t("Import CustomRPC ID")}</Button>
             </div>
         </Flex>
     );

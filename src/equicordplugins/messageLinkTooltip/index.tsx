@@ -10,6 +10,7 @@ import { definePluginSettings } from "@api/Settings";
 import { getUserSettingLazy } from "@api/UserSettings";
 import ErrorBoundary from "@components/ErrorBoundary";
 import { Devs } from "@utils/constants";
+import { t } from "@utils/i18n";
 import definePlugin, { OptionType } from "@utils/types";
 import { findComponentByCodeLazy } from "@webpack";
 import { ChannelStore, Constants, MessageStore, RestAPI, Tooltip, useEffect, useState, useStateFromStores } from "@webpack/common";
@@ -63,7 +64,7 @@ export default definePlugin({
     name: "MessageLinkTooltip",
     description: "Adds a tooltip with a message preview when hovering over message links, replies, and forwarded messages.",
     tags: ["Appearance", "Chat"],
-    authors: [Devs.Kyuuhachi],
+    authors: [Devs.ewlle, Devs.kraethis, Devs.Sharp],
 
     settings,
 
@@ -136,7 +137,7 @@ function MessagePreview({ channelId, messageId }) {
     const compact = settings.store.display === "compact" ? true : settings.store.display === "cozy" ? false : rawCompact;
 
     if (!message) {
-        return <span>Loading...</span>;
+        return <span>{t("Loading...")}</span>;
     }
 
     return <ChannelMessage

@@ -1,12 +1,7 @@
 /*
- * FluxCord — FluxDiagnostics runtime profiler (Layer 4: live runtime metrics)
- * Copyright (c) 2026 LOSTSTR
+ * Vencord, a Discord client mod
+ * Copyright (c) 2026 Vendicated and contributors
  * SPDX-License-Identifier: GPL-3.0-or-later
- *
- * قياس زمن التشغيل الحقيقي — يعمل فقط أثناء «التسجيل» (opt-in)، صفر تكلفة خارجه.
- * كل البيانات بعدّادات O(1) (لا مصفوفة لكل نداء)، نوافذ متدحرجة محدودة، وكل شيء
- * داخل try/catch. عند التسجيل يكشف نفسه كخطّاف عام (globalThis.__fluxProf) تدفع
- * إليه الإضافات المُجهَّزة (DiscordArabicizer…) — بلا اعتماد مباشر بينها (لا اقتران).
  */
 
 import { PluginNative } from "@utils/types";
@@ -23,7 +18,7 @@ interface DispatchStat { count: number; totalMs: number; maxMs: number; }
 interface DispatchSpan { type: string; start: number; end: number; }
 
 const HEAP_CAP = 300; // ~5 دقائق عند عيّنة/ثانية
-const LAG_CAP = 600;  // ~60 ثانية عند عيّنة/100ms
+const LAG_CAP = 600; // ~60 ثانية عند عيّنة/100ms
 const SPAN_TTL_MS = 5000; // long tasks surface within the same tick — a short trail suffices
 
 class RuntimeProfiler {
@@ -65,14 +60,14 @@ class RuntimeProfiler {
     }
 
     private fnStats = new Map<string, FnStat>();
-    private heap: number[] = [];          // عيّنات usedJSHeapSize بالميغابايت
-    private heapMin = Infinity;           // أدنى قيمة (خطّ أساس ما بعد GC) — لكشف التسريب الصادق
-    private heapMax = -Infinity;          // أعلى قيمة على مدى الجلسة — نفس نافذة heapMin
-    private lagSamples: number[] = [];     // تأخّر حلقة الأحداث (ms)
+    private heap: number[] = []; // عيّنات usedJSHeapSize بالميغابايت
+    private heapMin = Infinity; // أدنى قيمة (خطّ أساس ما بعد GC) — لكشف التسريب الصادق
+    private heapMax = -Infinity; // أعلى قيمة على مدى الجلسة — نفس نافذة heapMin
+    private lagSamples: number[] = []; // تأخّر حلقة الأحداث (ms)
     private longtaskCount = 0;
     private longtaskTotalMs = 0;
     private longtaskMaxMs = 0;
-    private metrics: ProcMetric[] = [];    // أحدث لقطة getAppMetrics
+    private metrics: ProcMetric[] = []; // أحدث لقطة getAppMetrics
     private peakCpu = 0;
 
     private heapTimer: ReturnType<typeof setInterval> | null = null;

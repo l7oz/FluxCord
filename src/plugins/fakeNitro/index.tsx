@@ -22,12 +22,13 @@ import { Paragraph } from "@components/Paragraph";
 import { ApngBlendOp, ApngDisposeOp, parseAPNG } from "@utils/apng";
 import { Devs } from "@utils/constants";
 import { getCurrentGuild } from "@utils/discord";
+import { t } from "@utils/i18n";
 import { Logger } from "@utils/Logger";
 import definePlugin, { OptionType } from "@utils/types";
 import type { Emoji, Message, RenderModalProps, Sticker } from "@vencord/discord-types";
 import { StickerFormatType } from "@vencord/discord-types/enums";
 import { findByCodeLazy, findByPropsLazy, proxyLazyWebpack } from "@webpack";
-import { ChannelStore, ConfirmModal, DraftType, EmojiStore, FluxDispatcher, GuildMemberStore, IconUtils, openModal, OverridePremiumTypeStore, PermissionsBits, PermissionStore, StickersStore, UploadHandler, UserSettingsActionCreators, UserSettingsProtoStore } from "@webpack/common";
+import { ChannelStore, ConfirmModal, DraftType, EmojiStore, FluxDispatcher, GuildMemberStore, IconUtils, openModal, OverridePremiumTypeStore, PermissionsBits, PermissionStore, StickersStore, UploadHandler, UserSettingsActionCreators, UserSettingsProtoStore, UserStore } from "@webpack/common";
 import { applyPalette, GIFEncoder, quantize } from "gifenc";
 import type { ReactElement, ReactNode } from "react";
 
@@ -179,10 +180,10 @@ function CannotEmbedNoticeModal({ modalProps, resolve }: { modalProps: RenderMod
     return (
         <ConfirmModal
             {...modalProps}
-            title="Hold on!"
-            subtitle="You are trying to send/edit a message that contains a FakeNitro emoji or sticker, however you do not have permissions to embed links in the current channel. Are you sure you want to send this message? Your FakeNitro items will appear as a link only."
-            confirmText="Send Anyway"
-            cancelText="Cancel"
+            title={t("Hold on!")}
+            subtitle={t("You are trying to send/edit a message that contains a FakeNitro emoji or sticker, however you do not have permissions to embed links in the current channel. Are you sure you want to send this message? Your FakeNitro items will appear as a link only.")}
+            confirmText={t("Send Anyway")}
+            cancelText={t("Cancel")}
             onConfirm={() => resolve(true)}
             onCloseCallback={() => setImmediate(() => resolve(false))}
             checkboxProps={{
@@ -416,10 +417,33 @@ export default definePlugin({
                 replace: "true"
             }
         },
+        // Free accounts have no premium SKU. The emoji picker calls this once per emoji,
+        // and each warn() freezes the client. Drop the logs and keep the original false return.
+        // Separate patches: ConsoleJanitor removes the first warning too, and a shared find would then skip the second.
+        {
+            find: "Cannot find the corresponding SKU to the user's premium type ",
+            replacement: {
+                match: /\i\.warn\(`Cannot find the corresponding SKU to the user's premium type \$\{[^`]+\.premiumType\}`\),/,
+                replace: ""
+            }
+        },
+        {
+            find: "Cannot find the corresponding product catalog entry to the user's SKU ",
+            replacement: {
+                match: /\i\.warn\(`Cannot find the corresponding product catalog entry to the user's SKU \$\{[^`]+\.premiumType\}`\),/,
+                replace: ""
+            }
+        }
     ],
 
     get guildId() {
         return getCurrentGuild()?.id;
+    },
+
+    getRealPremiumType(): number {
+        const user = UserStore?.getCurrentUser();
+        if (!user) return 0;
+        return (user as any)._realPremiumType ?? user.premiumType ?? 0;
     },
 
     get canUseEmotes() {
@@ -808,8 +832,8 @@ export default definePlugin({
                         openModal(props => (
                             <ConfirmModal
                                 {...props}
-                                title="Hold on!"
-                                confirmText="OK"
+                                title={t("Hold on!")}
+                                confirmText={t("OK")}
                                 variant="primary"
                             >
                                 <div>
@@ -840,27 +864,34 @@ export default definePlugin({
             }
 
             if (s.enableEmojiBypass) {
-                for (const emoji of messageObj.validNonShortcutEmojis) {
-                    if (this.canUseEmote(emoji, channelId)) continue;
-
+                const replaceEmoji = (emojiId: string, emojiName: string, isAnimated: boolean, emojiStr: string, offset: number, origStr: string) => {
                     hasBypass = true;
-
                     const emojiSize = s.emojiSize ?? DEFAULT_EMOJI_SIZE;
-                    const emojiString = `<${emoji.animated ? "a" : ""}:${emoji.originalName || emoji.name}:${emoji.id}>`;
-
-                    const url = new URL(IconUtils.getEmojiURL({ id: emoji.id, animated: emoji.animated, size: emojiSize }));
+                    const url = new URL(IconUtils.getEmojiURL({ id: emojiId, animated: isAnimated, size: emojiSize }));
                     url.searchParams.set("size", emojiSize.toString());
-                    url.searchParams.set("name", emoji.name);
+                    url.searchParams.set("name", emojiName);
                     url.searchParams.set("lossless", "true");
 
-                    if (emoji.animated) url.pathname = url.pathname.replace(".webp", ".gif");
+                    if (isAnimated) url.pathname = url.pathname.replace(".webp", ".gif");
 
-                    const linkText = s.hyperLinkText.replaceAll("{{NAME}}", emoji.name);
+                    const linkText = s.hyperLinkText.replaceAll("{{NAME}}", emojiName);
+                    return `${getWordBoundary(origStr, offset - 1)}${s.useEmojiHyperLinks ? `[${linkText}](${url})` : url}${getWordBoundary(origStr, offset + emojiStr.length)}`;
+                };
 
+                for (const emoji of messageObj.validNonShortcutEmojis || []) {
+                    if (this.canUseEmote(emoji, channelId)) continue;
+                    const emojiString = `<${emoji.animated ? "a" : ""}:${emoji.originalName || emoji.name}:${emoji.id}>`;
                     messageObj.content = messageObj.content.replace(emojiString, (match, offset, origStr) => {
-                        return `${getWordBoundary(origStr, offset - 1)}${s.useEmojiHyperLinks ? `[${linkText}](${url})` : url}${getWordBoundary(origStr, offset + match.length)}`;
+                        return replaceEmoji(emoji.id, emoji.name, !!emoji.animated, match, offset, origStr);
                     });
                 }
+
+                // Also regex match any remaining non-Nitro custom emojis in messageObj.content
+                messageObj.content = messageObj.content.replace(/(?<!\\)<(a)?:(\w+):(\d+)>/ig, (emojiStr, isAnimated, emojiName, emojiId, offset, origStr) => {
+                    const emoji = EmojiStore.getCustomEmojiById(emojiId);
+                    if (emoji && this.canUseEmote(emoji, channelId)) return emojiStr;
+                    return replaceEmoji(emojiId, emojiName || emoji?.name || "emoji", !!isAnimated, emojiStr, offset, origStr);
+                });
             }
 
             if (hasBypass && !s.disableEmbedPermissionCheck && !hasEmbedPerms(channelId)) {

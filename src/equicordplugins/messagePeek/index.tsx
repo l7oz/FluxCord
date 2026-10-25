@@ -12,8 +12,9 @@ import { definePluginSettings } from "@api/Settings";
 import { AttachmentIcon, GifIcon, ImageIcon, Microphone, StickerIcon, VideoIcon } from "@components/Icons";
 import betterActivities from "@equicordplugins/betterActivities";
 import showMeYourName from "@plugins/showMeYourName";
-import { Devs, EquicordDevs } from "@utils/constants";
+import { Devs } from "@utils/constants";
 import { classNameFactory } from "@utils/css";
+import { t as translateText } from "@utils/i18n";
 import { classes } from "@utils/misc";
 import definePlugin, { OptionType } from "@utils/types";
 import { Activity, ApplicationStream, Channel, Message, OnlineStatus, User } from "@vencord/discord-types";
@@ -157,13 +158,16 @@ function MessagePreviewContent({ channel, user }: { channel: Channel; user: User
     );
 
     if (channel.isSystemDM()) {
-        return <>Official Discord Message</>;
+        return <>{translateText("Official Discord Message")}</>;
     }
 
-    const smynName = isPluginEnabled(showMeYourName.name) ? showMeYourName.getTypingMemberListProfilesReactionsVoiceNameText({ user: user ?? lastMessage?.author, type: "membersList" }) : null;
+    const smynGetName = (showMeYourName as any).getTypingMemberListProfilesReactionsVoiceNameText;
+    const smynName = isPluginEnabled(showMeYourName.name) && typeof smynGetName === "function"
+        ? smynGetName.call(showMeYourName, { user: user ?? lastMessage?.author, type: "membersList" })
+        : null;
 
     if (!lastMessage) {
-        if (channel.isMultiUserDM()) return <>{channel.recipients.length + 1} Members</>;
+        if (channel.isMultiUserDM()) return <>{channel.recipients.length + 1}{" "}{translateText("Members")}</>;
         return null;
     }
 
@@ -242,7 +246,7 @@ export default definePlugin({
     description: "Shows the last message preview and timestamp in the Direct Messages list.",
     dependencies: ["MemberListDecoratorsAPI"],
     tags: ["Appearance", "Chat"],
-    authors: [Devs.prism, EquicordDevs.justjxke],
+    authors: [Devs.ewlle, Devs.kraethis, Devs.Sharp],
     settings,
     patches: [
         {

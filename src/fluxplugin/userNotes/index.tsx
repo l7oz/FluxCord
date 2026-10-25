@@ -9,12 +9,13 @@ import "./styles.css";
 import { findGroupChildrenByChildId, NavContextMenuPatchCallback } from "@api/ContextMenu";
 import ErrorBoundary from "@components/ErrorBoundary";
 import SettingsPlugin from "@plugins/_core/settings";
-import { getTestcordIconColor } from "./iconColors";
 import { removeFromArray } from "@utils/misc";
 import definePlugin, { IconProps } from "@utils/types";
 import { User } from "@vencord/discord-types";
 import { findComponentByCodeLazy } from "@webpack";
 import { Menu, TextArea, UserStore, useState } from "@webpack/common";
+
+import { getTestcordIconColor } from "./iconColors";
 
 const HeaderBarIcon = findComponentByCodeLazy("iconClassName", "badge", '"aria-haspopup":');
 

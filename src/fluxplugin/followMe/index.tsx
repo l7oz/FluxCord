@@ -5,8 +5,8 @@
  */
 
 import { addContextMenuPatch, NavContextMenuPatchCallback, removeContextMenuPatch } from "@api/ContextMenu";
-import { HeaderBarButton } from "@api/HeaderBar";
 import * as DataStore from "@api/DataStore";
+import { HeaderBarButton } from "@api/HeaderBar";
 import { definePluginSettings } from "@api/Settings";
 import { BanRiskWarning } from "@utils/fluxBanWarning";
 import { t } from "@utils/fluxI18n";

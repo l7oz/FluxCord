@@ -22,6 +22,7 @@ import { definePluginSettings } from "@api/Settings";
 import { getUserSettingLazy } from "@api/UserSettings";
 import { BaseText } from "@components/BaseText";
 import { Devs } from "@utils/constants.js";
+import { t } from "@utils/i18n";
 import { Queue } from "@utils/Queue";
 import definePlugin, { OptionType } from "@utils/types";
 import { Channel, Message } from "@vencord/discord-types";
@@ -123,8 +124,7 @@ const settings = definePluginSettings({
         type: OptionType.COMPONENT,
         component: () => (
             <Button onClick={() => messageCache.clear()}>
-                Clear the linked message cache
-            </Button>
+                {t("Clear the linked message cache")}</Button>
         )
     }
 });

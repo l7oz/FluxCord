@@ -6,6 +6,8 @@
 
 import { playAudio } from "@api/AudioPlayer";
 import { showNotification } from "@api/Notifications";
+import { getQuestifySettings } from "@equicordplugins/questify/settings/access";
+import { getIgnoredQuestIDs } from "@equicordplugins/questify/settings/ignoredQuests";
 import { sleep } from "@utils/misc";
 import type { PluginNative } from "@utils/types";
 import type { Quest } from "@vencord/discord-types";
@@ -13,10 +15,9 @@ import { findByCodeLazy, findStoreLazy } from "@webpack";
 import { QuestStore, RestAPI } from "@webpack/common";
 import { NavigationRouter } from "@webpack/common/utils";
 
-import { getQuestifySettings } from "../settings/access";
-import { questIsIgnored } from "../settings/ignoredQuests";
 import { getNewQuests, normalizeQuestName, type QuestIncludedTypes, questMatchesIncludedTypes } from "./filtering";
 import { QL } from "./logging";
+import { isQuestHidden } from "./questState";
 import { QUEST_PAGE } from "./ui";
 
 export const AuthorizedAppsStore = findStoreLazy("AuthorizedAppsStore");
@@ -169,8 +170,12 @@ export async function fetchAndAlertQuests(source: string): Promise<Quest[] | nul
     }
 
     const newExcludedQuests = newExcludedQuestIds.length > 0 ? await fetchExcludedQuestConfigs(newExcludedQuestIds) : [];
-    const newIncludedQuests = newQuests.filter(quest => questMatchesIncludedTypes(quest, includedTypes) && !questIsIgnored(quest.id));
-    const newIncludedExcludedQuests = newExcludedQuests.filter(quest => questMatchesIncludedTypes(quest, includedTypes) && !questIsIgnored(quest.id));
+    const ignoredQuestIds = getIgnoredQuestIDs();
+    const includeQuest = (quest: Quest) => questMatchesIncludedTypes(quest, includedTypes)
+        && !ignoredQuestIds.includes(quest.id)
+        && !isQuestHidden(quest, ignoredQuestIds);
+    const newIncludedQuests = newQuests.filter(includeQuest);
+    const newIncludedExcludedQuests = newExcludedQuests.filter(includeQuest);
     const shouldAlert = Boolean(alertSound) && newIncludedQuests.length > 0;
     const shouldAlertExcluded = Boolean(excludedAlertSound) && newIncludedExcludedQuests.length > 0;
     const shouldNotify = settings.notifyOnNewQuests && newIncludedQuests.length > 0;

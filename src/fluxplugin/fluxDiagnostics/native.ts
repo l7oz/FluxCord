@@ -1,10 +1,7 @@
 /*
- * FluxCord — FluxDiagnostics native (main process)
- * Copyright (c) 2026 LOSTSTR
+ * Vencord, a Discord client mod
+ * Copyright (c) 2026 Vendicated and contributors
  * SPDX-License-Identifier: GPL-3.0-or-later
- *
- * مصدر CPU% الحقيقي الوحيد عبر العمليات: Electron app.getAppMetrics().
- * للقراءة فقط — لا fs، لا شبكة، لا أوامر صدفة. كل شيء داخل try/catch.
  */
 
 import { app, IpcMainInvokeEvent } from "electron";
@@ -17,7 +14,7 @@ export interface ProcMetric {
      * عدّة أنوية (نفس دلالة Electron). null إذا تعذّرت القراءة (لا نزعم صفراً).
      */
     cpu: number | null;
-    memMB: number;      // مجموعة العمل (RSS تقريبي) بالميغابايت
+    memMB: number; // مجموعة العمل (RSS تقريبي) بالميغابايت
 }
 
 /**

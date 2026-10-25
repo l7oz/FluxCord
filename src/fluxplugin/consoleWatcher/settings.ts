@@ -1,9 +1,6 @@
 /*
- * ConsoleWatcher — أداة مطوّر لمراقبة أحداث الكونسول وجمعها للصيانة
- * Copyright (c) 2026 LOSTSTR
- *
- * مبنية على FluxCord المرخّصة GPL-3.0-or-later وتخضع لنفس الرخصة.
- *
+ * Vencord, a Discord client mod
+ * Copyright (c) 2026 Vendicated and contributors
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 

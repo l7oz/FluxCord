@@ -6,7 +6,8 @@
 
 import { BaseText } from "@components/index";
 import { cl } from "@equicordplugins/songSpotlight.desktop/lib/utils";
-import { classes } from "@utils/index";
+import { t } from "@utils/i18n";
+import { classes } from "@utils/misc";
 import { findByCodeLazy, findCssClassesLazy } from "@webpack";
 import { Tooltip } from "@webpack/common";
 import { ComponentType, HTMLAttributes, JSX } from "react";
@@ -49,7 +50,7 @@ export const Spinner = findByCodeLazy('"pulsingEllipsis"') as unknown as Spinner
 // basic components
 export function ExplicitTag({ className }: HTMLAttributes<HTMLDivElement>) {
     return (
-        <Tooltip text="Explicit">
+        <Tooltip text={t("Explicit")}>
             {tooltipProps => (
                 <BaseText
                     {...tooltipProps}

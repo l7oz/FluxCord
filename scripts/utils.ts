@@ -20,7 +20,7 @@ import { Dirent, readdirSync, readFileSync, writeFileSync } from "fs";
 import { access, readFile } from "fs/promises";
 import { join, sep } from "path";
 import { normalize as posixNormalize, sep as posixSep } from "path/posix";
-import { BigIntLiteral, createSourceFile, Identifier, isArrayLiteralExpression, isBigIntLiteral, isCallExpression, isExportAssignment, isIdentifier, isNumericLiteral, isObjectLiteralExpression, isPropertyAccessExpression, isPropertyAssignment, isSatisfiesExpression, isStringLiteral, isVariableStatement, NamedDeclaration, NodeArray, ObjectLiteralExpression, PropertyAssignment, ScriptTarget, StringLiteral, SyntaxKind } from "typescript";
+import { BigIntLiteral, createSourceFile, Identifier, isArrayLiteralExpression, isBigIntLiteral, isCallExpression, isExportAssignment, isIdentifier, isNoSubstitutionTemplateLiteral, isNumericLiteral, isObjectLiteralExpression, isPropertyAccessExpression, isPropertyAssignment, isSatisfiesExpression, isStringLiteral, isVariableStatement, NamedDeclaration, NodeArray, ObjectLiteralExpression, PropertyAssignment, ScriptTarget, StringLiteral, SyntaxKind } from "typescript";
 
 import { getPluginTarget } from "./utils.mjs";
 import { PluginTarget, PluginTargets } from "@utils/pluginTargets";
@@ -165,8 +165,14 @@ export async function parseFile(fileName: string) {
             switch (key) {
                 case "name":
                 case "description":
-                    if (!isStringLiteral(value)) throw fail(`${key} is not a string literal`);
-                    data[key] = value.text;
+                    // Ported from upstream: plugin text may be wrapped in the i18n t() helper
+                    if (isStringLiteral(value) || isNoSubstitutionTemplateLiteral(value)) {
+                        data[key] = value.text;
+                    } else if (isCallExpression(value) && isIdentifier(value.expression) && value.expression.text === "t" && isStringLiteral(value.arguments[0])) {
+                        data[key] = (value.arguments[0] as StringLiteral).text;
+                    } else {
+                        throw fail(`${key} is not a string literal or t() call`);
+                    }
                     break;
                 case "patches":
                     data.hasPatches = true;

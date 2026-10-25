@@ -6,6 +6,7 @@
 
 import { BaseText } from "@components/BaseText";
 import { classNameFactory } from "@utils/css";
+import { t } from "@utils/i18n";
 import { classes } from "@utils/misc";
 import { wordsFromCamel, wordsToTitle } from "@utils/text";
 import { DefinedSettings, PluginSettingDefCommon } from "@utils/types";
@@ -31,7 +32,7 @@ export type ComponentSettingProps<T extends Omit<PluginSettingDefCommon, "descri
 export function resolveError(isValidResult: boolean | string) {
     if (typeof isValidResult === "string") return isValidResult;
 
-    return isValidResult ? null : "Invalid input provided";
+    return isValidResult ? null : t("Hmm, that doesn't look quite right. Mind checking it?");
 }
 
 interface SettingsSectionProps extends PropsWithChildren {

@@ -6,13 +6,13 @@
 
 import { Heading } from "@components/Heading";
 import { Paragraph } from "@components/Paragraph";
+import { t } from "@utils/i18n";
 import { Margins } from "@utils/margins";
 import { canonicalizeMatch, canonicalizeReplace } from "@utils/patches";
 import { makeCodeblock } from "@utils/text";
 import { ReplaceFn } from "@utils/types";
 import { Button, Parser, useMemo, useState } from "@webpack/common";
 import type { Change } from "diff";
-
 // Do not include diff in standalone builds (side effects import)
 if (!IS_STANDALONE) {
     var differ = require("diff") as typeof import("diff");
@@ -55,7 +55,7 @@ function Match({ matchResult }: { matchResult: RegExpMatchArray | null; }) {
 
     return (
         <>
-            <Heading>Match</Heading>
+            <Heading>{t("Match")}</Heading>
             <div style={{ userSelect: "text" }}>{Parser.parse(fullMatch)}</div>
             <div style={{ userSelect: "text" }}>{Parser.parse(groups)}</div>
         </>
@@ -85,7 +85,7 @@ function Diff({ diff }: { diff: Change[] | null; }) {
 
     return (
         <>
-            <Heading>Diff</Heading>
+            <Heading>{t("Diff")}</Heading>
             {diffLines}
         </>
     );
@@ -120,7 +120,7 @@ export function PatchPreview({ module, match, replacement, setReplacementError }
 
     return (
         <>
-            <Heading>Module {id}</Heading>
+            <Heading>{t("Module")}{" "}{id}</Heading>
 
             <Match matchResult={matchResult} />
             <Diff diff={diff} />
@@ -140,7 +140,7 @@ export function PatchPreview({ module, match, replacement, setReplacementError }
                         }
                     }}
                 >
-                    Compile
+                    {t("Compile")}
                 </Button>
             )}
 

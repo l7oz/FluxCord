@@ -7,6 +7,7 @@
 import { BaseText } from "@components/BaseText";
 import { SpotifyStore, Track } from "@equicordplugins/musicControls/spotify/SpotifyStore";
 import { openImageModal } from "@utils/discord";
+import { t } from "@utils/i18n";
 import { RenderModalProps } from "@vencord/discord-types";
 import { Modal,React } from "@webpack/common";
 
@@ -20,7 +21,7 @@ const formatTime = (time: number) => {
 
 function getTitleNode(track: Track | null) {
     if (!track) {
-        return <BaseText size="sm" weight="semibold">No track playing</BaseText>;
+        return <BaseText size="sm" weight="semibold">{t("No track playing")}</BaseText>;
     }
     return (
         <div className={cl("header-content")}>
@@ -71,8 +72,7 @@ export function LyricsModal({ props }: { props: RenderModalProps; }) {
                     ))
                 ) : (
                     <BaseText size="sm" className={cl("modal-no-lyrics")}>
-                        No lyrics available :(
-                    </BaseText>
+                        {t("No lyrics available :(")}</BaseText>
                 )}
             </div>
         </Modal>

@@ -5,11 +5,12 @@
  */
 
 import { useSettings } from "@api/Settings";
-import { getTestcordIconColor, ICON_COLOR_FALLBACK } from "../iconColors";
 import { LazyComponent } from "@utils/lazyReact";
 import { classes } from "@utils/misc";
 import { React } from "@webpack/common";
 import type { SVGProps } from "react";
+
+import { getTestcordIconColor, ICON_COLOR_FALLBACK } from "../iconColors";
 
 export function NotesDataIcon(props: SVGProps<SVGSVGElement>) {
     return (

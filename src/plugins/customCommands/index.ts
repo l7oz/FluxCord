@@ -92,7 +92,7 @@ export default definePlugin({
     description: "Allows you to create custom slash commands / tags",
     dependencies: ["CommandsAPI"],
     searchTerms: ["MessageTags"],
-    authors: [Devs.Ven, Devs.Luna,],
+    authors: [Devs.ewlle, Devs.kraethis, Devs.Sharp],
     tags: ["Commands", "Customisation", "Utility"],
     settings,
 

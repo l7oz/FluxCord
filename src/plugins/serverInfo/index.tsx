@@ -8,6 +8,7 @@ import { findGroupChildrenByChildId, NavContextMenuPatchCallback } from "@api/Co
 import { definePluginSettings } from "@api/Settings";
 import { InfoIcon } from "@components/Icons";
 import { Devs, EquicordDevs } from "@utils/constants";
+import { t } from "@utils/i18n";
 import definePlugin, { OptionType } from "@utils/types";
 import { Guild } from "@vencord/discord-types";
 import { Menu } from "@webpack/common";
@@ -20,7 +21,7 @@ const makePatch: (showIcon: boolean) => NavContextMenuPatchCallback = showIcon =
     group?.push(
         <Menu.MenuItem
             id="vc-server-info"
-            label="Server Info"
+            label={t("Server Info")}
             leadingAccessory={showIcon ? { type: "icon", icon: InfoIcon } : undefined}
             action={() => openGuildInfoModal(guild)}
         />

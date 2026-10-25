@@ -140,7 +140,7 @@ export default definePlugin({
         plugins: []
     }),
     settings,
-    authors: [Devs.nin0dev],
+    authors: [Devs.ewlle, Devs.kraethis, Devs.Sharp],
     renderMessageAccessory: props => {
         return <UserpluginInstallButton props={props} />;
     }

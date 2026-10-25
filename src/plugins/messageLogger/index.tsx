@@ -18,6 +18,7 @@ import ErrorBoundary from "@components/ErrorBoundary";
 import { DeleteIcon, EyeIcon } from "@components/Icons";
 import { Devs, EQUIBOT_USER_ID, EquicordDevs, SUPPORT_CHANNEL_ID, VC_SUPPORT_CATEGORY_ID, VENBOT_USER_ID } from "@utils/constants";
 import { getIntlMessage } from "@utils/discord";
+import { t } from "@utils/i18n";
 import { Logger } from "@utils/Logger";
 import { classes } from "@utils/misc";
 import definePlugin, { OptionType } from "@utils/types";
@@ -155,7 +156,7 @@ const patchMessageContextMenu: NavContextMenuPatchCallback = (
             <Menu.MenuItem
                 id={TOGGLE_DELETE_STYLE_ID}
                 key={TOGGLE_DELETE_STYLE_ID}
-                label="Toggle Deleted Highlight"
+                label={t("Toggle Deleted Highlight")}
                 leadingAccessory={{ type: "icon", icon: EyeIcon }}
                 action={() => domElement.classList.toggle("messagelogger-deleted")}
             />,
@@ -218,7 +219,7 @@ const patchChannelContextMenu: NavContextMenuPatchCallback = (
     group.push(
         <Menu.MenuItem
             id="vc-ml-clear-channel"
-            label="Clear Message Log"
+            label={t("Clear Message Log")}
             color="danger"
             action={() => {
                 messages.forEach(msg => {
@@ -901,7 +902,8 @@ export default definePlugin({
             find: ".SEND_FAILED,",
             replacement: {
                 // Render editHistory behind the message content
-                match: /\]:\i.isUnsupported.{0,20}?,children:\[/,
+                // The optional style allows RoleColorEverywhere, which adds one at the same spot
+                match: /\]:\i.isUnsupported.{0,20}?,(?:style:[^,]{0,120}?\(\i\),)?children:\[/,
                 replace: "$&arguments[0]?.message?.editHistory?.length>0&&$self.renderEdits(arguments[0]),"
             }
         },

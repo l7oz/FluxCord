@@ -24,6 +24,7 @@ import ErrorBoundary from "@components/ErrorBoundary";
 import { SafetyIcon } from "@components/Icons";
 import { TooltipContainer } from "@components/TooltipContainer";
 import { Devs } from "@utils/constants";
+import { t } from "@utils/i18n";
 import { classes } from "@utils/misc";
 import definePlugin, { OptionType } from "@utils/types";
 import type { Guild, RoleOrUserPermission } from "@vencord/discord-types";
@@ -65,7 +66,7 @@ function MenuItem(guildId: string, { id, type, withIcon }: { id?: string, type?:
     return (
         <Menu.MenuItem
             id="perm-viewer-permissions"
-            label="View Permissions"
+            label={t("View Permissions")}
             leadingAccessory={withIcon ? { type: "icon", icon: SafetyIcon } : undefined}
             action={() => {
                 const guild = GuildStore.getGuild(guildId);
@@ -162,7 +163,7 @@ export default definePlugin({
     name: "PermissionsViewer",
     description: "View the permissions a user or channel has, and the roles of a server",
     tags: ["Servers", "Roles", "Utility"],
-    authors: [Devs.Nuckyz, Devs.Ven],
+    authors: [Devs.ewlle, Devs.kraethis, Devs.Sharp],
     settings,
 
     patches: [
@@ -194,7 +195,7 @@ export default definePlugin({
                 )}
             >
                 {popoutProps => (
-                    <TooltipContainer text="View Permissions">
+                    <TooltipContainer text={t("View Permissions")}>
                         <Button
                             {...popoutProps}
                             ref={buttonRef}

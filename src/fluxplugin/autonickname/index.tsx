@@ -4,12 +4,12 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
-import { t } from "@utils/fluxI18n";
 import { NavContextMenuPatchCallback } from "@api/ContextMenu";
 import * as DataStore from "@api/DataStore";
 import { definePluginSettings } from "@api/Settings";
-import { ModalSize } from "@utils/modal";
+import { t } from "@utils/fluxI18n";
 import { ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalProps, ModalRoot, openModal } from "@utils/fluxModals";
+import { ModalSize } from "@utils/modal";
 import definePlugin, { OptionType } from "@utils/types";
 import type { Channel, User } from "@vencord/discord-types";
 import { Button, GuildMemberStore, Menu, PermissionsBits, PermissionStore, React, RestAPI, SelectedGuildStore, showToast, Text, TextInput, Toasts, UserStore } from "@webpack/common";
