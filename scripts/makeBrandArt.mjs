@@ -396,18 +396,25 @@ function packAssets() {
     const foxBB = bbox(fox.g, fox.W, fox.H);
     const foxCrop = crop(fox.g, fox.W, foxBB);
 
-    {
+    const seal = (name, grid, s) => {
         const W = 512, H = 512, cv = Buffer.alloc(W * H * 4);
         bgPattern(cv, W, H);
         ring(cv, W, H, 256, 256, 250, 3, GOLD_RGB);
         ring(cv, W, H, 256, 256, 237, 8, GOLD_RGB);
-        const cl = buildCluster(false);
-        const bb = bbox(cl, GRID, GRID);
-        const cr = crop(cl, GRID, bb);
-        const s = 8;
+        const bb = bbox(grid, GRID, GRID);
+        const cr = crop(grid, GRID, bb);
         blit(cv, W, H, gridToRGBA(cr.g, cr.W, cr.H, s), cr.W * s, cr.H * s, Math.round((W - cr.W * s) / 2), Math.round((H - cr.H * s) / 2));
-        files.set("FluxCord-ServerIcon-512.png", encodePng(W, H, cv));
-    }
+        files.set(name, encodePng(W, H, cv));
+    };
+
+    const lettersZzz = buildLetters();
+    drawZ(lettersZzz, GRID, 58, 36, GOLD);
+    drawZ(lettersZzz, GRID, 63, 33, GOLD);
+    drawZ(lettersZzz, GRID, 67, 30, LGOLD);
+
+    seal("FluxCord-ServerIcon-512.png", buildCluster(false), 8);
+    seal("FluxCord-ServerIcon-512-NoFox.png", buildLetters(), 10);
+    seal("FluxCord-ServerIcon-512-NoFox-Zzz.png", lettersZzz, 8);
 
     {
         const art = gridToRGBA(full, GRID, GRID, 5);
