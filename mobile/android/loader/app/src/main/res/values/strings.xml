@@ -1,0 +1,4 @@
+<resources>
+    <string name="app_name">FluxCord Loader</string>
+    <string name="loader_initialised">FluxCord loader initialised</string>
+</resources>

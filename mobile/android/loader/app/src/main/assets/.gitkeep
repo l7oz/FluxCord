@@ -1,0 +1,5 @@
+resources {
+    android {
+        // The bundle is copied here by the build after `mobile/bundle` produces fluxcord.min.js.
+    }
+}

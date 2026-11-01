@@ -1,0 +1,9 @@
+Package: com.fluxcord.tweak
+Name: FluxCord Tweak
+Depends: mobilesubstrate || substrate
+Version: 1.0.0
+Architecture: iphoneos-arm
+Description: FluxCord - plugins, themes and privacy for Discord on iPhone and iPad.
+Maintainer: FluxCord contributors
+Section: Tweaks
+License: OSL-3.0

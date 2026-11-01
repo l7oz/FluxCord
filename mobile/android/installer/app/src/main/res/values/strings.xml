@@ -1,0 +1,4 @@
+<resources>
+    <string name="app_name">FluxCord Installer</string>
+    <string name="patching">Patching Discord with FluxCord...</string>
+</resources>

@@ -1,0 +1,7 @@
+<resources>
+    <style name="Theme.FluxCordInstaller" parent="Theme.AppCompat.Light.DarkActionBar">
+        <item name="colorPrimary">#0a0e1c</item>
+        <item name="colorPrimaryDark">#070912</item>
+        <item name="colorAccent">#e8b33d</item>
+    </style>
+</resources>
