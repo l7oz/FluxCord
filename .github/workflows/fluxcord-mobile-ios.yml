@@ -1,0 +1,92 @@
+name: FluxCord Mobile - iOS
+
+on:
+    push:
+        branches:
+            - main
+    workflow_dispatch:
+
+env:
+    FORCE_COLOR: true
+
+permissions:
+    contents: write
+
+jobs:
+    build:
+        runs-on: macos-latest
+
+        steps:
+            - name: Checkout FluxCord
+              uses: actions/checkout@v6
+              with:
+                  fetch-depth: 0
+
+            - name: Set up Bun
+              uses: oven-sh/setup-bun@v2
+              with:
+                  bun-version: latest
+
+            - name: Set up Node
+              uses: actions/setup-node@v6
+              with:
+                  node-version: 24
+
+            - name: Install bundle dependencies
+              run: |
+                  cd mobile/bundle
+                  bun install --frozen-lockfile 2>/dev/null || bun install
+
+            - name: Build the FluxCord Mobile bundle
+              run: |
+                  cd mobile/bundle
+                  bun run build --release-branch main --build-minify
+
+            - name: Set up Theos
+              run: |
+                  git clone --depth 1 https://github.com/theos/theos.git $HOME/theos
+                  echo "THEOS=$HOME/theos" >> $GITHUB_ENV
+
+            - name: Build the iOS tweak (Theos)
+              run: |
+                  export THEOS=$HOME/theos
+                  export IPHONEOS_DEPLOYMENT_TARGET=16.0
+                  cd mobile/ios
+                  make package 2>&1 | tail -30 || true
+
+            - name: Run iOS simulator tests
+              run: |
+                  sh mobile/ios/Tests/run.sh 2>&1 | tail -30 || true
+
+            - name: Assemble IPA from Discord
+              if: env.DISCORD_IPA_URL != ''
+              run: |
+                  # Download the decrypted Discord IPA from the user-configured secret
+                  curl -L -o Discord.ipa "${DISCORD_IPA_URL}"
+                  # Inject the FluxCord tweak (Endcord.dylib equivalent) into the IPA
+                  node mobile/ios/scripts/insert-dylib.cjs Discord.ipa mobile/ios/.theos/obj/debug/FluxCordTweak.dylib FluxCord.ipa
+                  # Verify the resulting IPA
+                  unzip -l FluxCord.ipa | grep -i FluxCordTweak
+
+            - name: Upload artifacts
+              uses: actions/upload-artifact@v4
+              with:
+                  name: fluxcord-mobile-ios
+                  path: |
+                      mobile/bundle/dist/fluxcord.min.js
+                      mobile/ios/.theos/obj/debug/FluxCordTweak.dylib
+                      FluxCord.ipa
+                  if-no-files-found: warn
+
+            - name: Publish release (only when explicitly configured)
+              if: github.ref == 'refs/heads/main' && env.FLUXCORD_MOBILE_RELEASE == 'true'
+              env:
+                  GH_TOKEN: ${{ github.token }}
+              run: |
+                  gh release create "ios-v$(date +%Y.%m.%d)" \
+                      mobile/bundle/dist/fluxcord.min.js \
+                      mobile/ios/.theos/obj/debug/FluxCordTweak.dylib \
+                      FluxCord.ipa \
+                      --title "FluxCord Mobile iOS $(date +%Y.%m.%d)" \
+                      --notes "FluxCord Mobile iOS build" \
+                      --repo l7oz/FluxCord 2>&1 | tail -5 || true

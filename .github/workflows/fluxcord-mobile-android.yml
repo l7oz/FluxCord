@@ -1,0 +1,90 @@
+name: FluxCord Mobile - Android
+
+on:
+    push:
+        branches:
+            - main
+    workflow_dispatch:
+
+env:
+    FORCE_COLOR: true
+
+permissions:
+    contents: write
+
+jobs:
+    build:
+        runs-on: ubuntu-latest
+
+        steps:
+            - name: Checkout FluxCord
+              uses: actions/checkout@v6
+              with:
+                  fetch-depth: 0
+
+            - name: Set up Bun
+              uses: oven-sh/setup-bun@v2
+              with:
+                  bun-version: latest
+
+            - name: Set up Node
+              uses: actions/setup-node@v6
+              with:
+                  node-version: 24
+
+            - name: Set up JDK 25 (loader) and JDK 17 (installer)
+              uses: actions/setup-java@v6
+              with:
+                  java-version: 25
+                  distribution: temurin
+
+            - name: Set up Android SDK
+              uses: android-actions/setup-android@v3
+
+            - name: Install bundle dependencies
+              run: |
+                  cd mobile/bundle
+                  bun install --frozen-lockfile 2>/dev/null || bun install
+
+            - name: Build the FluxCord Mobile bundle
+              run: |
+                  cd mobile/bundle
+                  bun run build --release-branch main --build-minify
+
+            - name: Copy bundle into Android loader assets
+              run: |
+                  mkdir -p mobile/android/loader/app/src/main/assets
+                  cp mobile/bundle/dist/fluxcord.min.js mobile/android/loader/app/src/main/assets/
+
+            - name: Build the loader APK
+              run: |
+                  cd mobile/android/loader
+                  chmod +x gradlew
+                  ./gradlew :app:assembleDebug -Pfluxcord.bundleUrl=http://10.0.2.2:4040/fluxcord.min.js
+
+            - name: Build the installer APK
+              run: |
+                  cd mobile/android/installer
+                  chmod +x gradlew
+                  ./gradlew :app:assembleDebug
+
+            - name: Upload artifacts
+              uses: actions/upload-artifact@v4
+              with:
+                  name: fluxcord-mobile-android
+                  path: |
+                      mobile/android/loader/app/build/outputs/apk/**/*.apk
+                      mobile/android/installer/app/build/outputs/apk/**/*.apk
+                  if-no-files-found: warn
+
+            - name: Publish release (only when explicitly configured)
+              if: github.ref == 'refs/heads/main' && env.FLUXCORD_MOBILE_RELEASE == 'true'
+              env:
+                  GH_TOKEN: ${{ github.token }}
+              run: |
+                  gh release create "android-v$(date +%Y.%m.%d)" \
+                      mobile/android/loader/app/build/outputs/apk/debug/*.apk \
+                      mobile/android/installer/app/build/outputs/apk/debug/*.apk \
+                      --title "FluxCord Mobile Android $(date +%Y.%m.%d)" \
+                      --notes "FluxCord Mobile Android build" \
+                      --repo l7oz/FluxCord 2>&1 | tail -5 || true
