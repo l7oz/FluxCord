@@ -683,8 +683,6 @@ namespace FluxCordInstaller.Core
             }
 
             // 4. Write the FluxCord loader stub as resources\app.asar (same shape Flxuilotl writes)
-            if (!File.Exists(paths.PayloadFile) || FileOps.SizeOf(paths.PayloadFile) <= 0)
-                throw new InstallerException(FailureKind.PayloadMissing, "FluxCord payload not found at " + paths.PayloadFile, paths.PayloadFile);
             rb.WroteStub = true;
             WriteAppAsar(appDir.AppAsar, paths.PayloadFile);
 
@@ -873,8 +871,7 @@ namespace FluxCordInstaller.Core
 
         /// <summary>
         /// Writes the tiny app.asar stub Electron boots from: index.js requires the mod payload,
-        /// package.json points at index.js. Numeric asar offsets (stricter than Flxuilotl's
-        /// string offsets, which some Electron builds reject).
+        /// package.json points at index.js. Byte-for-byte the format Flxuilotl's writer produces.
         /// </summary>
         public static void WriteAppAsar(string outFile, string modAsarPath)
         {
@@ -885,8 +882,8 @@ namespace FluxCordInstaller.Core
             byte[] pkgBytes = Encoding.UTF8.GetBytes(pkgJson);
 
             string headerJson =
-                "{\"files\":{\"index.js\":{\"size\":" + indexBytes.Length + ",\"offset\":0}," +
-                "\"package.json\":{\"size\":" + pkgBytes.Length + ",\"offset\":" + indexBytes.Length + "}}}";
+                "{\"files\":{\"index.js\":{\"size\":" + indexBytes.Length + ",\"offset\":\"0\"}," +
+                "\"package.json\":{\"size\":" + pkgBytes.Length + ",\"offset\":\"" + indexBytes.Length + "\"}}}";
             int headerLen = Encoding.UTF8.GetByteCount(headerJson);
             int aligned = (headerLen + 3) & ~3;
             string padded = headerJson + new string('0', aligned - headerLen);
