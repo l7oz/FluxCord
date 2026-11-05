@@ -12,7 +12,7 @@ import { ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalProps, M
 import { ModalSize } from "@utils/modal";
 import definePlugin, { OptionType } from "@utils/types";
 import { Channel, Message, User } from "@vencord/discord-types";
-import { Button, ChannelStore, GuildStore, Menu, RestAPI, SelectedChannelStore, showToast, Text, Toasts, UserStore } from "@webpack/common";
+import { Button, ChannelStore, GuildStore, Menu, PermissionsBits, PermissionStore, RestAPI, SelectedChannelStore, showToast, Text, Toasts, UserStore } from "@webpack/common";
 
 const settings = definePluginSettings({
     warning: {
@@ -213,6 +213,12 @@ function messageMatches(message: Message, currentUserId: string, mode: CleanMode
     if (message.author?.id !== targetUserId) return false;
     if (settings.store.skipSystemMessages && message.type != null && message.type !== 0 && message.type !== 19) return false;
     return true;
+}
+
+/** Discord only lets you delete someone else's messages in a server channel where you have Manage Messages. */
+function canDeleteMessagesOf(channel: Channel | undefined, userId: string): boolean {
+    if (userId === UserStore.getCurrentUser()?.id) return true;
+    return !!channel?.guild_id && PermissionStore.can(PermissionsBits.MANAGE_MESSAGES, channel);
 }
 
 /** The other party of a 1:1 DM channel (used for the "all messages from him" menu entry). */
@@ -901,6 +907,10 @@ async function openUserCleanConfirmation(channelId: string, user: User) {
         return;
     }
     if (isCleaningInProgress) return;
+    if (!canDeleteMessagesOf(ChannelStore.getChannel(channelId), user.id)) {
+        showToast(t("لا يسمح ديسكورد بحذف رسائل الآخرين إلا في السيرفرات مع صلاحية إدارة الرسائل.", "Discord only lets you delete other people's messages in servers where you have Manage Messages."), Toasts.Type.FAILURE);
+        return;
+    }
     shouldStopCleaning = false; // clear a lingering Stop so preview fetches still retry
 
     let preview: CleanPreview;
@@ -1037,7 +1047,7 @@ const GdmContextMenuPatch: NavContextMenuPatchCallback = (children, ctx: { chann
 
     const partnerId = getDmPartnerId(channel);
     const partner = partnerId ? UserStore.getUser(partnerId) : null;
-    if (!partner) return;
+    if (!partner || !canDeleteMessagesOf(channel, partner.id)) return;
 
     const group = findGroupChildrenByChildId("mark-channel-read", children) ?? children;
     if (!group) return;
@@ -1053,7 +1063,7 @@ const GdmContextMenuPatch: NavContextMenuPatchCallback = (children, ctx: { chann
 const MessageContextMenuPatch: NavContextMenuPatchCallback = (children, ctx: { channel?: Channel; message?: Message; } = {}) => {
     const { channel, message } = ctx;
     const author = message?.author;
-    if (!channel || !message || !author || isCleaningInProgress) return;
+    if (!channel || !message || !author || isCleaningInProgress || !canDeleteMessagesOf(channel, author.id)) return;
 
     const group = findGroupChildrenByChildId("mark-unread", children)
         ?? findGroupChildrenByChildId("copy-link", children)
@@ -1083,7 +1093,10 @@ const UserContextMenuPatch: NavContextMenuPatchCallback = (children, ctx: { chan
         <Menu.MenuSeparator key="separator-user" />,
         <Menu.MenuItem key="vc-user-clean-messages" id="vc-user-clean-messages"
             label={t("تنظيف الرسائل", "Clean messages")} color="danger"
-            action={() => void openCleanConfirmation(channelId)} />,
+            action={() => void openCleanConfirmation(channelId)} />
+    );
+
+    if (canDeleteMessagesOf(ChannelStore.getChannel(channelId), user.id)) group.push(
         <Menu.MenuItem key="vc-user-clean-his-messages" id="vc-user-clean-his-messages"
             label={t("كل الرسائل الخاصة به", "All messages from him")} color="danger"
             action={() => void openUserCleanConfirmation(channelId, user)} />
