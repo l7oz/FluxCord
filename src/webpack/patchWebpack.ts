@@ -205,16 +205,21 @@ define(Function.prototype, "m", {
 
             // Overwrite Webpack's defineExports function to define the export descriptors configurable.
             // This is needed so we can later blacklist specific exports from Webpack search by making them non-enumerable
-            this.d = function (exports, definition) {
-                for (const key in definition) {
-                    if (Object.hasOwn(definition, key) && !Object.hasOwn(exports, key)) {
-                        Object.defineProperty(exports, key, {
-                            enumerable: true,
-                            configurable: true,
-                            get: definition[key],
-                        });
+            // Newer Webpack runtimes pass plain exports as a third argument: d(exports, getters, values)
+            this.d = function (exports, definition, values) {
+                const defineAll = (props: Record<PropertyKey, unknown> | undefined, kind: "get" | "value") => {
+                    for (const key in props) {
+                        if (Object.hasOwn(props, key) && !Object.hasOwn(exports, key)) {
+                            Object.defineProperty(exports, key, {
+                                enumerable: true,
+                                configurable: true,
+                                [kind]: props[key],
+                            });
+                        }
                     }
-                }
+                };
+                defineAll(definition, "get");
+                defineAll(values, "value");
             };
         };
     }
@@ -428,6 +433,8 @@ function runFactoryWithWrap(patchedFactory: PatchedModuleFactory, thisArg: unkno
     }
 
     exports = module.exports;
+    // Newer Webpack runtimes no longer track module.loaded, which the find functions rely on
+    module.loaded ??= true;
 
     if (typeof require === "function" && require.c) {
         if (_blacklistBadModules(require.c, exports, module.id)) {
